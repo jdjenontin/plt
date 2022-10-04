@@ -84,7 +84,7 @@ int Player::continentBonusTroop ()
     if (afrique == 6) numberBonusTroop += 3;
     if (europe == 7) numberBonusTroop += 5;
     if (asie == 12) numberBonusTroop += 7;
-    if (ameriqueN == 4) numberBonusTroop += 2;
+    if (oceanie == 4) numberBonusTroop += 2;
 
     return numberBonusTroop;
 
