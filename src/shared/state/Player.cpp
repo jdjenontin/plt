@@ -22,12 +22,23 @@ Player::Player (std::vector<Country> lcountry, std::vector<Card> lcard, int troo
 
 void Player::place (Country country, int numberTroop) {
     cout << "Please place your troop" << endl;
-    country.numberTroup += numberTroop;
+    country.numberTroop += numberTroop;
 }
 
-void Player::attack (Country country1, Country country2) {
+void Player::attack (Country attacker, Country defender) {
     Calculation calcul;
     cout << "Please attack somebody" << endl;
+    calcul.compute(attacker, defender);
+    //dans le if il faut ajouter une operation 
+    if(true){
+        if(calcul.attack(attacker, defender) == 0) {
+            addCountry(defender);
+        }
+        else {
+
+        }
+
+    }
 
 }
 

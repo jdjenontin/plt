@@ -1,4 +1,6 @@
 #include <iostream>
+#include <random>
+#include <chrono>
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
 #include <SFML/Graphics.hpp>
@@ -14,7 +16,16 @@ void testSFML() {
 using namespace std;
 using namespace state;
 
-vector<string> vec= {"france", "germany", "england", "chine", "poland"};
+vector<string> vec= {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", 
+                     "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
+                     "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", 
+                     "Afrique du Nord", "Egypte", "Afrique de l'Est", "Congo", 
+                     "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", 
+                     "Scandinavie", "Europe du Nord", "Ukraine", "Europe de l'Ouest", 
+                     "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", 
+                     "Yakutsk", "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", 
+                     "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale", 
+                     "Australie Occidentale"};
 
 vector<Country> v_listcountry;
 //la liste est definitive, ne touche jamais.
@@ -43,13 +54,19 @@ int main(int argc,char* argv[])
         buildCountry(it->first, it->second);
     }
 
-  //  player1.attack(v_listcountry[])
-
-  //  if(player1.winAttack)
     player1.addCountry(v_listcountry[4]);
     player1.addCountry(v_listcountry[3]);
     player1.addCountry(v_listcountry[2]);
     player1.addCountry(v_listcountry[1]);
+
+    v_listcountry[1].addNumberTroop(5);
+    v_listcountry[0].addNumberTroop(3);
+
+    cout << v_listcountry[1].getNumberTroop() << " " << v_listcountry[0].getNumberTroop() << endl;
+
+    player1.attack(v_listcountry[1], v_listcountry[0]);
+
+    cout << v_listcountry[1].getNumberTroop() << " " << v_listcountry[0].getNumberTroop() << endl;
 
     cout << "It works !" << endl;
     cout << exemple.getX() << endl;
