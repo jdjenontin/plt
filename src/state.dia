@@ -728,7 +728,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#country#</dia:string>
+                <dia:string>#&amp;country#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -770,7 +770,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#void#</dia:string>
+            <dia:string>#int#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -793,7 +793,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#attacker#</dia:string>
+                <dia:string>#&amp;attacker#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -810,7 +810,7 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#defender#</dia:string>
+                <dia:string>#&amp;defender#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -858,7 +858,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#country1#</dia:string>
+                <dia:string>#&amp;country1#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -875,7 +875,7 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#country2#</dia:string>
+                <dia:string>#&amp;country2#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -3909,13 +3909,13 @@
         <dia:point val="53.8007,53.7893"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="53.7507,53.7393;73.2157,63.6393"/>
+        <dia:rectangle val="53.7507,53.7393;73.9857,63.6393"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="53.8007,53.7893"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="19.365000000000002"/>
+        <dia:real val="20.134999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="9.8000000000000007"/>
@@ -4203,7 +4203,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#country1#</dia:string>
+                <dia:string>#&amp;attacker#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -4220,7 +4220,7 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#country2#</dia:string>
+                <dia:string>#&amp;defender#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -4298,7 +4298,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#attacker#</dia:string>
+                <dia:string>#&amp;attacker#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -4315,7 +4315,7 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#defender#</dia:string>
+                <dia:string>#&amp;defender#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#Country#</dia:string>
@@ -4674,18 +4674,18 @@
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O21">
       <dia:attribute name="obj_pos">
-        <dia:point val="73.1657,59.0893"/>
+        <dia:point val="73.9357,59.0893"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="72.4157,58.3393;77.85,64.65"/>
+        <dia:rectangle val="73.1857,58.3393;77.85,63.905"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="73.1657,59.0893"/>
-        <dia:point val="75.8329,59.0893"/>
-        <dia:point val="75.8329,63.05"/>
+        <dia:point val="73.9357,59.0893"/>
+        <dia:point val="76.2178,59.0893"/>
+        <dia:point val="76.2178,63.05"/>
         <dia:point val="77.8,63.05"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

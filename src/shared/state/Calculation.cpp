@@ -14,15 +14,14 @@ Calculation::~Calculation () {
 
 }
 
-void Calculation::compute (Country country1, Country country2) {
-
+void Calculation::compute (Country &attacker, Country &defender) {
+    std::cout << "your win rate is :(its not available now)" << std::endl;
 }
 
 int Calculation::throwdice () {
-    int valeur;
-    srand((unsigned int) time(0));
-
-    return valeur = rand()%6 + 1;
+    srand(time(0));
+    std::cout << rand() << std::endl;
+    return (rand() % 6 + 1);
 }
 
 void Calculation::init_lostroop () {
@@ -30,34 +29,40 @@ void Calculation::init_lostroop () {
     lostTroopDefender = 0;
 }
 
-int Calculation::attack (Country attacker, Country defender) {
+int Calculation::attack (Country &attacker, Country &defender) {
+    Dice dice;
     int att, def;
+    int count = 1;
 
     init_lostroop();
 
     att = attacker.getNumberTroop() - 1;
 
-    std::cout << "number :"<< att << std::endl;
+    std::cout << "attacker forces :"<< att << std::endl;
 
     def = defender.getNumberTroop();
 
-    std::cout << "number :"<< def << std::endl;
+    std::cout << "defender forces :"<< def << std::endl;
 
     while(1){
-        int x = throwdice();
+        std::cout << "turn :" << count << std::endl;
 
-        std::cout << "number x:"<< x << std::endl;
+        int x = dice.thrown();
 
-        int y = throwdice();
+        std::cout << "attacker's dice number :"<< x << std::endl;
 
-        std::cout << "number y:"<< y << std::endl;
+        int y = dice.thrown();
 
-        if(x > y){
+        std::cout << "defender's dice number :"<< y << std::endl;
+
+        if(x >= y){
             std::cout << "attwin" << std::endl;
             def -= 1;
             lostTroopDefender += 1;
             if (def == 0) {
-                attacker.reduceNumberTroop(lostTroopAttacker);
+                std::cout << "you win the attack" << std::endl;
+                attacker.reduceNumberTroop(lostTroopAttacker + 1);
+                std::cout << "you have "<< attacker.getNumberTroop() << " troop now"<< std::endl;
                 defender.setNumberTroop(1);
                 return 0;
             }
@@ -72,6 +77,7 @@ int Calculation::attack (Country attacker, Country defender) {
                 return 1;
             }
         }
+        count++;
     }
 }
 
