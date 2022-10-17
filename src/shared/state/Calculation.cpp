@@ -6,4 +6,8 @@ Calculation::Calculation () {
 
 }
 
+Calculation::~Calculation () {
+    
+}
+
 }

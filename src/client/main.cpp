@@ -14,7 +14,12 @@ void testSFML() {
 using namespace std;
 using namespace state;
 
-vector<string> vec= {"france", "germany", "england", "chine", "poland"};
+vector<string> vec= {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
+                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
+                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
+                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
+                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
+                            "Australie Occidentale"};
 
 vector<Country> v_listcountry;
 //la liste est definitive, ne touche jamais.
@@ -56,6 +61,7 @@ int main(int argc,char* argv[])
     cout << player1.getownTroop() << endl;
     cout << v_listcountry[4].getNameCountry() << v_listcountry[4].getNumberCountry() << endl;
     cout << player1.getListCountry()[0].getNameCountry() << " " << player1.getListCountry()[0].getNumberCountry() << endl;
+
 
     return 0;
 }
