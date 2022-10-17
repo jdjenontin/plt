@@ -68,6 +68,7 @@ bool Country::isAdjacent (int idCountry) {
                                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0}};
 
     return bool(matriceAdj[numberCountry][idCountry]);
+}
 int Country::getNumberTroop () {
     return numberTroop;
 }

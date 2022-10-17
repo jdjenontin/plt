@@ -69,15 +69,23 @@ void Player::addCountry (Country country) {
 }
 
 void Player::deleteCountry (Country country) {
-
+    int i = 0;
+    while(listCountry[i].getNameCountry() != country.getNameCountry()){
+        i++;
+    }
+    listCountry.erase(listCountry.begin() + i);
 }
 
 void Player::addCard (Card card) {
-
+    listCard.push_back(card);
 }
 
 void Player::deleteCard (Card card) {
-
+    int i = 0;
+    while(listCard[i].getNameCountry() != card.getNameCountry()){
+        i++;
+    }
+    listCard.erase(listCard.begin() + i);
 }
 
 int Player::getownTroop () {
@@ -104,7 +112,8 @@ int Player::continentBonusTroop ()
             europe += 1;
         else if (country.getNumberCountry() < 38)
             asie += 1;
-        else oceanie;
+        else 
+            oceanie +=1;
     }
 
     // Ajout des troupes bonus

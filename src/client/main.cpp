@@ -56,10 +56,16 @@ int main(int argc,char* argv[])
         buildCountry(it->first, it->second);
     }
 
-    player1.addCountry(v_listcountry[4]);
-    player1.addCountry(v_listcountry[3]);
-    player1.addCountry(v_listcountry[2]);
-    player1.addCountry(v_listcountry[1]);
+//**************************************//
+    for(int i = 19; i < 40; i++){
+        player1.addCountry(v_listcountry[i]);
+    }
+
+    int bonus = player1.continentBonusTroop();
+    cout << bonus << endl;
+//**************************************//
+
+
 //choose your country
     int c_attack, c_defender;
 
@@ -68,6 +74,10 @@ int main(int argc,char* argv[])
 
     cout << "choose the defend country's number :";
     cin >> c_defender;
+
+//**************************************//
+    if(v_listcountry[c_attack].isAdjacent(c_defender))
+        cout << "isadjacent" << endl;
 
 //**************************************//
     int n_attacker, n_defender;
