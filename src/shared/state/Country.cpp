@@ -23,4 +23,20 @@ int Country::getNumberCountry () {
     return numberCountry;
 }
 
+int Country::getNumberTroop () {
+    return numberTroop;
+}
+
+void Country::setNumberTroop (int numTroop) {
+    numberTroop = numTroop;
+}
+
+void Country::addNumberTroop (int numTroop) {
+    numberTroop += numTroop;
+}
+
+void Country::reduceNumberTroop (int numTroop) {
+    numberTroop -= numTroop;
+}
+
 }

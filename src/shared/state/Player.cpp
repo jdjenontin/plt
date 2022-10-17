@@ -1,5 +1,7 @@
 #include "Player.h"
 #include <iostream>
+#include <string>
+#include <string.h>
 
 using namespace std;
 
@@ -20,18 +22,45 @@ Player::Player (std::vector<Country> lcountry, std::vector<Card> lcard, int troo
     ownTroop = troop;
 }
 
-void Player::place (Country country, int numberTroop) {
-    cout << "Please place your troop" << endl;
-    country.numberTroup += numberTroop;
+void Player::place (Country &country, int numberTroop) {
+    cout << "place!" << endl;
+
+    country.numberTroop += numberTroop;
 }
 
-void Player::attack (Country country1, Country country2) {
+int Player::attack (Country &attacker, Country &defender) {
+    char choose[50];
+    int n_troop;
+
     Calculation calcul;
-    cout << "Please attack somebody" << endl;
+    cout << "attack!" << endl;
+    calcul.compute(attacker, defender);
 
+    std::cout << "do you want attack? If yes, type true or type any letter for return :\n";
+    cin >> choose; 
+
+    std::cout << choose << std::endl;
+    //dans le if il faut ajouter une operation 
+    if(strcmp(choose, "true") == 0){
+        if(calcul.attack(attacker, defender) == 0) {
+            addCountry(defender);
+            cout << "choose the quantity of troop that you want put in new country :";
+            cin >> n_troop;
+            attacker.reduceNumberTroop(n_troop);
+            place(defender, n_troop);
+        }
+        else {
+        }
+        return 0;
+    }
+    else{
+        std::cout << "its not available now" << std::endl;
+        return 1;
+    }
+    return 1;
 }
 
-void Player::reinforce (Country country1, Country country2, int numberTroop) {
+void Player::reinforce (Country &country1, Country &country2, int numberTroop) {
     cout << "Please move your troop" << endl;
 }
 
