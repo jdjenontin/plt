@@ -48,46 +48,8 @@ void listCountries(Player player){
 void jouer(Player player){
     //choisir les pays attaquant et defensifs
     int c_attack, c_defender;
-void testgame(){
-    
 
     listCountries(player);
-
-    cout << "choose the number of player :(you need choose 3 for now)";
-    cin >> num_player;
-
-    State state(num_player);
-
-    //if(num_player != 3) return;
-
-    Player player1;
-    Player player2;
-    Player player3;
-
-    state.init();
-
-//initialiser la liste
-    v_listcountry = state.getListCountry();
-    
-//ajouter des pays au joueur1
-//**************************************//
-    //init_player(player1, player2, player3);
-    cout << "here" << endl;
-    vector<Player> pList = state.getPlayersList();
-    
-    for(auto player : pList){
-        cout << "Number of country : " << player.getListCountry().size() << endl;  
-        }
-//**************************************//
-
-//jouer
-    while(state.playing){
-        
-    }
-
-
-//choisis les pays attaquant et defensifs
-    int c_attack, c_defender;
 
     cout << "choose the attack country's number :";
     cin >>  c_attack;
@@ -135,7 +97,7 @@ void testgame(){
 */
 }
 
-void init_player(Player &player1, Player &player2, Player &player3){
+/*void init_player(Player &player1, Player &player2, Player &player3){
     Dice dice(3,5);
 
     for(int i = 0; i < 42; i+=3){
@@ -147,26 +109,19 @@ void init_player(Player &player1, Player &player2, Player &player3){
         v_listcountry[i+2].addNumberTroop(dice.thrown());
     }
 }
+*/
 
 void testgame(){
-    State state;
-
     int num_player;
 
     cout << "choose the number of player :(you need choose 3 for now) ";
     cin >> num_player;
 
-    if(num_player != 3) return;
+    State state(num_player);
 
     Player player1;
     Player player2;
     Player player3;
-
-    vector<Player> player;
-
-    player = state.player;
-
-    cout << "s" << endl;
 
     state.init();
 
@@ -175,18 +130,18 @@ void testgame(){
     
 //ajouter des pays au joueur1
 //**************************************//
-    init_player(player1, player2, player3);
-
-    player.push_back(player1);
-    player.push_back(player2);
-    player.push_back(player3);
-
+    //init_player(player1, player2, player3);
+    vector<Player> pList = state.getPlayersList();
+    
+    for(auto player : pList){
+        cout << "Number of country : " << player.getListCountry().size() << endl;  
+        }
 //**************************************//
 
 //jouer
     while(1){
         cout << "s" << endl;
-        for(vector<Player>::iterator it = player.begin(); it != player.end(); ++it){
+        for(vector<Player>::iterator it = pList.begin(); it != pList.end(); ++it){
             jouer(*it);
         }
     }

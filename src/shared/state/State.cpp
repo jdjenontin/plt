@@ -68,7 +68,7 @@ void State::init()
 
     // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
     int j = 0;
-    for(int i = 0; i != 42; i++){
+    for(auto i : affectation_order){
         countriesList[i].addNumberTroop(2);
         playersList[j].addCountry(countriesList[i]);
         j++;
@@ -95,10 +95,17 @@ void State::init()
         // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
         int remaningTroop = initialTroop%playerCountries.size();
 
+        cout << "Remaining ::" << remaningTroop << endl;
+
+        Dice dice(0, playerCountries.size() - 1);
+
         for(int k = 0; k != remaningTroop; k++)
         {
-            Dice dice(0, playerCountries.size() - 1);
-            playerCountries[dice.thrown()].addNumberTroop(1);
+            int test = dice.thrown();
+            cout << "Throw " << test << endl;
+            cout << playerCountries[test].getNumberTroop() << endl;
+            playerCountries[test].addNumberTroop(1);
+            cout << "GDehrtdre" <<playerCountries[test].getNumberTroop() << endl;
         }
         
 
