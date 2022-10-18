@@ -9,6 +9,7 @@ namespace state{
 
 Player::Player () {
     ownTroop = 35;
+    status = PLAYING;
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 

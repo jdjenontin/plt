@@ -30,7 +30,7 @@ void Calculation::init_lostroop () {
 }
 
 int Calculation::attack (Country &attacker, Country &defender) {
-    Dice dice;
+    Dice dice(1,6);
     int att, def;
     int count = 1;
 

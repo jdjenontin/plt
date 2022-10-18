@@ -12,6 +12,10 @@ State::State(){
     
 }
 
+State::~State(){
+
+}
+
 void State::init()
 {
     //Création de la liste de tous les pays
@@ -33,7 +37,27 @@ void State::init()
         countriesList.push_back(country);
     }
 
+    //Creation de la liste de toutes les cartes 
+    for(int i = 0; i < 42; i+=3){
+        Card card1(countriesNames[i], Infantry);
+        cardList.push_back(card1);
+
+        Card card2(countriesNames[i+1], Cavalry);
+        cardList.push_back(card2);
+
+        Card card3(countriesNames[i+2], Artillery);
+        cardList.push_back(card3);
+    }
+
     //Affectation des pays et troupes aux joueurs
+}
+
+std::vector<Country> State::getListCountry() {
+    return countriesList;
+}
+
+std::vector<Card> State::getListCard() {
+    return cardList;
 }
 
 
