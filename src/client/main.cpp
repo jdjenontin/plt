@@ -72,6 +72,12 @@ void testgame(){
     init_player(player1, player2, player3);
 //**************************************//
 
+//jouer
+    while(state.playing){
+        
+    }
+
+
 //choisis les pays attaquant et defensifs
     int c_attack, c_defender;
 
