@@ -49,14 +49,16 @@ void init_player(Player player1, Player player2, Player player3){
 }
 
 void testgame(){
-    State state;
+    
 
     int num_player;
 
     cout << "choose the number of player :(you need choose 3 for now)";
     cin >> num_player;
 
-    if(num_player != 3) return;
+    State state(num_player);
+
+    //if(num_player != 3) return;
 
     Player player1;
     Player player2;
@@ -69,7 +71,13 @@ void testgame(){
     
 //ajouter des pays au joueur1
 //**************************************//
-    init_player(player1, player2, player3);
+    //init_player(player1, player2, player3);
+    cout << "here" << endl;
+    vector<Player> pList = state.getPlayersList();
+    
+    for(auto player : pList){
+        cout << "Number of country : " << player.getListCountry().size() << endl;  
+        }
 //**************************************//
 
 //jouer

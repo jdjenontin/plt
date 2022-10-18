@@ -1,7 +1,12 @@
 #include "State.h"
 #include <iostream>
 #include <map>
-#include <iterator>
+
+#include <random>
+
+#include "Dice.h"
+#include "Calculation.h"
+
 
 using namespace std;
 
@@ -13,7 +18,15 @@ State::State(){
 }
 
 State::~State(){
+    
+}
 
+State::State(int n_player){
+    numberPlayer = n_player;
+
+    for(int i = 0; i < n_player; i++){
+        playersList.push_back(Player());
+    }
 }
 
 void State::init()
@@ -48,8 +61,50 @@ void State::init()
         Card card3(countriesNames[i+2], Artillery);
         cardList.push_back(card3);
     }
-
     //Affectation des pays et troupes aux joueurs
+    vector<int> affectation_order;
+    Calculation calc;
+    affectation_order = calc.shuffledTab(42);
+
+    // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
+    int j = 0;
+    for(int i = 0; i != 42; i++){
+        countriesList[i].addNumberTroop(2);
+        playersList[j].addCountry(countriesList[i]);
+        j++;
+        j %= numberPlayer;
+    }
+    
+    // Attribution des soldats :
+    
+    map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
+
+    
+    cout << initialTroopMap[numberPlayer] << endl;
+    int initialTroop = initialTroopMap[numberPlayer];
+
+    for (int i = 0; i != numberPlayer; i++){
+        vector<Country> playerCountries = playersList[i].getListCountry();
+        int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
+        
+        // Ajout d'un nombre min de troupe à tous less territoire
+        for(auto country : playerCountries){
+            country.addNumberTroop(minTroopPerTeritory);
+        }
+        
+        // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
+        int remaningTroop = initialTroop%playerCountries.size();
+
+        for(int k = 0; k != remaningTroop; k++)
+        {
+            Dice dice(0, playerCountries.size() - 1);
+            playerCountries[dice.thrown()].addNumberTroop(1);
+        }
+        
+
+    }
+
+
 }
 
 std::vector<Country> State::getListCountry() {
@@ -60,5 +115,8 @@ std::vector<Card> State::getListCard() {
     return cardList;
 }
 
+const std::vector<Player>& State::getPlayersList() const{
+    return playersList;
+}
 
 } // namespace state
