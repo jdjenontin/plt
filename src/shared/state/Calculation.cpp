@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <chrono>
+#include <iterator>
+#include <algorithm>
 
 #include "Calculation.h"
 
@@ -79,6 +81,22 @@ int Calculation::attack (Country &attacker, Country &defender) {
         }
         count++;
     }
+}
+
+
+/*
+* Generate a shuffle list containing a list of integer for 0 to numberOfElement
+*/
+std::vector<int> Calculation::shuffledTab(int numberOfElement){
+    std::vector<int> temp_list;
+    for(int i = 0; i != numberOfElement; i++){
+        temp_list.push_back(i);
+
+        auto rng = std::default_random_engine {};
+        std::shuffle(begin(temp_list), end(temp_list), rng);
+    }
+
+    return temp_list;
 }
 
 }

@@ -37,6 +37,10 @@ void buildCountry (int number, string name) {
 
 int main(int argc,char* argv[])
 {
+
+    State state(3);
+    state.init();
+    
     Exemple exemple;
     exemple.setX(53);
 

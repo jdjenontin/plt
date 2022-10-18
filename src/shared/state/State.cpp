@@ -1,7 +1,11 @@
 #include "State.h"
 #include <iostream>
 #include <map>
-#include <iterator>
+
+#include <random>
+
+#include "Calculation.h"
+
 
 using namespace std;
 
@@ -10,6 +14,18 @@ namespace state
     
 State::State(){
     
+}
+
+State::~State(){
+    
+}
+
+State::State(int n_player){
+    numberPlayer = n_player;
+
+    for(int i = 0; i < n_player; i++){
+        playersList.push_back(Player());
+    }
 }
 
 void State::init()
@@ -34,6 +50,39 @@ void State::init()
     }
 
     //Affectation des pays et troupes aux joueurs
+    vector<int> affectation_order;
+    Calculation calc;
+    affectation_order = calc.shuffledTab(42);
+
+    // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
+    int j = 0;
+    for(int i = 0; i != 42; i++){
+        countriesList[i].addNumberTroop(2);
+        playersList[j].addCountry(countriesList[i]);
+        j++;
+        j %= numberPlayer;
+    }
+    
+    // Attribution des soldats :
+
+    map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
+
+    int initialTroop = initialTroopMap[numberPlayer];
+
+    int minTroopPerTeritory = (int) initialTroop/numberPlayer;
+
+    for (int i = 0; i != numberPlayer; i++){
+        vector<Country> playerCountries = playersList[i].getListCountry();
+        int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
+
+        for(auto country : playerCountries){
+            country.addNumberTroop(minTroopPerTeritory);
+        }
+
+        int remaningTroop = initialTroop%playerCountries.size();
+    }
+
+
 }
 
 
