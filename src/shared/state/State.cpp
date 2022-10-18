@@ -4,6 +4,7 @@
 
 #include <random>
 
+#include "Dice.h"
 #include "Calculation.h"
 
 
@@ -60,7 +61,6 @@ void State::init()
         Card card3(countriesNames[i+2], Artillery);
         cardList.push_back(card3);
     }
-
     //Affectation des pays et troupes aux joueurs
     vector<int> affectation_order;
     Calculation calc;
@@ -76,22 +76,32 @@ void State::init()
     }
     
     // Attribution des soldats :
-
+    
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
+    
+    cout << initialTroopMap[numberPlayer] << endl;
     int initialTroop = initialTroopMap[numberPlayer];
-
-    int minTroopPerTeritory = (int) initialTroop/numberPlayer;
 
     for (int i = 0; i != numberPlayer; i++){
         vector<Country> playerCountries = playersList[i].getListCountry();
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
-
+        
+        // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
             country.addNumberTroop(minTroopPerTeritory);
         }
-
+        
+        // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
         int remaningTroop = initialTroop%playerCountries.size();
+
+        for(int k = 0; k != remaningTroop; k++)
+        {
+            Dice dice(0, playerCountries.size() - 1);
+            playerCountries[dice.thrown()].addNumberTroop(1);
+        }
+        
+
     }
 
 
@@ -105,5 +115,8 @@ std::vector<Card> State::getListCard() {
     return cardList;
 }
 
+const std::vector<Player>& State::getPlayersList() const{
+    return playersList;
+}
 
 } // namespace state
