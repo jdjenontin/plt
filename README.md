@@ -63,7 +63,7 @@ Le diagramme des classes pour les états est présenté à la figure ci dessous.
 
 ![RIsk](rapport/state.png)
 
-La classe principale du package **state** est State. Elle définit décrit l'état du jeu à chaque instant.
+La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
 
 Les éléments de l'état du jeu , décrits à la section précédentes sont représentés par les classes suivantes :
 
