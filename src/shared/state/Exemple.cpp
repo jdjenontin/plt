@@ -6,5 +6,9 @@ void Exemple::setX (int x) {
     this->x = x;
 }
 
+int Exemple::getX () {
+    return x;
+}
+
 }
 
