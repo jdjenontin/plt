@@ -38,7 +38,7 @@ L'état du jeu est défini par les joueurs et leurs possesions : Pays et Cartes.
 
 ### 2.1 Les Joueurs
 
-Le nombre de joueur est définit au début de chaque partie, l'état initiale du jeu varit en fonction du nombre de joueurs impliqué.
+Le nombre de joueur est défini au début de chaque partie, l'état initiale du jeu varie en fonction du nombre de joueurs impliqué.
 Dans le cadre de notre projets nous implémenterons dans un premier temps des parties impliquant 3 joueurs puis dans un second temps des parties impliquants entre 2 et 5 joueurs.
 Pour une partie impliquant:
 * 2 joueurs : Chaque joueur dispose au début de la partie de 21 territoires et de 45 soldats.
@@ -55,17 +55,17 @@ Au nombre de 42 au total, les territoires sont distribués de façon aléatoire 
 ### 2.3 Les cartes
 
 Au nombre de 42 aussi, elles sont de 3 types : Infantry, Cavalry et Artillery. Chaque carte est associé à un pays.
-Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un jouer possède leq 3 types de cartes il peut les échanger contre des troupes bonus.
+Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un joueur possède les 3 types de cartes il peut les échanger contre des troupes bonus.
 
 ## 2.2 Conception logiciel
 
-Le diagramme des  classes pour les état est présenter à la figure ci dessous.
+Le diagramme des classes pour les états est présenté à la figure ci dessous.
 
 ![RIsk](rapport/state.png)
 
 La classe principale du package **state** est State. Elle définit décrit l'état du jeu à chaque instant.
 
-Les éléments de l'états du jeu , décrites à la section précédentes sont représentés par les classes suivantes :
+Les éléments de l'état du jeu , décrits à la section précédentes sont représentés par les classes suivantes :
 
 | Element | Classe  |
 |---------|---------|
@@ -74,10 +74,10 @@ Les éléments de l'états du jeu , décrites à la section précédentes sont r
 |Carte    | Card    |
 
 
-A ces classes s'ajoutes :
+A ces classes s'ajoutent :
 
 * La classe **Calculation** qui regroupe un ensemble de méthodes qui s'occupent des divers calculs aléatoires nécessaire au bon déroulement du jeu
 
 * La classe **Dice**, composant de Calculation, qui reproduit le comportement d'un dé
 
-* La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map ju jeu qui sera défini la partie graphique.
+* La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map de jeu qui sera définie dans la partie graphique.
