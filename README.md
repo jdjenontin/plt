@@ -55,7 +55,7 @@ Au nombre de 42 au total, les territoires sont distribués de façon aléatoire 
 ### 2.3 Les cartes
 
 Au nombre de 42 aussi, elles sont de 3 types : Infantry, Cavalry et Artillery. Chaque carte est associé à un pays.
-Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un jouer possède leq 3 types de cartes il peut les échanger contre des troupes bonus.
+Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un joueur possède les 3 types de cartes il peut les échanger contre des troupes bonus.
 
 ## 2.2 Conception logiciel
 
@@ -63,7 +63,7 @@ Le diagramme des  classes pour les état est présenter à la figure ci dessous.
 
 ![RIsk](rapport/state.png)
 
-La classe principale du package **state** est State. Elle définit décrit l'état du jeu à chaque instant.
+La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
 
 Les éléments de l'états du jeu , décrites à la section précédentes sont représentés par les classes suivantes :
 
