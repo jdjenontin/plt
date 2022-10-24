@@ -93,9 +93,10 @@ int Player::getownTroop () {
     return ownTroop;
 }
 
+/*
 std::vector<Country> Player::getListCountry () {
     return listCountry;
-}
+}*/
 
 int Player::continentBonusTroop ()
 {
@@ -128,5 +129,11 @@ int Player::continentBonusTroop ()
     return numberBonusTroop;
 
 }
+
+    // Getters 
+     const std::vector<Country>& Player::getListCountry () const
+     {
+        return listCountry;
+     }
 }
 

@@ -85,4 +85,7 @@ void Country::reduceNumberTroop (int numTroop) {
     numberTroop -= numTroop;
 }
 
+
+
 }
+
