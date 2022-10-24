@@ -87,9 +87,20 @@ void State::init()
         vector<Country> playerCountries = playersList[i].getListCountry();
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
         
+        cout << playerCountries[0].getNameCountry() << playerCountries[0].getNumberTroop() << endl;
+        playerCountries[0].addNumberTroop(1);
+        
         // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
+            cout << country.getNumberTroop() << endl;
             country.addNumberTroop(minTroopPerTeritory);
+            cout << country.getNumberTroop() << endl;
+        }
+
+        for(auto country : playerCountries){
+            cout << country.getNumberTroop() << endl;
+            country.addNumberTroop(minTroopPerTeritory);
+            cout << country.getNumberTroop() << endl;
         }
         
         // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
@@ -107,11 +118,7 @@ void State::init()
             playerCountries[test].addNumberTroop(1);
             cout << "GDehrtdre" <<playerCountries[test].getNumberTroop() << endl;
         }
-        
-
     }
-
-
 }
 
 std::vector<Country> State::getListCountry() {

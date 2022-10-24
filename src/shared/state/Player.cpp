@@ -26,7 +26,7 @@ Player::Player (std::vector<Country> lcountry, std::vector<Card> lcard, int troo
 void Player::place (Country &country, int numberTroop) {
     cout << "place!" << endl;
 
-    country.numberTroop += numberTroop;
+    country.addNumberTroop(numberTroop);
 }
 
 int Player::attack (Country &attacker, Country &defender) {
@@ -93,8 +93,8 @@ int Player::getownTroop () {
     return ownTroop;
 }
 
-std::vector<Country> Player::getListCountry () {
-    return listCountry;
+const std::vector<Country>& Player::getListCountry () const{
+      return listCountry;
 }
 
 int Player::continentBonusTroop ()

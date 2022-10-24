@@ -6,42 +6,103 @@
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
 #include <SFML/Graphics.hpp>
+#include <sstream>
+#include <state.h>
+
+using namespace std;
+using namespace state;
+using namespace sf;
 
 void testSFML() {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    // create the window
+    RenderWindow window(sf::VideoMode(1280, 886), "My window");
 
+    Texture t;
+
+    t.loadFromFile("res/carte.png");
+
+    Sprite background(t);
+    
+    Color color;
+
+    CircleShape cir(25);
+
+    cir.setFillColor(color.Black);
+
+    Font font;
+    if (!font.loadFromFile("res/arial/arial.ttf"))
+        return;
+    Text text1("1", font, 30);
+
+    Text text2("X : 0", font, 20);
+    text2.setFillColor(color.Black);
+    Text text3("Y : 0", font, 20);
+    text3.setFillColor(color.Black);
+
+    text2.setPosition(1150,25);
+    text3.setPosition(1150,50);
+
+    text1.setFillColor(color.Blue);
+
+    // run the program as long as the window is open
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        ostringstream flux1, flux2;
+
+        Vector2i pos = Mouse::getPosition(window);
+
+        Event mouse;
+        while (window.pollEvent(mouse))
         {
-            if (event.type == sf::Event::Closed)
+            if (mouse.type == Event::Closed)
                 window.close();
+            if (mouse.type == Event::MouseButtonPressed)
+                if (mouse.key.code == Mouse::Left) 
+                {
+                    text1.setPosition(pos.x, pos.y);
+                }
+                else if (mouse.key.code == Mouse::Right) 
+                {
+                    cir.setPosition(pos.x, pos.y);
+                }
         }
 
-        window.clear();
-        window.draw(shape);
+        flux1 << "X : ";
+        flux1 << pos.x;
+
+        String const str1 = flux1.str();
+
+        flux2 << "Y : ";
+        flux2 << pos.y;
+
+        String const str2 = flux2.str();
+        
+        text2.setString(str1);
+        text3.setString(str2);
+
+        window.clear(Color::White);	
+        window.draw(background);
+        window.draw(text1);
+        window.draw(text2);
+        window.draw(text3);
+        window.draw(cir);
+
         window.display();
     }
 }
 
 // Fin test SFML
 
-#include <state.h>
-
-using namespace std;
-using namespace state;
-
 vector<Country> v_listcountry;
 //la liste est definitive, ne touche jamais.
 
 void listCountries(Player player){
     cout << "listCountires" << endl;
-    for(unsigned i = 0; i < player.getListCountry().size(); i++){
-        cout << player.getListCountry()[i].getNumberCountry();
-        cout << ' ' << player.getListCountry()[i].getNumberTroop() << endl;
+    vector<Country> listcountry = player.getListCountry();
+
+    for(unsigned i = 0; i < listcountry.size(); i++){
+        cout << listcountry[i].getNumberCountry();
+        cout << ' ' << listcountry[i].getNumberTroop() << endl;
     }
 }
 
@@ -150,8 +211,8 @@ void testgame(){
 
 int main(int argc,char* argv[])
 {
-    //testSFML();
-    testgame();
+    testSFML();
+    //testgame();
 
     return 0;
 }
