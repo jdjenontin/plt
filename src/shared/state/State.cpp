@@ -104,8 +104,6 @@ void State::init()
         
 
     }
-
-
 }
 
 std::vector<Country> State::getListCountry() {
