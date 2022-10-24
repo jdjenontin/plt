@@ -24,6 +24,7 @@ State::~State(){
 State::State(int n_player){
     numberPlayer = n_player;
 
+    // Création de la liste des joueurs
     for(int i = 0; i < n_player; i++){
         playersList.push_back(Player());
     }
@@ -69,8 +70,7 @@ void State::init()
     // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
     int j = 0;
     for(auto i : affectation_order){
-        countriesList[i].addNumberTroop(2);
-        playersList[j].addCountry(countriesList[i]);
+        playersList[j].addCountry(&countriesList[i]);
         j++;
         j %= numberPlayer;
     }
@@ -79,34 +79,28 @@ void State::init()
     
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
-    
-    cout << initialTroopMap[numberPlayer] << endl;
     int initialTroop = initialTroopMap[numberPlayer];
 
     for (int i = 0; i != numberPlayer; i++){
-        vector<Country> playerCountries = playersList[i].getListCountry();
+        vector<Country*> playerCountries = playersList[i].getListCountry();
+
+        // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
-        
+
         // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
-            country.addNumberTroop(minTroopPerTeritory);
+            country -> addNumberTroop(minTroopPerTeritory);
         }
+
+        int remainingTroop = initialTroop % playerCountries.size();
         
-        // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
-        int remaningTroop = initialTroop%playerCountries.size();
-
-        cout << "Remaining ::" << remaningTroop << endl;
-
+        // Ajoout du nombre de troupe restant de façon aléatoire sur les territoires 
         Dice dice(0, playerCountries.size() - 1);
-
-        for(int k = 0; k != remaningTroop; k++)
+        for(int k = 0; k != remainingTroop; k++)
         {
-            int test = dice.thrown();
-            cout << "Throw " << test << endl;
-            cout << playerCountries[test].getNumberTroop() << endl;
-            playerCountries[test].addNumberTroop(1);
-            cout << "GDehrtdre" <<playerCountries[test].getNumberTroop() << endl;
-        }
+            int electedCountry = dice.thrown();
+            playerCountries[electedCountry]->addNumberTroop(1);
+        } 
         
 
     }

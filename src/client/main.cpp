@@ -3,6 +3,7 @@
 #include <chrono>
 #include <algorithm>
 #include <vector>
+#include <sstream>
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
 #include <SFML/Graphics.hpp>
@@ -40,8 +41,8 @@ vector<Country> v_listcountry;
 void listCountries(Player player){
     cout << "listCountires" << endl;
     for(unsigned i = 0; i < player.getListCountry().size(); i++){
-        cout << player.getListCountry()[i].getNumberCountry();
-        cout << ' ' << player.getListCountry()[i].getNumberTroop() << endl;
+        cout << player.getListCountry()[i]->getNumberCountry();
+        cout << ' ' << player.getListCountry()[i]->getNumberTroop() << endl;
     }
 }
 
@@ -150,7 +151,6 @@ void testgame(){
 
 int main(int argc,char* argv[])
 {
-    //testSFML();
     testgame();
 
     return 0;
