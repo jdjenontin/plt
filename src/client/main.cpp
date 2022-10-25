@@ -30,9 +30,31 @@ vector<Country> v_listcountry;
 Color blue(0, 0, 255, 200);
 Color red(255, 0, 0, 200);
 Color green(0, 255, 0, 200);
+Color pink(238, 130, 238, 200);
+Color purple(88, 82, 169, 200);
 
-vector<Color> colors = {blue, red, green};
+vector<Color> colors = {blue, red, green, pink, purple};
 
+bool existCountry(Vector2i pos){
+    for(unsigned i = 0; i < PosCountries.size(); i++){
+        if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
+            return true;
+    }
+    return false;
+}
+
+const Country findCountry(Vector2i pos){
+    for(unsigned i = 0; i < PosCountries.size(); i++){
+        if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
+            return v_listcountry[i];
+    }
+    return {};
+}
+
+void init_text(Text &text, int x, int y, Color color){
+    text.setPosition(x, y);
+    text.setFillColor(color);
+}
 
 void affiche_message(RenderWindow &window, Vector2i pos){
     ostringstream flux;
@@ -46,10 +68,10 @@ void affiche_message(RenderWindow &window, Vector2i pos){
             numCountry = i;
     }
 
-    flux << "you choose the country ";
+    flux << "It's the country ";
     flux << v_listcountry[numCountry].getNameCountry();
     flux << "\n";
-    flux << "number of country is ";
+    flux << "Number of country is ";
     flux << numCountry;
 
     text.setString(flux.str());
@@ -93,12 +115,16 @@ void testSFML(vector<Player> &pList) {
 
     Texture t, circle;
 
+    Country c_country, d_country; // les pays attaquants et defensifs
+
+    int status = 0;
+
     t.loadFromFile("res/carte.png");
     circle.loadFromFile("res/button.png");
     circle.setSmooth(true);
 
     Sprite background(t);
-    
+
     Color color;
 
     CircleShape cir(25);
@@ -120,12 +146,29 @@ void testSFML(vector<Player> &pList) {
 
     text1.setFillColor(color.Blue);
 
+    Text text4(" ", font, 25), text5(" ", font, 25), text6(" ", font, 25);
+    init_text(text4, 600, 865, color.Black);
+    init_text(text5, 600, 900, color.Black);
+    init_text(text6, 600, 935, color.Black);
+
     // run the program as long as the window is open
     while (window.isOpen())
     {
-        ostringstream flux1, flux2;
+        ostringstream flux1, flux2, flux3, flux4, flux5, flux6;
 
         Vector2i pos = Mouse::getPosition(window);
+
+        flux1 << "X : ";
+        flux1 << pos.x;
+
+        flux2 << "Y : ";
+        flux2 << pos.y;
+
+        flux3 << "you choose the country ";
+
+        flux4 << "you will attack the country ";
+
+        flux5 << "you need choose a country adjacent !";
 
         Event mouse;
         while (window.pollEvent(mouse))
@@ -135,30 +178,59 @@ void testSFML(vector<Player> &pList) {
             if (mouse.type == Event::MouseButtonPressed)
                 if (mouse.key.code == Mouse::Left) 
                 {
-                    text1.setPosition(pos.x, pos.y);
-
-
-
+                    //text1.setPosition(pos.x, pos.y);
+                    if(status == 0)
+                    {
+                        c_country = findCountry(pos);
+                        if(existCountry(pos)){
+                            flux3 << c_country.getNameCountry();    
+                            text4.setString(flux3.str());
+                            status++;
+                        }
+                    }
+                    else if(status == 1){
+                        d_country = findCountry(pos);
+                        if(existCountry(pos)){
+                            cout << c_country.getNumberCountry() << endl;
+                            cout << d_country.getNumberCountry() << endl;
+                            if(c_country.isAdjacent(d_country.getNumberCountry()) == true){
+                                flux4 << d_country.getNameCountry();
+                                text5.setString(flux4.str());
+                                status++;
+                            }
+                            else{
+                                text5.setString(flux5.str());
+                            }
+                        }
+                    }
                     // a faire 
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
                     cir.setPosition(pos.x, pos.y);
                 }
+                else if (Keyboard::isKeyPressed(Keyboard::T))
+                {
+
+                }
+            if (status == 2){
+                flux6 << "If you want to attack, please tape T";
+                if(Keyboard::isKeyPressed(Keyboard::T))
+                {
+                            
+                }
+                            //player.attack(c_country, d_country);
+                else
+                {
+                    status = 0;
+                    flux6 << " ";
+                }
+                text6.setString(flux6.str());
+            }
         }
-
-        flux1 << "X : ";
-        flux1 << pos.x;
-
-        String const str1 = flux1.str();
-
-        flux2 << "Y : ";
-        flux2 << pos.y;
-
-        String const str2 = flux2.str();
         
-        text2.setString(str1);
-        text3.setString(str2);
+        text2.setString(flux1.str());
+        text3.setString(flux2.str());
 
         window.clear(Color::White);	
         window.draw(background);
@@ -166,6 +238,9 @@ void testSFML(vector<Player> &pList) {
         window.draw(text2);
         window.draw(text3);
         window.draw(cir);
+        window.draw(text4);
+        window.draw(text5);
+        window.draw(text6);
 
         init_button(window, pList, circle);
         affiche_message(window, pos);
