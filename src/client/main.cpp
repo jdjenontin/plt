@@ -14,13 +14,88 @@ using namespace std;
 using namespace state;
 using namespace sf;
 
-void testSFML() {
-    // create the window
-    RenderWindow window(sf::VideoMode(1280, 886), "My window");
+vector<vector<int>> PosCountries = {{100,140},{210,135},{204,208},{290,220},{446,90},{367,227},
+                                    {208,302},{298,327},{225,416},{310,480},{327,593},{400,567},
+                                    {341,685},{602,525},{695,489},{752,587},{689,637},{704,748},
+                                    {815,750},{550,180},{530,274},{648,160},{638,286},{750,249},
+                                    {563,361},{664,362},{784,453},{863,323},{877,203},{940,149},
+                                    {1033,115},{1021,224},{1035,301},{1130,122},{1171,267},{1000,372},
+                                    {931,466},{1028,476},{1060,608},{1166,593},{1202,711},{1106,739},
+};
 
-    Texture t;
+Font font;
+
+vector<Country> v_listcountry;
+
+Color blue(0, 0, 255);
+Color red(255, 0, 0);
+Color green(0, 255, 0);
+
+vector<Color> colors = {blue, red, green};
+
+
+void affiche_message(RenderWindow &window, Vector2i pos){
+    ostringstream flux;
+    Color color;
+    int numCountry;
+
+    Text text("default", font, 25);
+
+    for(unsigned i = 0; i < PosCountries.size(); i++){
+        if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
+            numCountry = i;
+    }
+
+    flux << "you choose the country ";
+    flux << v_listcountry[numCountry].getNameCountry();
+    flux << "\n";
+    flux << "number of country is ";
+    flux << numCountry;
+
+    text.setString(flux.str());
+    text.setPosition(50, 900);
+    text.setFillColor(color.Black);
+    window.draw(text);
+    
+}
+
+void init_button(RenderWindow &window, vector<Player> &pList, Texture circle){
+    Color color;
+
+    for(unsigned j = 0; j < pList.size(); j++){
+        for(unsigned i = 0; i < pList[j].getListCountry().size(); i++){
+            CircleShape c(25);
+            vector<Country> cList= pList[j].getListCountry();
+
+            int num = cList[i].getNumberCountry();
+            c.setTexture(&circle); // texture is a sf::Texture
+            c.setTextureRect(IntRect(2, 2, 21, 20));
+            c.setPosition(PosCountries[num][0] - 20, 
+                            PosCountries[num][1] - 20);
+            c.setFillColor(colors[j]);
+            window.draw(c);
+
+            Text text("1", font, 25);
+
+            text.setString(to_string(cList[i].getNumberTroop()));
+            text.setFillColor(color.Black);
+            text.setPosition(PosCountries[num][0] - 5, PosCountries[num][1] - 11);
+            text.Bold;
+            window.draw(text); 
+        }
+    }
+
+}
+
+void testSFML(vector<Player> &pList) {
+    // create the window
+    RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
+
+    Texture t, circle;
 
     t.loadFromFile("res/carte.png");
+    circle.loadFromFile("res/button.png");
+    circle.setSmooth(true);
 
     Sprite background(t);
     
@@ -28,9 +103,9 @@ void testSFML() {
 
     CircleShape cir(25);
 
-    cir.setFillColor(color.Black);
+    cir.setTexture(&circle); // texture is a sf::Texture
+    cir.setTextureRect(IntRect(2, 2, 21, 20));
 
-    Font font;
     if (!font.loadFromFile("res/arial/arial.ttf"))
         return;
     Text text1("1", font, 30);
@@ -88,13 +163,14 @@ void testSFML() {
         window.draw(text3);
         window.draw(cir);
 
+        init_button(window, pList, circle);
+        affiche_message(window, pos);
+
         window.display();
     }
 }
 
 // Fin test SFML
-
-vector<Country> v_listcountry;
 //la liste est definitive, ne touche jamais.
 
 void listCountries(Player player){
@@ -193,9 +269,11 @@ void testgame(){
     //init_player(player1, player2, player3);
     vector<Player> pList = state.getPlayersList();
     
-    for(auto player : pList){
-        cout << "Number of country : " << player.getListCountry().size() << endl;  
-        }
+    // for(auto player : pList){
+    //     cout << "Number of country : " << player.getListCountry().size() << endl;  
+    //     }
+    
+    testSFML(pList);
 //**************************************//
 
 //jouer
