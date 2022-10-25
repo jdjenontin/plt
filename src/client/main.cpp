@@ -27,9 +27,9 @@ Font font;
 
 vector<Country> v_listcountry;
 
-Color blue(0, 0, 255);
-Color red(255, 0, 0);
-Color green(0, 255, 0);
+Color blue(0, 0, 255, 200);
+Color red(255, 0, 0, 200);
+Color green(0, 255, 0, 200);
 
 vector<Color> colors = {blue, red, green};
 
@@ -65,9 +65,9 @@ void init_button(RenderWindow &window, vector<Player> &pList, Texture circle){
     for(unsigned j = 0; j < pList.size(); j++){
         for(unsigned i = 0; i < pList[j].getListCountry().size(); i++){
             CircleShape c(25);
-            vector<Country> cList= pList[j].getListCountry();
+            vector<Country*> cList= pList[j].getListCountry();
 
-            int num = cList[i].getNumberCountry();
+            int num = cList[i]->getNumberCountry();
             c.setTexture(&circle); // texture is a sf::Texture
             c.setTextureRect(IntRect(2, 2, 21, 20));
             c.setPosition(PosCountries[num][0] - 20, 
@@ -77,7 +77,7 @@ void init_button(RenderWindow &window, vector<Player> &pList, Texture circle){
 
             Text text("1", font, 25);
 
-            text.setString(to_string(cList[i].getNumberTroop()));
+            text.setString(to_string(cList[i]->getNumberTroop()));
             text.setFillColor(color.Black);
             text.setPosition(PosCountries[num][0] - 5, PosCountries[num][1] - 11);
             text.Bold;
@@ -136,6 +136,10 @@ void testSFML(vector<Player> &pList) {
                 if (mouse.key.code == Mouse::Left) 
                 {
                     text1.setPosition(pos.x, pos.y);
+
+
+
+                    // a faire 
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
@@ -173,19 +177,9 @@ void testSFML(vector<Player> &pList) {
 // Fin test SFML
 //la liste est definitive, ne touche jamais.
 
-void listCountries(Player player){
-    cout << "listCountires" << endl;
-    for(unsigned i = 0; i < player.getListCountry().size(); i++){
-        cout << player.getListCountry()[i]->getNumberCountry();
-        cout << ' ' << player.getListCountry()[i]->getNumberTroop() << endl;
-    }
-}
-
 void jouer(Player player){
     //choisir les pays attaquant et defensifs
     int c_attack, c_defender;
-
-    listCountries(player);
 
     cout << "choose the attack country's number :";
     cin >>  c_attack;
@@ -255,10 +249,6 @@ void testgame(){
 
     State state(num_player);
 
-    Player player1;
-    Player player2;
-    Player player3;
-
     state.init();
 
 //initialiser la liste
@@ -289,7 +279,6 @@ void testgame(){
 int main(int argc,char* argv[])
 {
     testgame();
-    testSFML();
     //testgame();
 
     return 0;

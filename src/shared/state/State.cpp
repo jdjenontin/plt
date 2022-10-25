@@ -67,6 +67,8 @@ void State::init()
     Calculation calc;
     affectation_order = calc.shuffledTab(42);
 
+    cout << affectation_order[1] << endl;
+
     // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
     int j = 0;
     for(auto i : affectation_order){
