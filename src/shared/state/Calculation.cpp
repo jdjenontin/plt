@@ -91,10 +91,10 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
     std::vector<int> temp_list;
     for(int i = 0; i != numberOfElement; i++){
         temp_list.push_back(i);
-
-        auto rng = std::default_random_engine {};
-        std::shuffle(begin(temp_list), end(temp_list), rng);
     }
+
+    auto rng = std::default_random_engine {};
+    std::shuffle(begin(temp_list), end(temp_list), rng);
 
     return temp_list;
 }

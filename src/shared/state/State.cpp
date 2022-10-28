@@ -24,6 +24,7 @@ State::~State(){
 State::State(int n_player){
     numberPlayer = n_player;
 
+    // Création de la liste des joueurs
     for(int i = 0; i < n_player; i++){
         playersList.push_back(Player());
     }
@@ -66,11 +67,12 @@ void State::init()
     Calculation calc;
     affectation_order = calc.shuffledTab(42);
 
+    cout << affectation_order[1] << endl;
+
     // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
     int j = 0;
-    for(int i = 0; i != 42; i++){
-        countriesList[i].addNumberTroop(2);
-        playersList[j].addCountry(countriesList[i]);
+    for(auto i : affectation_order){
+        playersList[j].addCountry(&countriesList[i]);
         j++;
         j %= numberPlayer;
     }
@@ -79,32 +81,31 @@ void State::init()
     
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
-    
-    cout << initialTroopMap[numberPlayer] << endl;
     int initialTroop = initialTroopMap[numberPlayer];
 
     for (int i = 0; i != numberPlayer; i++){
-        vector<Country> playerCountries = playersList[i].getListCountry();
+        vector<Country*> playerCountries = playersList[i].getListCountry();
+
+        // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
-        
+
         // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
-            country.addNumberTroop(minTroopPerTeritory);
+            country -> addNumberTroop(minTroopPerTeritory);
         }
-        
-        // Ajoout du nombre de troupe restant de façon aléatoire sur le reste des territoires 
-        int remaningTroop = initialTroop%playerCountries.size();
 
-        for(int k = 0; k != remaningTroop; k++)
+        int remainingTroop = initialTroop % playerCountries.size();
+        
+        // Ajoout du nombre de troupe restant de façon aléatoire sur les territoires 
+        Dice dice(0, playerCountries.size() - 1);
+        for(int k = 0; k != remainingTroop; k++)
         {
-            Dice dice(0, playerCountries.size() - 1);
-            playerCountries[dice.thrown()].addNumberTroop(1);
-        }
+            int electedCountry = dice.thrown();
+            playerCountries[electedCountry]->addNumberTroop(1);
+        } 
         
 
     }
-
-
 }
 
 std::vector<Country> State::getListCountry() {
