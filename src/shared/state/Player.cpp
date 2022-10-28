@@ -17,7 +17,7 @@ Player::~Player () {
 
 }
 
-Player::Player (std::vector<Country> lcountry, std::vector<Card> lcard, int troop) {
+Player::Player (std::vector<Country*> lcountry, std::vector<Card> lcard, int troop) {
     listCountry = lcountry;
     listCard = lcard;
     ownTroop = troop;
@@ -26,7 +26,7 @@ Player::Player (std::vector<Country> lcountry, std::vector<Card> lcard, int troo
 void Player::place (Country &country, int numberTroop) {
     cout << "place!" << endl;
 
-    country.numberTroop += numberTroop;
+    country.addNumberTroop(numberTroop);
 }
 
 int Player::attack (Country &attacker, Country &defender) {
@@ -44,7 +44,7 @@ int Player::attack (Country &attacker, Country &defender) {
     //dans le if il faut ajouter une operation 
     if(strcmp(choose, "true") == 0){
         if(calcul.attack(attacker, defender) == 0) {
-            addCountry(defender);
+            //addCountry(defender); Ask Xiaoyu
             cout << "choose the quantity of troop that you want put in new country :";
             cin >> n_troop;
             attacker.reduceNumberTroop(n_troop);
@@ -65,13 +65,13 @@ void Player::reinforce (Country &country1, Country &country2, int numberTroop) {
     cout << "Please move your troop" << endl;
 }
 
-void Player::addCountry (Country country) {
+void Player::addCountry (Country* country) {
     listCountry.push_back(country);
 }
 
-void Player::deleteCountry (Country country) {
+void Player::deleteCountry (Country* country) {
     int i = 0;
-    while(listCountry[i].getNameCountry() != country.getNameCountry()){
+    while(listCountry[i] -> getNameCountry() != country -> getNameCountry()){
         i++;
     }
     listCountry.erase(listCountry.begin() + i);
@@ -93,25 +93,22 @@ int Player::getownTroop () {
     return ownTroop;
 }
 
-std::vector<Country> Player::getListCountry () {
-    return listCountry;
-}
-
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
     int numberBonusTroop(0);
 
     for(auto country : listCountry){
-        if(country.getNumberCountry() < 9)
+        int countryId = country->getNumberCountry();
+        if(countryId < 9)
             ameriqueN += 1;
-        else if (country.getNumberCountry() < 13)
+        else if (countryId < 13)
             ameriqueS += 1;
-        else if (country.getNumberCountry() < 19)
+        else if (countryId < 19)
             afrique += 1;
-        else if (country.getNumberCountry() < 26)
+        else if (countryId < 26)
             europe += 1;
-        else if (country.getNumberCountry() < 38)
+        else if (countryId < 38)
             asie += 1;
         else 
             oceanie +=1;
@@ -128,5 +125,8 @@ int Player::continentBonusTroop ()
     return numberBonusTroop;
 
 }
+    std::vector<Country*> Player::getListCountry () {
+        return listCountry;
+     }
 }
 

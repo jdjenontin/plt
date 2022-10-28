@@ -1,4 +1,5 @@
 #include "Country.h"
+#include <iostream>
 
 namespace state{
 
@@ -85,4 +86,7 @@ void Country::reduceNumberTroop (int numTroop) {
     numberTroop -= numTroop;
 }
 
+
+
 }
+
