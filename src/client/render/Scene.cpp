@@ -34,6 +34,32 @@ Scene::Scene (sf::RenderWindow* window){
                     {931,466},{1028,476},{1060,608},{1166,593},{1202,711},{1106,739},};
 }
 
+void Scene::init(std::vector<state::Player> pList){
+    for(unsigned i = 0; i < pList.size(); i++){
+        Message m(50, 480 + (35 * i), "player");
+        m.setintMessage(i);
+        m.addMessage(":");
+
+        Colors color;
+
+        sf::CircleShape c(25);
+
+        sf::Texture circle;
+
+        circle.loadFromFile("res/button.png");
+        circle.setSmooth(true);
+
+        c.setTexture(&circle); // texture is a sf::Texture
+        c.setTextureRect(sf::IntRect(2, 2, 21, 20));
+        c.setPosition(80, 480 + (35 * i));
+        c.setFillColor(color.colorList[i]);
+
+        window->draw(c);
+
+        listMessage.push_back(&m);
+    }
+}
+
 bool Scene::existCountry (sf::Vector2i pos){
     for(unsigned i = 0; i < posCountry.size(); i++){
         if((abs(pos.x - posCountry[i][0]) < 30 ) && (abs(pos.y - posCountry[i][1]) < 30 ))

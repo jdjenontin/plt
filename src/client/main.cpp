@@ -102,6 +102,7 @@ void testSFML(vector<Player> &pList) {
     Scene scene(&window);
 
     scene.setListCountry(v_listcountry);
+    scene.init(pList);
 
     Country c_country, d_country; // les pays attaquants et defensifs
 

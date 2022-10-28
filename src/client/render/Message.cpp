@@ -86,6 +86,17 @@ void Message::replaceMessage (std::string message){
     text.setString(m_flux.str());
 }
 
+void Message::addMessage (std::string message) {
+    std::ostringstream m_flux;
+
+    std::string str = text.getString();
+
+    m_flux << str;
+    m_flux << message;
+
+    text.setString(m_flux.str());
+}
+
 void Message::show (bool display) {
     if(display)
         text.setString(f_message);
