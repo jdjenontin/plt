@@ -126,7 +126,7 @@ void testgame(){
 int main(int argc,char* argv[])
 {
     //testSFML();
-    testgame();
-
+    //testgame();
+    cout << "It works !" << endl;
     return 0;
 }
