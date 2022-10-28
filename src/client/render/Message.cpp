@@ -45,23 +45,52 @@ Message::Message(int x, int y, std::string string){
     f_message = string;
 }
 
-void Message::setstrMessage (std::string message){
-    std::string str;
+Message::Message (int x, int y, std::string string, bool m_display){
+    if (!font.loadFromFile("res/arial/arial.ttf"))
+        return;
 
-    str.append(f_message);
-    str.append(message);
-    text.setString(str);
+    position.x = x;
+    position.y = y;
+
+    text.setFillColor(color.Black);
+    text.setFont(font);
+    text.setCharacterSize(25);
+    text.setPosition(x, y);
+    if(m_display) {text.setString(string);}
+    f_message = string;
+}
+
+void Message::setstrMessage (std::string message){
+    std::ostringstream m_flux;
+
+    m_flux << f_message;
+    m_flux << message;
+
+    text.setString(m_flux.str());
 }
 
 void Message::setintMessage (int message){
-    std::string str;
-    flux << message;
+    std::ostringstream m_flux;
 
-    str.append(f_message);
-    str.append(flux.str());
-    text.setString(str);
+    m_flux << f_message;
+    m_flux << message;
 
-    flux.clear();
+    text.setString(m_flux.str());
+}
+
+void Message::replaceMessage (std::string message){
+    std::ostringstream m_flux;
+
+    m_flux << message;
+
+    text.setString(m_flux.str());
+}
+
+void Message::show (bool display) {
+    if(display)
+        text.setString(f_message);
+    else    
+        text.setString("");
 }
 
 }
