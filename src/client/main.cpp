@@ -9,10 +9,12 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <state.h>
+#include <render.h>
 
 using namespace std;
 using namespace state;
 using namespace sf;
+using namespace render;
 
 vector<vector<int>> PosCountries = {{100,140},{210,135},{204,208},{290,220},{446,90},{367,227},
                                     {208,302},{298,327},{225,416},{310,480},{327,593},{400,567},
@@ -34,22 +36,6 @@ Color pink(238, 130, 238, 200);
 Color purple(88, 82, 169, 200);
 
 vector<Color> colors = {blue, red, green, pink, purple};
-
-bool existCountry(Vector2i pos){
-    for(unsigned i = 0; i < PosCountries.size(); i++){
-        if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
-            return true;
-    }
-    return false;
-}
-
-const Country findCountry(Vector2i pos){
-    for(unsigned i = 0; i < PosCountries.size(); i++){
-        if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
-            return v_listcountry[i];
-    }
-    return {};
-}
 
 void init_text(Text &text, int x, int y, Color color){
     text.setPosition(x, y);
@@ -115,6 +101,10 @@ void testSFML(vector<Player> &pList) {
 
     Texture t, circle;
 
+    Scene scene(window);
+
+    scene.setListCountry(v_listcountry);
+
     Country c_country, d_country; // les pays attaquants et defensifs
 
     int status = 0;
@@ -127,13 +117,13 @@ void testSFML(vector<Player> &pList) {
 
     Color color;
 
-    CircleShape cir(25);
+    Button button;
 
-    cir.setTexture(&circle); // texture is a sf::Texture
-    cir.setTextureRect(IntRect(2, 2, 21, 20));
+    button.circle.setTexture(&circle); // texture is a sf::Texture
+    button.circle.setTextureRect(IntRect(2, 2, 21, 20));
 
     if (!font.loadFromFile("res/arial/arial.ttf"))
-        return;
+        return; 
     Text text1("1", font, 30);
 
     Text text2("X : 0", font, 20);
@@ -150,6 +140,16 @@ void testSFML(vector<Player> &pList) {
     init_text(text4, 600, 865, color.Black);
     init_text(text5, 600, 900, color.Black);
     init_text(text6, 600, 935, color.Black);
+
+    Message m1(1150, 25, "X : "), 
+            m2(1150, 50, "Y : "), 
+            m3(600, 865, "you choose the country "), 
+            m4(600, 900, "you will attack the country "), 
+            m5(600, 935);
+
+
+    scene.addMessage(&m1);
+    scene.addMessage(&m2);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -181,25 +181,25 @@ void testSFML(vector<Player> &pList) {
                     //text1.setPosition(pos.x, pos.y);
                     if(status == 0)
                     {
-                        c_country = findCountry(pos);
-                        if(existCountry(pos)){
-                            flux3 << c_country.getNameCountry();    
-                            text4.setString(flux3.str());
+                        c_country = scene.findCountry(pos);
+
+                        cout << c_country.getNameCountry() << endl;
+                        if(scene.existCountry(pos)){
+                            m3.setstrMessage(c_country.getNameCountry());    
+                            //text4.setString(flux3.str());
                             status++;
                         }
                     }
                     else if(status == 1){
-                        d_country = findCountry(pos);
-                        if(existCountry(pos)){
-                            cout << c_country.getNumberCountry() << endl;
-                            cout << d_country.getNumberCountry() << endl;
+                        d_country = scene.findCountry(pos);
+                        if(scene.existCountry(pos)){
                             if(c_country.isAdjacent(d_country.getNumberCountry()) == true){
-                                flux4 << d_country.getNameCountry();
-                                text5.setString(flux4.str());
+                                m4.setstrMessage(d_country.getNameCountry());
+                                //text5.setString(flux4.str());
                                 status++;
                             }
                             else{
-                                text5.setString(flux5.str());
+                                m5.setstrMessage("you need choose a country adjacent !");
                             }
                         }
                     }
@@ -207,40 +207,44 @@ void testSFML(vector<Player> &pList) {
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
-                    cir.setPosition(pos.x, pos.y);
+                    button.circle.setPosition(pos.x, pos.y);
                 }
                 else if (Keyboard::isKeyPressed(Keyboard::T))
                 {
 
                 }
-            if (status == 2){
-                flux6 << "If you want to attack, please tape T";
-                if(Keyboard::isKeyPressed(Keyboard::T))
-                {
-                            
-                }
-                            //player.attack(c_country, d_country);
-                else
-                {
-                    status = 0;
-                    flux6 << " ";
-                }
-                text6.setString(flux6.str());
             }
+        if (status >= 2){
+            flux6 << "If you want to attack, please press T, if not, press F ";
+            if(Keyboard::isKeyPressed(Keyboard::T))
+            {
+                cout << "attack !" << endl;
+                status = 0;
+            }
+                            //player.attack(c_country, d_country);
+            else if(!Keyboard::isKeyPressed(Keyboard::F))
+            {
+                status = 0;
+                flux6 << " ";
+            }
+            else continue;
+            text6.setString(flux6.str());
         }
-        
-        text2.setString(flux1.str());
-        text3.setString(flux2.str());
+        //m1.setintMessage(pos.x);
+        //m2.setintMessage(pos.y);
 
         window.clear(Color::White);	
         window.draw(background);
-        window.draw(text1);
-        window.draw(text2);
-        window.draw(text3);
-        window.draw(cir);
-        window.draw(text4);
-        window.draw(text5);
-        window.draw(text6);
+        // window.draw(text1);
+        // window.draw(text2);
+        // window.draw(text3);
+        // if(status < 2){
+        //     window.draw(text4);
+        //     window.draw(text5);
+        // }
+        // else
+        //     window.draw(text6);
+        scene.display_message();
 
         init_button(window, pList, circle);
         affiche_message(window, pos);

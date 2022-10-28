@@ -696,6 +696,7 @@ struct stdlib_includes {
    int random;
    int sfmlGraphics;
    int jsoncpp;
+   int sstream;
 };
 
 void print_include_stdlib(struct stdlib_includes* si,char* name) {
@@ -791,7 +792,10 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
        if (!si->sfmlGraphics 
        && (strstr(name,"sf::RenderWindow")
        ||  strstr(name,"sf::VertexArray")
-       ||  strstr(name,"sf::Texture"))) {
+       ||  strstr(name,"sf::Texture")
+       ||  strstr(name,"sf::Text")
+       ||  strstr(name,"sf::Vector2i")
+       ||  strstr(name,"sf::Color"))) {
            print ("#include <SFML/Graphics.hpp>\n");
            si->sfmlGraphics = 1;
        }       
@@ -799,6 +803,11 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
        && (strstr(name,"Json::") == name)) {
            print ("#include <json/json.h>\n");
            si->jsoncpp = 1;
+       }  
+       if (!si->sstream
+       && (strstr(name,"std::ostringstream") == name)) {
+           print ("#include <sstream>\n");
+           si->sstream = 1;
        }       
     }
 }
