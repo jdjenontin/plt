@@ -70,10 +70,10 @@
           <dia:boolean val="false"/>
         </dia:attribute>
         <dia:attribute name="snap-to-grid">
-          <dia:boolean val="true"/>
+          <dia:boolean val="false"/>
         </dia:attribute>
         <dia:attribute name="snap-to-object">
-          <dia:boolean val="false"/>
+          <dia:boolean val="true"/>
         </dia:attribute>
         <dia:attribute name="show-grid">
           <dia:boolean val="true"/>

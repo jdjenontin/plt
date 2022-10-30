@@ -31,32 +31,32 @@ Scene::Scene (sf::RenderWindow* window){
                     {815,750},{550,180},{530,274},{648,160},{638,286},{750,249},
                     {563,361},{664,362},{784,453},{863,323},{877,203},{940,149},
                     {1033,115},{1021,224},{1035,301},{1130,122},{1171,267},{1000,372},
-                    {931,466},{1028,476},{1060,608},{1166,593},{1202,711},{1106,739},};
+                    {931,466},{1028,476},{1060,608},{1166,593},{1202,711},{1106,739}};
 }
 
-void Scene::init(std::vector<state::Player> pList){
+void Scene::init(std::vector<state::Player>& pList, sf::Texture* texture){
     for(unsigned i = 0; i < pList.size(); i++){
-        Message m(50, 480 + (35 * i), "player");
+        Colors color;
+
+        Message m(50, 480 + (60 * i), "Player");
         m.setintMessage(i);
         m.addMessage(":");
 
-        Colors color;
+        Button b(150, 475 + (60 * i), 25, color.colorList[i], texture);
 
-        sf::CircleShape c(25);
+        const_listButton.push_back(b);
 
-        sf::Texture circle;
+        const_listMessage.push_back(m);
 
-        circle.loadFromFile("res/button.png");
-        circle.setSmooth(true);
+        for(unsigned j = 0; j < pList[i].getListCountry().size(); j++){
+            vector<state::Country*> cList= pList[i].getListCountry();
 
-        c.setTexture(&circle); // texture is a sf::Texture
-        c.setTextureRect(sf::IntRect(2, 2, 21, 20));
-        c.setPosition(80, 480 + (35 * i));
-        c.setFillColor(color.colorList[i]);
+            int num = cList[j]->getNumberCountry();
 
-        window->draw(c);
+            Button b1(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[i], texture);
 
-        listMessage.push_back(&m);
+            const_listButton.push_back(b1);
+        }
     }
 }
 
@@ -84,9 +84,25 @@ void Scene::addMessage (Message* message){
     listMessage.push_back(message);
 }
 
+void Scene::addListMessage (std::vector<Message*> message){
+    for(auto m : message){
+        listMessage.push_back(m);
+    }
+}
+
 void Scene::display_message (){
     for(auto m : listMessage){
+        // std::string str = m->text.getString();
+        // std::cout << str << std::endl;
         window->draw(m->text);
+    }
+
+    for(auto m : const_listMessage){
+        window->draw(m.text);
+    }
+
+    for(auto b : const_listButton){
+        window->draw(b.circle);
     }
 }
 

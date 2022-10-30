@@ -1,5 +1,7 @@
 #include "Message.h"
 
+#include <SFML/Graphics.hpp>
+#include <sstream>
 #include <iostream>
 #include <string>
 

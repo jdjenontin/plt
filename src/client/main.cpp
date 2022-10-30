@@ -42,48 +42,12 @@ void init_text(Text &text, int x, int y, Color color){
     text.setFillColor(color);
 }
 
-// void affiche_message(RenderWindow &window, Vector2i pos){
-//     ostringstream flux;
-//     Color color;
-//     int numCountry;
-
-//     Text text("default", font, 25);
-
-//     for(unsigned i = 0; i < PosCountries.size(); i++){
-//         if((abs(pos.x - PosCountries[i][0]) < 30 ) && (abs(pos.y - PosCountries[i][1]) < 30 ))
-//             numCountry = i;
-//     }
-
-//     flux << "It's the country ";
-//     flux << v_listcountry[numCountry].getNameCountry();
-//     flux << "\n";
-//     flux << "Number of country is ";
-//     flux << numCountry;
-
-//     text.setString(flux.str());
-//     text.setPosition(50, 900);
-//     text.setFillColor(color.Black);
-//     window.draw(text);
-    
-// }
-
-void init_button(RenderWindow &window, vector<Player> &pList, Texture circle){
-    Color color;
-
+void display_troop(RenderWindow &window, vector<Player> &pList){
     for(unsigned j = 0; j < pList.size(); j++){
         for(unsigned i = 0; i < pList[j].getListCountry().size(); i++){
-            CircleShape c(25);
             vector<Country*> cList= pList[j].getListCountry();
 
             int num = cList[i]->getNumberCountry();
-            c.setTexture(&circle); // texture is a sf::Texture
-            c.setTextureRect(IntRect(2, 2, 21, 20));
-            c.setPosition(PosCountries[num][0] - 20, 
-                            PosCountries[num][1] - 20);
-            c.setFillColor(colors[j]);
-            window.draw(c);
-
-            Text text("1", font, 25);
 
             Message m(PosCountries[num][0] - 5, PosCountries[num][1] - 11, to_string(cList[i]->getNumberTroop()));
 
@@ -93,24 +57,28 @@ void init_button(RenderWindow &window, vector<Player> &pList, Texture circle){
 
 }
 
+// cout << "test" << endl;
+
 void testSFML(vector<Player> &pList) {
     // create the window
     RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
 
-    Texture t, circle;
+    Texture t, circle;    
+    
+    circle.loadFromFile("res/button.png");
+    circle.setSmooth(true);
 
     Scene scene(&window);
 
     scene.setListCountry(v_listcountry);
-    scene.init(pList);
+    scene.init(pList, &circle);
 
     Country c_country, d_country; // les pays attaquants et defensifs
 
     int status = 0;
 
     t.loadFromFile("res/carte.png");
-    circle.loadFromFile("res/button.png");
-    circle.setSmooth(true);
+
 
     Sprite background(t);
 
@@ -129,7 +97,7 @@ void testSFML(vector<Player> &pList) {
             m6(50, 900, "It's the country "),
             m7(50, 935, "Number of country is ");
 
-    scene.listMessage = {&m1, &m2, &m3, &m4, &m5, &m6, &m7};
+    scene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7});
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -199,7 +167,7 @@ void testSFML(vector<Player> &pList) {
 
         scene.display_message();
 
-        init_button(window, pList, circle);
+        display_troop(window, pList);
 
         window.display();
     }
