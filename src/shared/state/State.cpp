@@ -67,7 +67,7 @@ void State::init()
     Calculation calc;
     affectation_order = calc.shuffledTab(42);
 
-    cout << affectation_order[1] << endl;
+    //cout << affectation_order[1] << endl;
 
     // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
     int j = 0;
@@ -103,13 +103,15 @@ void State::init()
             int electedCountry = dice.thrown();
             playerCountries[electedCountry]->addNumberTroop(1);
         } 
-        
+    }
 
+    for(unsigned i = 0 ; i < countriesList.size(); i++){
+        listCountires.push_back(&countriesList[i]);
     }
 }
 
-std::vector<Country> State::getListCountry() {
-    return countriesList;
+const std::vector<Country*>& State::getListCountires() const{
+    return listCountires;
 }
 
 std::vector<Card> State::getListCard() {

@@ -39,7 +39,7 @@ void Scene::init(std::vector<state::Player>& pList, sf::Texture* texture){
         Colors color;
 
         Message m(50, 480 + (60 * i), "Player");
-        m.setintMessage(i);
+        m.setintMessage(i+1);
         m.addMessage(":");
 
         Button b(150, 475 + (60 * i), 25, color.colorList[i], texture);
@@ -47,16 +47,6 @@ void Scene::init(std::vector<state::Player>& pList, sf::Texture* texture){
         const_listButton.push_back(b);
 
         const_listMessage.push_back(m);
-
-        for(unsigned j = 0; j < pList[i].getListCountry().size(); j++){
-            vector<state::Country*> cList= pList[i].getListCountry();
-
-            int num = cList[j]->getNumberCountry();
-
-            Button b1(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[i], texture);
-
-            const_listButton.push_back(b1);
-        }
     }
 }
 
@@ -68,7 +58,7 @@ bool Scene::existCountry (sf::Vector2i pos){
     return false;
 }
 
-state::Country Scene::findCountry (sf::Vector2i pos){
+state::Country* Scene::findCountry (sf::Vector2i pos){
     for(unsigned i = 0; i < posCountry.size(); i++){
         if((abs(pos.x - posCountry[i][0]) < 30 ) && (abs(pos.y - posCountry[i][1]) < 30 ))
             return listcountry[i];
@@ -76,8 +66,20 @@ state::Country Scene::findCountry (sf::Vector2i pos){
     return {};
 }
 
-void Scene::setListCountry(const std::vector<state::Country> v_listcountry){
-    listcountry = v_listcountry;
+state::Country Scene::const_findCountry (sf::Vector2i pos){
+    for(unsigned i = 0; i < posCountry.size(); i++){
+        if((abs(pos.x - posCountry[i][0]) < 30 ) && (abs(pos.y - posCountry[i][1]) < 30 ))
+            return *listcountry[i];
+    }
+    return {};
+}
+
+void Scene::setListcountry(const std::vector<state::Country*> & listcountry){
+    this->listcountry = listcountry;
+}
+
+const std::vector<state::Country*> & Scene::getListcountry() const{
+    return listcountry;
 }
 
 void Scene::addMessage (Message* message){
@@ -92,8 +94,6 @@ void Scene::addListMessage (std::vector<Message*> message){
 
 void Scene::display_message (){
     for(auto m : listMessage){
-        // std::string str = m->text.getString();
-        // std::cout << str << std::endl;
         window->draw(m->text);
     }
 

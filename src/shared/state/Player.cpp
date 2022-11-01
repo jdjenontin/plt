@@ -23,42 +23,33 @@ Player::Player (std::vector<Country*> lcountry, std::vector<Card> lcard, int tro
     ownTroop = troop;
 }
 
-void Player::place (Country &country, int numberTroop) {
+void Player::place (Country* country, int numberTroop) {
     cout << "place!" << endl;
 
-    country.addNumberTroop(numberTroop);
+    country->addNumberTroop(numberTroop);
 }
 
-int Player::attack (Country &attacker, Country &defender) {
-    char choose[50];
+int Player::attack (Country* attacker, Country* defender) {
     int n_troop;
 
     Calculation calcul;
     cout << "attack!" << endl;
     calcul.compute(attacker, defender);
 
-    std::cout << "do you want attack? If yes, type true or type any letter for return :\n";
-    cin >> choose; 
+    int win = calcul.attack(attacker, defender);
 
-    std::cout << choose << std::endl;
     //dans le if il faut ajouter une operation 
-    if(strcmp(choose, "true") == 0){
-        if(calcul.attack(attacker, defender) == 0) {
-            //addCountry(defender); Ask Xiaoyu
-            cout << "choose the quantity of troop that you want put in new country :";
-            cin >> n_troop;
-            attacker.reduceNumberTroop(n_troop);
-            place(defender, n_troop);
-        }
-        else {
-        }
-        return 0;
-    }
-    else{
-        std::cout << "its not available now" << std::endl;
+    if(win == 0) {
         return 1;
+        // addCountry(defender); //Ask Xiaoyu
+        // cout << "choose the quantity of troop that you want put in new country :";
+        // cin >> n_troop;
+        // attacker->reduceNumberTroop(n_troop);
+        // place(defender, n_troop);
     }
-    return 1;
+    else {}
+
+    return 0;
 }
 
 void Player::reinforce (Country &country1, Country &country2, int numberTroop) {
@@ -93,6 +84,15 @@ int Player::getownTroop () {
     return ownTroop;
 }
 
+bool Player::existCountry (Country country){
+    for(auto c : listCountry){
+        if(c->getNameCountry() == country.getNameCountry())
+            return true;
+    }
+
+    return false;
+}
+
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
@@ -123,10 +123,11 @@ int Player::continentBonusTroop ()
     if (oceanie == 4) numberBonusTroop += 2;
 
     return numberBonusTroop;
-
 }
-    std::vector<Country*> Player::getListCountry () {
-        return listCountry;
-     }
+
+const std::vector<Country*>& Player::getListCountry () const {
+    return listCountry;
+}
+
 }
 

@@ -27,30 +27,29 @@ vector<vector<int>> PosCountries = {{100,140},{210,135},{204,208},{290,220},{446
 
 Font font;
 
-vector<Country> v_listcountry;
-
-Color blue(0, 0, 255, 200);
-Color red(255, 0, 0, 200);
-Color green(0, 255, 0, 200);
-Color pink(238, 130, 238, 200);
-Color purple(88, 82, 169, 200);
-
-vector<Color> colors = {blue, red, green, pink, purple};
+vector<Country*> v_listcountry;
 
 void init_text(Text &text, int x, int y, Color color){
     text.setPosition(x, y);
     text.setFillColor(color);
 }
 
-void display_troop(RenderWindow &window, vector<Player> &pList){
-    for(unsigned j = 0; j < pList.size(); j++){
-        for(unsigned i = 0; i < pList[j].getListCountry().size(); i++){
-            vector<Country*> cList= pList[j].getListCountry();
+void display(RenderWindow &window, vector<Player> &pList, Texture* texture){
+    Colors color;
 
+    for(unsigned j = 0; j < pList.size(); j++){
+        vector<Country*> cList = pList[j].getListCountry();
+
+        for(unsigned i = 0; i < cList.size(); i++){
             int num = cList[i]->getNumberCountry();
+
+            cList[i]->setColor(color.colorList[j]);
 
             Message m(PosCountries[num][0] - 5, PosCountries[num][1] - 11, to_string(cList[i]->getNumberTroop()));
 
+            Button b(PosCountries[num][0] - 20, PosCountries[num][1] - 20, 25, color.colorList[j], texture);
+
+            window.draw(b.circle);
             window.draw(m.text);
         }
     }
@@ -59,7 +58,9 @@ void display_troop(RenderWindow &window, vector<Player> &pList){
 
 // cout << "test" << endl;
 
-void testSFML(vector<Player> &pList) {
+void testSFML(State &state) {
+    vector<Player> pList = state.getPlayersList();
+
     // create the window
     RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
 
@@ -67,42 +68,51 @@ void testSFML(vector<Player> &pList) {
     
     circle.loadFromFile("res/button.png");
     circle.setSmooth(true);
-
-    Scene scene(&window);
-
-    scene.setListCountry(v_listcountry);
-    scene.init(pList, &circle);
-
-    Country c_country, d_country; // les pays attaquants et defensifs
-
-    int status = 0;
-
     t.loadFromFile("res/carte.png");
-
 
     Sprite background(t);
 
+    Scene scene(&window);
+
+    scene.setListcountry(v_listcountry);
+    scene.init(pList, &circle);
+
+    // vector<Country*> list = scene.getListcountry();
+
+    // cout << v_listcountry[0]->getNumberTroop() << endl;
+
+    // list[0]->addNumberTroop(1);
+
+    // cout << v_listcountry[0]->getNumberTroop() << endl;
+
+    // test 
+
+    Country *c_country, *d_country; // les pays attaquants et defensifs
+
+    int status = 0; // afin de forcer les ordres des commandes
+
+    int n_player = 0; // le chiffre player est d'indiquer que c'est le tour de quel player
+
     Color color;
-
-    Button button;
-
-    button.circle.setTexture(&circle); // texture is a sf::Texture
-    button.circle.setTextureRect(IntRect(2, 2, 21, 20));
 
     Message m1(1150, 25, "X : "), 
             m2(1150, 50, "Y : "), 
-            m3(600, 865, "you choose the country ", NO_DISPLAY), 
-            m4(600, 900, "you will attack the country ", NO_DISPLAY), 
+            m3(600, 865, "You choose the country ", NO_DISPLAY), 
+            m4(600, 900, "You will attack the country ", NO_DISPLAY), 
             m5(600, 935, "If you want to attack, please press T, if not, press F ", NO_DISPLAY),
             m6(50, 900, "It's the country "),
-            m7(50, 935, "Number of country is ");
+            m7(50, 935, "Number of country is "),
+            m8(600, 50, "Turn : "),
+            m9(600, 10, "It's your turn ");
 
-    scene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7});
+    scene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7, &m8, &m9});
 
     // run the program as long as the window is open
     while (window.isOpen())
     {
         Vector2i pos = Mouse::getPosition(window);
+
+        Player player = pList[n_player];
 
         Event mouse;
         while (window.pollEvent(mouse))
@@ -117,16 +127,26 @@ void testSFML(vector<Player> &pList) {
                         c_country = scene.findCountry(pos);
 
                         if(scene.existCountry(pos)){
-                            m3.setstrMessage(c_country.getNameCountry());    
-                            status++;
+                            if(player.existCountry(*c_country)){
+                                m3.setstrMessage(c_country->getNameCountry());    
+                                status++;
+                            }
+                            else{
+                                m3.replaceMessage("you need choose your own country !");
+                            }
                         }
                     }
                     else if(status == 1){
                         d_country = scene.findCountry(pos);
                         if(scene.existCountry(pos)){
-                            if(c_country.isAdjacent(d_country.getNumberCountry()) == true){
-                                m4.setstrMessage(d_country.getNameCountry());
-                                status++;
+                            if(c_country->isAdjacent(d_country->getNumberCountry()) == true){
+                                if(player.existCountry(*d_country)){
+                                    m4.replaceMessage("you need choose your opponent's country !");
+                                }
+                                else{
+                                    m4.setstrMessage(d_country->getNameCountry());
+                                    status++; 
+                                }
                             }
                             else{
                                 m4.replaceMessage("you need choose a country adjacent !");
@@ -137,13 +157,18 @@ void testSFML(vector<Player> &pList) {
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
-                    button.circle.setPosition(pos.x, pos.y);
+                    c_country->addNumberTroop(1);
+                    cout << "test" << endl;
                 }
         }
         if (status == 2){
             m5.show(DISPLAY);
             if(Keyboard::isKeyPressed(Keyboard::T))
             {
+                int win = player.attack(c_country, d_country);
+                if(win == 1){
+                    
+                }
                 status = 0;
                 m3.show(NO_DISPLAY);
                 m4.show(NO_DISPLAY);
@@ -159,15 +184,15 @@ void testSFML(vector<Player> &pList) {
         }
         m1.setintMessage(pos.x);
         m2.setintMessage(pos.y);
-        m6.setstrMessage(scene.findCountry(pos).getNameCountry());
-        m7.setintMessage(scene.findCountry(pos).getNumberCountry());
+        m6.setstrMessage(scene.const_findCountry(pos).getNameCountry());
+        m7.setintMessage(scene.const_findCountry(pos).getNumberCountry());
 
         window.clear(Color::White);	
         window.draw(background);
 
         scene.display_message();
 
-        display_troop(window, pList);
+        display(window, pList, &circle);
 
         window.display();
     }
@@ -250,27 +275,19 @@ void testgame(){
     state.init();
 
 //initialiser la liste
-    v_listcountry = state.getListCountry();
-    
-//ajouter des pays au joueur1
+    v_listcountry = state.getListCountires();  
+
 //**************************************//
-    //init_player(player1, player2, player3);
-    vector<Player> pList = state.getPlayersList();
-    
-    // for(auto player : pList){
-    //     cout << "Number of country : " << player.getListCountry().size() << endl;  
-    //     }
-    
-    testSFML(pList);
+    testSFML(state);
 //**************************************//
 
 //jouer
-    while(1){
-        cout << "s" << endl;
-        for(vector<Player>::iterator it = pList.begin(); it != pList.end(); ++it){
-            jouer(*it);
-        }
-    }
+    // while(1){
+    //     cout << "s" << endl;
+    //     for(vector<Player>::iterator it = pList.begin(); it != pList.end(); ++it){
+    //         jouer(*it);
+    //     }
+    // }
 
 }
 
