@@ -34,7 +34,7 @@ Scene::Scene (sf::RenderWindow* window){
                     {931,466},{1028,476},{1060,608},{1166,593},{1202,711},{1106,739}};
 }
 
-void Scene::init(std::vector<state::Player>& pList, sf::Texture* texture){
+void Scene::init(std::vector<state::Player*>& pList, sf::Texture* texture){
     for(unsigned i = 0; i < pList.size(); i++){
         Colors color;
 
@@ -44,9 +44,19 @@ void Scene::init(std::vector<state::Player>& pList, sf::Texture* texture){
 
         Button b(150, 475 + (60 * i), 25, color.colorList[i], texture);
 
+        pList[i]->setColor(color.colorList[i]);
+
         const_listButton.push_back(b);
 
         const_listMessage.push_back(m);
+
+        vector<state::Country*> cList = pList[i]->getListCountry();
+
+        for(unsigned j = 0; j < cList.size(); j++){
+            int num = cList[j]->getNumberCountry();
+
+            cList[j]->setColor(color.colorList[i]);
+        }
     }
 }
 

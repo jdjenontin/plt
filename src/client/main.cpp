@@ -34,11 +34,11 @@ void init_text(Text &text, int x, int y, Color color){
     text.setFillColor(color);
 }
 
-void display(RenderWindow &window, vector<Player> &pList, Texture* texture){
+void display(RenderWindow &window, vector<Player*> &pList, Texture* texture){
     Colors color;
 
     for(unsigned j = 0; j < pList.size(); j++){
-        vector<Country*> cList = pList[j].getListCountry();
+        vector<Country*> cList = pList[j]->getListCountry();
 
         for(unsigned i = 0; i < cList.size(); i++){
             int num = cList[i]->getNumberCountry();
@@ -53,13 +53,12 @@ void display(RenderWindow &window, vector<Player> &pList, Texture* texture){
             window.draw(m.text);
         }
     }
-
 }
 
 // cout << "test" << endl;
 
 void testSFML(State &state) {
-    vector<Player> pList = state.getPlayersList();
+    vector<Player*> pList = state.getListPlayers();
 
     // create the window
     RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
@@ -76,16 +75,6 @@ void testSFML(State &state) {
 
     scene.setListcountry(v_listcountry);
     scene.init(pList, &circle);
-
-    // vector<Country*> list = scene.getListcountry();
-
-    // cout << v_listcountry[0]->getNumberTroop() << endl;
-
-    // list[0]->addNumberTroop(1);
-
-    // cout << v_listcountry[0]->getNumberTroop() << endl;
-
-    // test 
 
     Country *c_country, *d_country; // les pays attaquants et defensifs
 
@@ -112,7 +101,7 @@ void testSFML(State &state) {
     {
         Vector2i pos = Mouse::getPosition(window);
 
-        Player player = pList[n_player];
+        Player* player = pList[n_player];
 
         Event mouse;
         while (window.pollEvent(mouse))
@@ -125,9 +114,8 @@ void testSFML(State &state) {
                     if(status == 0)
                     {
                         c_country = scene.findCountry(pos);
-
                         if(scene.existCountry(pos)){
-                            if(player.existCountry(*c_country)){
+                            if(player->existCountry(*c_country)){
                                 m3.setstrMessage(c_country->getNameCountry());    
                                 status++;
                             }
@@ -140,7 +128,7 @@ void testSFML(State &state) {
                         d_country = scene.findCountry(pos);
                         if(scene.existCountry(pos)){
                             if(c_country->isAdjacent(d_country->getNumberCountry()) == true){
-                                if(player.existCountry(*d_country)){
+                                if(player->existCountry(*d_country)){
                                     m4.replaceMessage("you need choose your opponent's country !");
                                 }
                                 else{
@@ -165,9 +153,11 @@ void testSFML(State &state) {
             m5.show(DISPLAY);
             if(Keyboard::isKeyPressed(Keyboard::T))
             {
-                int win = player.attack(c_country, d_country);
+                int win = player->attack(c_country, d_country);
                 if(win == 1){
-                    
+                    Player* p = state.belongsto(d_country);
+                    p->deleteCountry(d_country);
+                    player->addCountry(d_country);
                 }
                 status = 0;
                 m3.show(NO_DISPLAY);

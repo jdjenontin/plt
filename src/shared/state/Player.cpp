@@ -13,6 +13,12 @@ Player::Player () {
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
+Player::Player (int m_order) {
+    ownTroop = 35;
+    status = PLAYING;
+    order = m_order;
+}
+
 Player::~Player () {
 
 }
@@ -47,9 +53,7 @@ int Player::attack (Country* attacker, Country* defender) {
         // attacker->reduceNumberTroop(n_troop);
         // place(defender, n_troop);
     }
-    else {}
-
-    return 0;
+    else return 0;
 }
 
 void Player::reinforce (Country &country1, Country &country2, int numberTroop) {
@@ -78,6 +82,14 @@ void Player::deleteCard (Card card) {
         i++;
     }
     listCard.erase(listCard.begin() + i);
+}
+
+void Player::setColor(const sf::Color& m_color){
+    color = m_color;
+}
+
+const sf::Color& Player::getColor() const{
+    return color;
 }
 
 int Player::getownTroop () {
@@ -127,6 +139,10 @@ int Player::continentBonusTroop ()
 
 const std::vector<Country*>& Player::getListCountry () const {
     return listCountry;
+}
+
+int Player::getOrder () {
+    return order;
 }
 
 }
