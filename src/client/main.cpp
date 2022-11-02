@@ -77,10 +77,14 @@ void testSFML(State &state) {
     scene.init(pList, &circle);
 
     Country *c_country, *d_country; // les pays attaquants et defensifs
+    Country *t_country; // le pays a ajouter des troups;
 
-    int status = 0; // afin de forcer les ordres des commandes
-
-    int n_player = 0; // le chiffre player est d'indiquer que c'est le tour de quel player
+    int status = 0; // afin de forcer les ordres des commandes.
+    bool next = false; // indiquer si le jouer a fait l'attack, si le joueur a fait au moins un attack, il peut passer le tour a le joueur suivant,
+                       // sinon il ne peut pas passer.
+    bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
+    int n_player = 0; // le chiffre player est d'indiquer que c'est le tour de quel player.
+    int bonus_troop; // le nombre de troop gagner chaque tour.
 
     Color color;
 
@@ -92,9 +96,11 @@ void testSFML(State &state) {
             m6(50, 900, "It's the country "),
             m7(50, 935, "Number of country is "),
             m8(600, 50, "Turn : "),
-            m9(600, 10, "It's your turn ");
+            m9(600, 10, "It's your turn player"),
+            m10(40, 35, "Press P to end your turn", NO_DISPLAY),
+            m11(50, 865, "You have ", NO_DISPLAY);
 
-    scene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7, &m8, &m9});
+    scene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7, &m8, &m9, &m10, &m11});
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -102,17 +108,44 @@ void testSFML(State &state) {
         Vector2i pos = Mouse::getPosition(window);
 
         Player* player = pList[n_player];
+        // choisir un player par hazard pour tester
+        m8.setintMessage(state.turn + 1);
+        m9.setintMessage(n_player + 1);
 
         Event mouse;
         while (window.pollEvent(mouse))
         {
+            if(!getTroop){
+                bonus_troop = player->continentBonusTroop();
+                m11.setintMessage(bonus_troop);
+                m11.addMessage(" troops in this turn");
+                getTroop = true;
+            }
             if (mouse.type == Event::Closed)
                 window.close();
             if (mouse.type == Event::MouseButtonPressed)
                 if (mouse.key.code == Mouse::Left) 
                 {
-                    if(status == 0)
+                    // placec_country->addNumberTroop(1);
+                    cout << "test" << endl;
+                    if(status == 0){
+                        t_country = scene.findCountry(pos);
+                        m11.setintMessage(bonus_troop);
+                        m11.addMessage(" troops now");
+                        if(player->existCountry(*t_country)){
+                            t_country->addNumberTroop(1);
+                            bonus_troop--;
+                        }
+                        if(bonus_troop == 0){
+                            status++;
+                            m11.show(NO_DISPLAY);
+                        }
+                    }
+                    // choose the attack country
+                    else if(status == 1)
                     {
+                        player->winAttack = false;
+                        m5.show(NO_DISPLAY);
                         c_country = scene.findCountry(pos);
                         if(scene.existCountry(pos)){
                             if(player->existCountry(*c_country)){
@@ -124,7 +157,8 @@ void testSFML(State &state) {
                             }
                         }
                     }
-                    else if(status == 1){
+                    // choose the defend country
+                    else if(status == 2){
                         d_country = scene.findCountry(pos);
                         if(scene.existCountry(pos)){
                             if(c_country->isAdjacent(d_country->getNumberCountry()) == true){
@@ -145,11 +179,15 @@ void testSFML(State &state) {
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
-                    c_country->addNumberTroop(1);
-                    cout << "test" << endl;
+                    if(player->winAttack){
+                        d_country->addNumberTroop(1);
+                        c_country->reduceNumberTroop(1);
+                    }
+                    if(status == 2)
+                        status = 1;
                 }
         }
-        if (status == 2){
+        if (status == 3){
             m5.show(DISPLAY);
             if(Keyboard::isKeyPressed(Keyboard::T))
             {
@@ -158,20 +196,41 @@ void testSFML(State &state) {
                     Player* p = state.belongsto(d_country);
                     p->deleteCountry(d_country);
                     player->addCountry(d_country);
+                    player->winAttack = true;
+                    m5.replaceMessage("Click right key to add the troop in your new country");
                 }
-                status = 0;
+                else{
+                    m5.show(NO_DISPLAY);
+                }
+                status = 1;
+                next = true;
+
                 m3.show(NO_DISPLAY);
                 m4.show(NO_DISPLAY);
-                m5.show(NO_DISPLAY);
+                m10.show(DISPLAY);
             }
             else if(Keyboard::isKeyPressed(Keyboard::F))
             {
-                status = 0;
+                status = 1;
                 m3.show(NO_DISPLAY);
                 m4.show(NO_DISPLAY);
                 m5.show(NO_DISPLAY);
             }
         }
+        if(next){
+            if(Keyboard::isKeyPressed(Keyboard::P)){
+                n_player++;
+                if(n_player == pList.size()){
+                    n_player = 0;
+                    state.turn++;
+                }
+                status = 0;
+                next = false;
+                getTroop = false;
+                m10.show(NO_DISPLAY);
+            }
+        }
+
         m1.setintMessage(pos.x);
         m2.setintMessage(pos.y);
         m6.setstrMessage(scene.const_findCountry(pos).getNameCountry());

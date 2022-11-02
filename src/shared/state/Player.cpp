@@ -108,10 +108,11 @@ bool Player::existCountry (Country country){
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
-    int numberBonusTroop(0);
+    int numberBonusTroop(10);
 
     for(auto country : listCountry){
         int countryId = country->getNumberCountry();
+        cout << countryId << endl;
         if(countryId < 9)
             ameriqueN += 1;
         else if (countryId < 13)
