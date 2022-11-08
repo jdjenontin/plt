@@ -35,6 +35,8 @@ Scene::Scene (sf::RenderWindow* window){
 }
 
 void Scene::init(std::vector<state::Player*>& pList, sf::Texture* texture){
+    this->pList = pList;
+
     for(unsigned i = 0; i < pList.size(); i++){
         Colors color;
 
@@ -53,8 +55,6 @@ void Scene::init(std::vector<state::Player*>& pList, sf::Texture* texture){
         vector<state::Country*> cList = pList[i]->getListCountry();
 
         for(unsigned j = 0; j < cList.size(); j++){
-            int num = cList[j]->getNumberCountry();
-
             cList[j]->setColor(color.colorList[i]);
         }
     }
@@ -121,6 +121,30 @@ void Scene::display_message (){
 
     for(auto b : const_listButton){
         window->draw(b.circle);
+    }
+
+    Colors color;
+
+    sf::Texture circle;    
+    
+    circle.loadFromFile("res/button.png");
+    circle.setSmooth(true);
+
+    for(unsigned j = 0; j < pList.size(); j++){
+        vector<state::Country*> cList = pList[j]->getListCountry();
+
+        for(unsigned i = 0; i < cList.size(); i++){
+            int num = cList[i]->getNumberCountry();
+
+            cList[i]->setColor(color.colorList[j]);
+
+            Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberTroop()));
+
+            Button b(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[j], &circle);
+
+            window->draw(b.circle);
+            window->draw(m.text);
+        }
     }
 }
 

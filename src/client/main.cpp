@@ -63,13 +63,10 @@ void testSFML(State &state) {
     // create the window
     RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
 
-    Texture t, circle;    
+    Texture circle;    
     
     circle.loadFromFile("res/button.png");
     circle.setSmooth(true);
-    t.loadFromFile("res/carte.png");
-
-    Sprite background(t);
 
     Scene scene(&window);
 
@@ -78,13 +75,13 @@ void testSFML(State &state) {
 
     Country *c_country, *d_country; // les pays attaquants et defensifs
     Country *t_country; // le pays a ajouter des troups;
-    Country *m_country, *n_country; // les pays pour reinforcer
+    //Country *m_country, *n_country; // les pays pour reinforcer
 
     int status = 0; // afin de forcer les ordres des commandes.
     bool next = false; // indiquer si le jouer a fait l'attack, si le joueur a fait au moins un attack, il peut passer le tour a le joueur suivant,
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
-    int n_player = 0; // le chiffre player est d'indiquer que c'est le tour de quel player.
+    unsigned int n_player = 0; // le chiffre player est d'indiquer que c'est le tour de quel player.
     int bonus_troop; // le nombre de troop gagner chaque tour.
 
     Color color;
@@ -180,16 +177,16 @@ void testSFML(State &state) {
                         }
                     }
                     else if(status == 4){
-                        m_country = scene.findCountry(pos);
-                        if(scene.existCountry(pos)){
-                            if(player->existCountry(*c_country)){
-                                m3.setstrMessage(c_country->getNameCountry());    
-                                status++;
-                            }
-                            else{
-                                m3.replaceMessage("you need choose your own country !");
-                            }
-                        }
+                        // m_country = scene.findCountry(pos);
+                        // if(scene.existCountry(pos)){
+                        //     if(player->existCountry(*c_country)){
+                        //         m3.setstrMessage(c_country->getNameCountry());    
+                        //         status++;
+                        //     }
+                        //     else{
+                        //         m3.replaceMessage("you need choose your own country !");
+                        //     }
+                        // }
                     }
                     else if(status == 5){
 
@@ -262,8 +259,6 @@ void testSFML(State &state) {
         m7.setintMessage(scene.const_findCountry(pos).getNumberCountry());
 
         scene.display_message();
-
-        display(window, pList, &circle);
 
         window.display();
     }
