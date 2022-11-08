@@ -111,7 +111,6 @@ void State::init()
     for(unsigned i = 0; i < countriesList.size(); i++){
         listCountires.push_back(&countriesList[i]);
     }
-
 }
 
 const std::vector<Country*>& State::getListCountires() const{

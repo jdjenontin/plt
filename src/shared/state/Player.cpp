@@ -36,8 +36,6 @@ void Player::place (Country* country, int numberTroop) {
 }
 
 int Player::attack (Country* attacker, Country* defender) {
-    int n_troop;
-
     Calculation calcul;
     cout << "attack!" << endl;
     calcul.compute(attacker, defender);
