@@ -78,6 +78,7 @@ void testSFML(State &state) {
 
     Country *c_country, *d_country; // les pays attaquants et defensifs
     Country *t_country; // le pays a ajouter des troups;
+    Country *m_country, *n_country; // les pays pour reinforcer
 
     int status = 0; // afin de forcer les ordres des commandes.
     bool next = false; // indiquer si le jouer a fait l'attack, si le joueur a fait au moins un attack, il peut passer le tour a le joueur suivant,
@@ -116,7 +117,10 @@ void testSFML(State &state) {
         while (window.pollEvent(mouse))
         {
             if(!getTroop){
-                bonus_troop = player->continentBonusTroop();
+                if(n_player == pList.size() - 1)
+                    bonus_troop = player->continentBonusTroop() + 1;
+                else
+                    bonus_troop = player->continentBonusTroop();
                 m11.setintMessage(bonus_troop);
                 m11.addMessage(" troops in this turn");
                 getTroop = true;
@@ -175,16 +179,37 @@ void testSFML(State &state) {
                             }
                         }
                     }
+                    else if(status == 4){
+                        m_country = scene.findCountry(pos);
+                        if(scene.existCountry(pos)){
+                            if(player->existCountry(*c_country)){
+                                m3.setstrMessage(c_country->getNameCountry());    
+                                status++;
+                            }
+                            else{
+                                m3.replaceMessage("you need choose your own country !");
+                            }
+                        }
+                    }
+                    else if(status == 5){
+
+                    }
                     // a faire 
                 }
                 else if (mouse.key.code == Mouse::Right) 
                 {
                     if(player->winAttack){
-                        d_country->addNumberTroop(1);
-                        c_country->reduceNumberTroop(1);
+                        int s = c_country->getNumberTroop();
+                        if(s > 1){
+                            d_country->addNumberTroop(1);
+                            c_country->reduceNumberTroop(1);
+                        }
+                        else status = 1;
                     }
                     if(status == 2)
                         status = 1;
+                    if(status == 3)
+                        status = 4;
                 }
         }
         if (status == 3){
@@ -235,9 +260,6 @@ void testSFML(State &state) {
         m2.setintMessage(pos.y);
         m6.setstrMessage(scene.const_findCountry(pos).getNameCountry());
         m7.setintMessage(scene.const_findCountry(pos).getNumberCountry());
-
-        window.clear(Color::White);	
-        window.draw(background);
 
         scene.display_message();
 

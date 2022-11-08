@@ -108,7 +108,11 @@ bool Player::existCountry (Country country){
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
-    int numberBonusTroop(10);
+    int numberBonusTroop(3);
+
+    if(listCountry.size() / 3 > 3){
+        numberBonusTroop += (listCountry.size() / 3 - 3);
+    }
 
     for(auto country : listCountry){
         int countryId = country->getNumberCountry();

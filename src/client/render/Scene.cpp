@@ -103,6 +103,14 @@ void Scene::addListMessage (std::vector<Message*> message){
 }
 
 void Scene::display_message (){
+    sf::Texture t;
+
+    t.loadFromFile("res/carte.png");
+    sf::Sprite background(t);
+
+    window->clear(sf::Color::White);	
+    window->draw(background);
+
     for(auto m : listMessage){
         window->draw(m->text);
     }
