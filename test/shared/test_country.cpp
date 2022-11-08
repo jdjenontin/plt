@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE(TestCountry)
   {
     Country country;
     country.setNumberTroop(5);
-    BOOST_CHECK_EQUAL(country.getNumberTroop(), 2);
+    BOOST_CHECK_EQUAL(country.getNumberTroop(),5);
   }
 }
 
