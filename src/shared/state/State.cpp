@@ -29,6 +29,10 @@ State::State(int n_player){
     for(int i = 0; i < n_player; i++){
         playersList.push_back(Player(i));
     }
+
+    for(unsigned i = 0; i < playersList.size(); i++){
+        listPlayers.push_back(&playersList[i]);
+    }
 }
 
 void State::init()
@@ -108,9 +112,6 @@ void State::init()
         listCountires.push_back(&countriesList[i]);
     }
 
-    for(unsigned i = 0; i < playersList.size(); i++){
-        listPlayers.push_back(&playersList[i]);
-    }
 }
 
 const std::vector<Country*>& State::getListCountires() const{

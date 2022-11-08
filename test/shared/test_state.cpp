@@ -15,15 +15,15 @@ BOOST_AUTO_TEST_CASE(TestCountry)
 {
   { // Constructor's and getPlayerList test
     State state(3);
-    vector<Player> pList = state.getPlayersList();
-    BOOST_CHECK_EQUAL(pList.size(), 4); 
+    vector<Player*> pList = state.getListPlayers();
+    BOOST_CHECK_EQUAL(pList.size(), 3); 
   }
   { //
     State state(3);
-    vector<Player> pList = state.getPlayersList();
+    vector<Player*> pList = state.getListPlayers();
     
     // Player1 total countries
-    vector<Country*> p1Countries = pList[1].getListCountry();
+    vector<Country*> p1Countries = pList[1]->getListCountry();
     BOOST_CHECK_EQUAL(p1Countries.size(), 0);
   }
 }
