@@ -3,6 +3,7 @@
 #include <map>
 
 #include <random>
+#include <SFML/Graphics.hpp>
 
 #include "Dice.h"
 #include "Calculation.h"
@@ -26,7 +27,7 @@ State::State(int n_player){
 
     // Création de la liste des joueurs
     for(int i = 0; i < n_player; i++){
-        playersList.push_back(Player());
+        playersList.push_back(Player(i));
     }
 }
 
@@ -101,21 +102,38 @@ void State::init()
             int electedCountry = dice.thrown();
             playerCountries[electedCountry]->addNumberTroop(1);
         } 
-        
+    }
 
+    for(unsigned i = 0; i < countriesList.size(); i++){
+        listCountires.push_back(&countriesList[i]);
+    }
+
+    for(unsigned i = 0; i < playersList.size(); i++){
+        listPlayers.push_back(&playersList[i]);
     }
 }
 
-std::vector<Country> State::getListCountry() {
-    return countriesList;
+const std::vector<Country*>& State::getListCountires() const{
+    return listCountires;
 }
 
 std::vector<Card> State::getListCard() {
     return cardList;
 }
 
-const std::vector<Player>& State::getPlayersList() const{
-    return playersList;
+const std::vector<Player*>& State::getListPlayers() const{
+    return listPlayers;
+}
+
+Player* State::belongsto (Country* country){
+    for(unsigned i = 0; i < playersList.size(); i++){
+        sf::Color c1 = playersList[i].getColor();   
+        sf::Color c2 = country->getColor();
+        if(c1.toInteger() == c2.toInteger())
+            return &playersList[i];
+    }
+
+    return {};
 }
 
 } // namespace state
