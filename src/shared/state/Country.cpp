@@ -1,4 +1,5 @@
 #include "Country.h"
+#include <iostream>
 
 namespace state{
 
@@ -83,6 +84,14 @@ void Country::addNumberTroop (int numTroop) {
 
 void Country::reduceNumberTroop (int numTroop) {
     numberTroop -= numTroop;
+}
+
+void Country::setColor(const sf::Color& m_color){
+    color = m_color;
+}
+
+const sf::Color& Country::getColor() const{
+    return color;
 }
 
 }
