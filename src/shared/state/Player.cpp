@@ -29,35 +29,6 @@ Player::Player (std::vector<Country*> lcountry, std::vector<Card> lcard, int tro
     ownTroop = troop;
 }
 
-void Player::place (Country* country, int numberTroop) {
-    cout << "place!" << endl;
-
-    country->addNumberTroop(numberTroop);
-}
-
-int Player::attack (Country* attacker, Country* defender) {
-    Calculation calcul;
-    cout << "attack!" << endl;
-    calcul.compute(attacker, defender);
-
-    int win = calcul.attack(attacker, defender);
-
-    //dans le if il faut ajouter une operation 
-    if(win == 0) {
-        return 1;
-        // addCountry(defender); //Ask Xiaoyu
-        // cout << "choose the quantity of troop that you want put in new country :";
-        // cin >> n_troop;
-        // attacker->reduceNumberTroop(n_troop);
-        // place(defender, n_troop);
-    }
-    else return 0;
-}
-
-void Player::reinforce (Country &country1, Country &country2, int numberTroop) {
-    cout << "Please move your troop" << endl;
-}
-
 void Player::addCountry (Country* country) {
     listCountry.push_back(country);
 }

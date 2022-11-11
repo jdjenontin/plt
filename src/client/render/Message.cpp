@@ -47,6 +47,22 @@ Message::Message(int x, int y, std::string string){
     f_message = string;
 }
 
+Message::Message(int x, int y, std::string string, sf::Color color){
+    if (!font.loadFromFile("res/arial/arial.ttf"))
+        return;
+
+    position.x = x;
+    position.y = y;
+
+    text.setFillColor(color);
+    text.setFont(font);
+    text.setCharacterSize(25);
+    text.setPosition(x, y);
+    text.setString(string);
+    f_message = string;
+}
+
+
 Message::Message (int x, int y, std::string string, bool m_display){
     if (!font.loadFromFile("res/arial/arial.ttf"))
         return;

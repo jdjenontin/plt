@@ -115,6 +115,22 @@ void State::init()
     }
 }
 
+void State::IncrementTurn () {
+    turn++;
+}
+
+const int & State::getTurn() const {
+    return turn;
+}
+
+void State::ChangePlaying () {
+    numberPlayer++;
+    if((unsigned int)numberPlayer == playersList.size()){
+        numberPlayer = 0;
+        IncrementTurn();
+    }
+}
+
 const std::vector<Country*>& State::getListCountires() const{
     return listCountires;
 }
@@ -125,6 +141,10 @@ std::vector<Card> State::getListCard() {
 
 const std::vector<Player*>& State::getListPlayers() const{
     return listPlayers;
+}
+
+int State::getNumberPlayer() const{
+    return numberPlayer;
 }
 
 Player* State::belongsto (Country* country){
