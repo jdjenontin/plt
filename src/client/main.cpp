@@ -23,7 +23,7 @@ void testSFML(State &state) {
     vector<Player*> pList = state.getListPlayers();
 
     // create the window
-    RenderWindow window(sf::VideoMode(1280, 986), "My window", Style::Titlebar);
+    RenderWindow window(sf::VideoMode(1280, 986), "RISK !", Style::Titlebar|Style::Close);
 
     Texture circle;    
     

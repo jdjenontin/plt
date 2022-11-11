@@ -36,7 +36,7 @@ Nous développons notre jeu en C++ dans un environnement Linux Ubuntu avec l'IDE
 
 L'état du jeu est défini par les joueurs et leurs possesions : Pays et Cartes.
 
-### 2.1 Les Joueurs
+### 2.1.1 Les Joueurs
 
 Le nombre de joueur est défini au début de chaque partie, l'état initiale du jeu varie en fonction du nombre de joueurs impliqué.
 Dans le cadre de notre projets nous implémenterons dans un premier temps des parties impliquant 3 joueurs puis dans un second temps des parties impliquants entre 2 et 5 joueurs.
@@ -48,11 +48,11 @@ Pour une partie impliquant:
 
 Un joueur perd la partie lorsqu'il n'a plus territoire et gagne lorsqu'il a tous les territoires.
 
-### 2.1 Les territoires
+### 2.1.2 Les territoires
 
 Au nombre de 42 au total, les territoires sont distribués de façon aléatoire entre les divers joueurs. Chaque territoire possède un certain nombre de troupes. Les troupes servent notament à attaquer un territoire limistrophe ou à défendre le territoire en cas d'attaque.
 
-### 2.3 Les cartes
+### 2.1.3 Les cartes
 
 Au nombre de 42 aussi, elles sont de 3 types : Infantry, Cavalry et Artillery. Chaque carte est associé à un pays.
 Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un joueur possède les 3 types de cartes il peut les échanger contre des troupes bonus.
@@ -81,3 +81,38 @@ A ces classes s'ajoutent :
 * La classe **Dice**, composant de Calculation, qui reproduit le comportement d'un dé
 
 * La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map de jeu qui sera définie dans la partie graphique.
+
+# 3 Rendu : Stratégie et Conception
+
+## 3.1 Stratégie de rendu d'un état
+
+Pour le rendu d'un état, nous avons opté pour la réalisation de deux scène : 
+
+### La scène d'accueil 
+Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lancer une partie et "**addplayer**" (Pas encore fonctionnele) pour ajouter des joueurs.
+
+![RIsk](rapport/menu.png)
+
+### La scène de jeu 
+
+Ici, nous nous servons d'une map du jeu fixe, celle-ci est représentée dans le rendu par une image de même taille que la fenêtre de jeu. 
+Nous supperposons ensuite sur cette image :
+* Le nombre de soldats présents sur chaque territoire dans des "bulles" en nous servant des coordonnées du territoire dans la fenêtre. Chaque bulle a une couleur permettant d'identifier le joueur détenteur du territoire.
+* Les informations de jeu et les instructions à l'aide de texte que nous disposons à divers endroits de la fenêtre
+
+![RIsk](rapport/jeu.png)
+
+## 3.2 Conception logiciel
+
+Le diagramme des classes pour le rendu est le suivant :
+
+![RIsk](rapport/render.svg)
+
+* **Coulors** : La classe coulors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
+* **Message** : La classe Message est l'une des classe de base du rendu, cette classe est utilisée pour afficher des chaines de caractères sur les différentes scènes. Elle dispose de divers constructeurs pour créer des Message à une position donnée de la scène ou encore pour définir la couleur du message à créer.
+* **Boutton** : La classe Boutton est une classe qui permet de définir les éléments cliquable de l'interface.
+* **Menu** : La classe Menu est utilisé pour créer des éléments de menu, cliquable et portant un texte.
+* **MenuScene** : MenuScene est la classe qui se charge d'afficher la scène d'acceuil, elle est composée d'éléments de type Menu.
+* **GameScene** : GameScene est la classe qui se charge d'afficher la scène de jeu.
+* **Scene** est la classe principale de ce diagramme. C'est la classe mère de MenuScene et GameScene.
+
