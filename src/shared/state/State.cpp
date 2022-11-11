@@ -124,9 +124,9 @@ const int & State::getTurn() const {
 }
 
 void State::ChangePlaying () {
-    numberPlayer++;
-    if((unsigned int)numberPlayer == playersList.size()){
-        numberPlayer = 0;
+    orderPlayer++;
+    if(orderPlayer == (int)playersList.size()){
+        orderPlayer = 0;
         IncrementTurn();
     }
 }
@@ -143,8 +143,8 @@ const std::vector<Player*>& State::getListPlayers() const{
     return listPlayers;
 }
 
-int State::getNumberPlayer() const{
-    return numberPlayer;
+int State::getOrderPlayer() const{
+    return orderPlayer;
 }
 
 Player* State::belongsto (Country* country){

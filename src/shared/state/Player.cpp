@@ -85,7 +85,6 @@ int Player::continentBonusTroop ()
 
     for(auto country : listCountry){
         int countryId = country->getNumberCountry();
-        cout << countryId << endl;
         if(countryId < 9)
             ameriqueN += 1;
         else if (countryId < 13)
