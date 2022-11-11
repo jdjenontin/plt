@@ -97,7 +97,7 @@ Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lan
 
 Ici, nous nous servons d'une map du jeu fixe, celle-ci est représentée dans le rendu par une image de même taille que la fenêtre de jeu. 
 Nous supperposons ensuite sur cette image :
-* Le nombre de soldats présents sur chaque territoire dans des "bulles" en nous servant des coordonnées du territoire dans la fenêtre. Chaque bulle a une couleure permettant d'identifier le joueur détenteur du territoire.
+* Le nombre de soldats présents sur chaque territoire dans des "bulles" en nous servant des coordonnées du territoire dans la fenêtre. Chaque bulle a une couleur permettant d'identifier le joueur détenteur du territoire.
 * Les informations de jeu et les instructions à l'aide de texte que nous disposons à divers endroits de la fenêtre
 
 ![RIsk](rapport/jeu.png)
@@ -108,7 +108,7 @@ Le diagramme des classes pour le rendu est le suivant :
 
 ![RIsk](rapport/render.svg)
 
-* **Couleur** : La classe couleur est utilisé pour attribuer une couleur à un élément afficher à l'écran.
+* **Coulors** : La classe coulors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
 * **Message** : La classe Message est l'une des classe de base du rendu, cette classe est utilisée pour afficher des chaines de caractères sur les différentes scènes. Elle dispose de divers constructeurs pour créer des Message à une position donnée de la scène ou encore pour définir la couleur du message à créer.
 * **Boutton** : La classe Boutton est une classe qui permet de définir les éléments cliquable de l'interface.
 * **Menu** : La classe Menu est utilisé pour créer des éléments de menu, cliquable et portant un texte.
