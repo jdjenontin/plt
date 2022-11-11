@@ -30,3 +30,54 @@ Le tour de chaque joueur se déroule en trois parties. Tout d’abord la phase d
 Nous développons notre jeu en C++ dans un environnement Linux Ubuntu avec l'IDE Visual Studio Code. 
 
 
+# 2 Desciption et conception es états
+
+## 2.1 Description des états
+
+L'état du jeu est défini par les joueurs et leurs possesions : Pays et Cartes.
+
+### 2.1 Les Joueurs
+
+Le nombre de joueur est définit au début de chaque partie, l'état initiale du jeu varit en fonction du nombre de joueurs impliqué.
+Dans le cadre de notre projets nous implémenterons dans un premier temps des parties impliquant 3 joueurs puis dans un second temps des parties impliquants entre 2 et 5 joueurs.
+Pour une partie impliquant:
+* 2 joueurs : Chaque joueur dispose au début de la partie de 21 territoires et de 45 soldats.
+* 3 joueurs : Chaque joueur dispose au début de la partie de 14 territoires et de 35 soldats.
+* 4 joueurs : Les deux premiers joueurs disposent de 11 territoires chacun et les deux derniers disposent de 10 territoires chacun; tous les joueurs disposent de 30 soldats chacun.
+* 5 joueurs : Les deux premiers joueurs disposent de 9 territoires chacun et les trois derniers disposent de 8 territoires chacun; tous les joueurs disposent de 25 soldats chacun.
+
+Un joueur perd la partie lorsqu'il n'a plus territoire et gagne lorsqu'il a tous les territoires.
+
+### 2.1 Les territoires
+
+Au nombre de 42 au total, les territoires sont distribués de façon aléatoire entre les divers joueurs. Chaque territoire possède un certain nombre de troupes. Les troupes servent notament à attaquer un territoire limistrophe ou à défendre le territoire en cas d'attaque.
+
+### 2.3 Les cartes
+
+Au nombre de 42 aussi, elles sont de 3 types : Infantry, Cavalry et Artillery. Chaque carte est associé à un pays.
+Les cartes sont distribué une à une et de façon aléatoire à chaque tour de jeu. Lorsqu'un joueur possède les 3 types de cartes il peut les échanger contre des troupes bonus.
+
+## 2.2 Conception logiciel
+
+Le diagramme des  classes pour les état est présenter à la figure ci dessous.
+
+![RIsk](rapport/state.png)
+
+La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
+
+Les éléments de l'états du jeu , décrites à la section précédentes sont représentés par les classes suivantes :
+
+| Element | Classe  |
+|---------|---------|
+|Joueur   | Player  |
+|Terrioire| Country |
+|Carte    | Card    |
+
+
+A ces classes s'ajoutes :
+
+* La classe **Calculation** qui regroupe un ensemble de méthodes qui s'occupent des divers calculs aléatoires nécessaire au bon déroulement du jeu
+
+* La classe **Dice**, composant de Calculation, qui reproduit le comportement d'un dé
+
+* La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map ju jeu qui sera défini la partie graphique.
