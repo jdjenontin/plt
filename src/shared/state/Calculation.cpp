@@ -89,11 +89,14 @@ int Calculation::attack (Country* attacker, Country* defender) {
 */
 std::vector<int> Calculation::shuffledTab(int numberOfElement){
     std::vector<int> temp_list;
+    // obtain a time-based seed:
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
     for(int i = 0; i != numberOfElement; i++){
         temp_list.push_back(i);
     }
 
-    auto rng = std::default_random_engine {};
+    auto rng = std::default_random_engine(seed);
     std::shuffle(begin(temp_list), end(temp_list), rng);
 
     return temp_list;
