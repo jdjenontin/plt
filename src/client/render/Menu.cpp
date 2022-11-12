@@ -14,16 +14,16 @@ Menu::~Menu () {
 Menu::Menu (int x, int y, std::string name) {
     sf::Vector2f size;
 
-    size.x = 100;
+    size.x = 200;
     size.y = 50;
 
     this->name = name;
     position.x = x;
     position.y = y;
 
-    message = new Message(x, y, name);
+    message = new Message(x - 50, y - 13, name);
     rectangle.setSize(size);
-    rectangle.setPosition(x - 25, y - 10);
+    rectangle.setPosition(x - 100, y - 25);
     rectangle.setFillColor(sf::Color::Green);
 }
 

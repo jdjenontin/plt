@@ -22,19 +22,6 @@ State::~State(){
     
 }
 
-State::State(int n_player){
-    numberPlayer = n_player;
-
-    // Création de la liste des joueurs
-    for(int i = 0; i < n_player; i++){
-        playersList.push_back(Player(i));
-    }
-
-    for(unsigned i = 0; i < playersList.size(); i++){
-        listPlayers.push_back(&playersList[i]);
-    }
-}
-
 void State::init()
 {
     //Création de la liste de tous les pays
@@ -46,6 +33,15 @@ void State::init()
                             "Australie Occidentale"};
 
     std::map <int, string> listcountry;
+
+    // Création de la liste des joueurs
+    for(int i = 0; i < numberPlayer; i++){
+        playersList.push_back(Player(i));
+    }
+
+    for(unsigned i = 0; i < playersList.size(); i++){
+        listPlayers.push_back(&playersList[i]);
+    }
 
     for(int i = 0; i < (int)countriesNames.size(); i++) {
         listcountry[i] = countriesNames[i];
