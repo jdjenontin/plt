@@ -23,12 +23,6 @@ Player::~Player () {
 
 }
 
-Player::Player (std::vector<Country*> lcountry, std::vector<Card> lcard, int troop) {
-    listCountry = lcountry;
-    listCard = lcard;
-    ownTroop = troop;
-}
-
 void Player::addCountry (Country* country) {
     listCountry.push_back(country);
 }
@@ -41,13 +35,13 @@ void Player::deleteCountry (Country* country) {
     listCountry.erase(listCountry.begin() + i);
 }
 
-void Player::addCard (Card card) {
+void Player::addCard (Card* card) {
     listCard.push_back(card);
 }
 
-void Player::deleteCard (Card card) {
+void Player::deleteCard (Card* card) {
     int i = 0;
-    while(listCard[i].getNameCountry() != card.getNameCountry()){
+    while(listCard[i]->getNameCountry() != card->getNameCountry()){
         i++;
     }
     listCard.erase(listCard.begin() + i);
@@ -112,6 +106,10 @@ int Player::continentBonusTroop ()
 
 const std::vector<Country*>& Player::getListCountry () const {
     return listCountry;
+}
+
+const std::vector<Card*>& Player::getListCard() const{
+    return listCard;
 }
 
 int Player::getOrder () {
