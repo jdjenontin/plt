@@ -9,6 +9,8 @@ using namespace std;
 namespace render
 {
 
+Message cardm(17, 70, "Card");
+
 GameScene::GameScene (sf::RenderWindow* window) {
     this->window = window;
 
@@ -28,6 +30,11 @@ GameScene::~GameScene () {
 void GameScene::init(std::vector<state::Player *> &pList, sf::Texture *texture)
 {
     this->pList = pList;
+
+    Button cardb(20, 20, 25, sf::Color::Magenta, texture);
+
+    const_listButton.push_back(cardb);
+    const_listMessage.push_back(cardm);
 
     for (unsigned i = 0; i < pList.size(); i++)
     {
@@ -105,6 +112,12 @@ void GameScene::addListMessage(std::vector<Message *> message)
     {
         listMessage.push_back(m);
     }
+}
+
+bool GameScene::isCardButton (sf::Vector2i pos){
+    if(abs(pos.x - 45) < 25 && abs(pos.y - 45) < 25)
+        return true;
+    else return false;
 }
 
 void GameScene::display()

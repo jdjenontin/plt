@@ -10,12 +10,24 @@ namespace render
 {
 
 Scene::Scene () {
-    
+
 }
 
 
 Scene::~Scene()
 {
+}
+
+bool Scene::isOpen () {
+    return isopen;
+}
+
+void Scene::open () {
+    isopen = true;
+}
+
+void Scene::close () {
+    isopen = false;
 }
 
 }

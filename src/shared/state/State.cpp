@@ -107,6 +107,17 @@ void State::init()
     for(unsigned i = 0; i < countriesList.size(); i++){
         listCountires.push_back(&countriesList[i]);
     }
+
+    for(unsigned i = 0; i < cardList.size(); i++){
+        listCard.push_back(&cardList[i]);
+    }
+
+    //test
+    for(unsigned i = 0; i < playersList.size(); i+=3){
+        playersList[i].addCard(&cardList[i]);
+        playersList[i].addCard(&cardList[i+1]);
+        playersList[i].addCard(&cardList[i+2]);
+    }
 }
 
 void State::IncrementTurn () {
@@ -129,8 +140,8 @@ const std::vector<Country*>& State::getListCountires() const{
     return listCountires;
 }
 
-std::vector<Card> State::getListCard() {
-    return cardList;
+const std::vector<Card*>& State::getListCard() const{
+    return listCard;
 }
 
 const std::vector<Player*>& State::getListPlayers() const{

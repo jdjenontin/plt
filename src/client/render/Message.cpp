@@ -16,7 +16,8 @@ Message::Message(){
 }
 
 Message::~Message(){
-
+    // std::string s = text.getString();
+    // std::cout << s << std::endl;
 }
 
 Message::Message(int x, int y){

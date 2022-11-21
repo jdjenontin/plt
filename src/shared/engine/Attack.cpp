@@ -47,6 +47,7 @@ bool Attack::isadjacent () {
 
 int Attack::execute () {
     state::Calculation calcul;
+    state::Dice dice(1,6);
 
     calcul.compute(c_country, d_country);
 

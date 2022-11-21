@@ -21,6 +21,10 @@ void MenuScene::init () {
     Menu addplayer(640, 500, "addplayer");
 
     listMenu.push_back(addplayer);
+
+    Menu deleteplayer(640, 400, "deleteplayer");
+
+    listMenu.push_back(deleteplayer);
 }
 
 std::string MenuScene::getNameMenu (sf::Vector2i pos) {
