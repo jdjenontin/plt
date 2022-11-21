@@ -162,9 +162,21 @@ void testSFML() {
                         }
                         else if(status == 4){
                             reinforce.setm_country(gamescene.findCountry(pos));
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existM_country())
+                                    m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());
+                                    status++;
+                                    cout << "test" << endl;
+                            }
+                            
                         }
                         else if(status == 5){
                             reinforce.setn_country(gamescene.findCountry(pos));
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existN_country())
+                                    cout << "test" << endl;
+                                    reinforce.execute();
+                            }
                         }
                     }
 
@@ -199,6 +211,10 @@ void testSFML() {
                     // si le joueur veut rechoisir le pays attaquant, il peut utiliser le bouton a droit
                     if(status == 2)
                         status = 1;
+
+                    if(status == 1)
+                        cout << status << endl;
+                        status = 4;
                 }
         }
         if(gamescene.isopen){
