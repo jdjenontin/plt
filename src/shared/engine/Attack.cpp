@@ -41,7 +41,7 @@ bool Attack::abletoattack () {
     return c_country->getNumberTroop() > 1;
 }
 
-bool Attack::isadjacent () {
+bool Attack:: isadjacent () {
     return c_country->isAdjacent(d_country->getNumberCountry());
 }
 

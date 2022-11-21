@@ -14,18 +14,18 @@ MenuScene::~MenuScene () {
 }
 
 void MenuScene::init () {
-    Menu start(500, 300, "start");
+    Menu start(640, 300, "start");
 
     listMenu.push_back(start);
 
-    Menu addplayer(500, 500, "addplayer");
+    Menu addplayer(640, 500, "addplayer");
 
     listMenu.push_back(addplayer);
 }
 
 std::string MenuScene::getNameMenu (sf::Vector2i pos) {
     for(auto m : listMenu){
-        if(abs(pos.x - m.getPostion().x) < 30 && abs(pos.y - m.getPostion().y) < 30){
+        if(abs(pos.x - m.getPostion().x) < 100 && abs(pos.y - m.getPostion().y) < 25){
             return m.getName();
         }
     }

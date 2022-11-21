@@ -19,8 +19,10 @@ using namespace engine;
 
 vector<Country*> v_listcountry;
 
-void testSFML(State &state) {
-    vector<Player*> pList = state.getListPlayers();
+void testSFML() {
+    State state;
+
+    vector<Player*> pList;
 
     // create the window
     RenderWindow window(sf::VideoMode(1280, 986), "RISK !", Style::Titlebar|Style::Close);
@@ -31,9 +33,6 @@ void testSFML(State &state) {
     circle.setSmooth(true);
 
     GameScene gamescene(&window);
-
-    gamescene.setListcountry(v_listcountry);
-    gamescene.init(pList, &circle);
 
     MenuScene menuscene(&window);
 
@@ -72,21 +71,27 @@ void testSFML(State &state) {
     {
         Vector2i pos = Mouse::getPosition(window);
 
-        Player* player = pList[state.getOrderPlayer()];
-        // choisir un player par hazard pour tester
-        m8.setintMessage(state.getTurn() + 1);
-        m9.setintMessage(state.getOrderPlayer() + 1);
+        Player* player;
 
-        place.setPlayer(player);
-        attack.setPlayer(player);
-        reinforce.setPlayer(player);
+        if(gamescene.isopen){
+            player = pList[state.getOrderPlayer()];
+
+            m8.setintMessage(state.getTurn() + 1);
+            m9.setintMessage(state.getOrderPlayer() + 1);
+
+            place.setPlayer(player);
+            attack.setPlayer(player);
+            reinforce.setPlayer(player);
+        }
+        // choisir un player par hazard pour tester
 
         Event mouse;
         while (window.pollEvent(mouse))
         {
             // recuperer le bonus de troup
             // une fois le bonus de troup est recuperer, on ne rentre plus dans ce boucle jusqu'a le prochain joueur
-            if(!getTroop){
+            if(gamescene.isopen){
+                if(!getTroop){
                 if(state.getOrderPlayer() == (int)pList.size() - 1)
                     place.bonus_troop = player->continentBonusTroop() + 1;
                 else
@@ -94,7 +99,9 @@ void testSFML(State &state) {
                 m11.setintMessage(place.bonus_troop);
                 m11.addMessage(" troops in this turn");
                 getTroop = true;
+                }
             }
+            
             if (mouse.type == Event::Closed)
                 window.close();
             // appuyer sur le souris 
@@ -102,16 +109,6 @@ void testSFML(State &state) {
                 // appuyer sur le gauche
                 if (mouse.key.code == Mouse::Left) 
                 {
-                    if(menuscene.isopen){
-                        if(menuscene.getNameMenu(pos) == "start"){
-                            menuscene.isopen = false;
-                            gamescene.isopen = true;
-                        }
-                        else if(menuscene.getNameMenu(pos) == "addplayer"){
-                            cout << "its not availble now" << endl;
-                        }
-                    }
-
                     if(gamescene.isopen){
                     // quand status = 0, on distribute les troups, jusqu'a le bonus troup est nul, on passe le status 1 
                         if(status == 0){
@@ -165,19 +162,43 @@ void testSFML(State &state) {
                             }
                         }
                         else if(status == 4){
-                            // m_country = scene.findCountry(pos);
-                            // if(scene.existCountry(pos)){
-                            //     if(player->existCountry(*c_country)){
-                            //         m3.setstrMessage(c_country->getNameCountry());    
-                            //         status++;
-                            //     }
-                            //     else{
-                            //         m3.replaceMessage("you need choose your own country !");
-                            //     }
-                            // }
+                            reinforce.setm_country(gamescene.findCountry(pos));
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existM_country())
+                                    m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());
+                                    status++;
+                                    cout << "test" << endl;
+                            }
+                            
                         }
                         else if(status == 5){
+                            reinforce.setn_country(gamescene.findCountry(pos));
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existN_country())
+                                    cout << "test" << endl;
+                                    reinforce.execute();
+                            }
+                        }
+                    }
 
+                    if(menuscene.isopen){
+                        if(menuscene.getNameMenu(pos) == "start"){
+                            state.init();
+
+                            pList = state.getListPlayers();
+
+                            v_listcountry = state.getListCountires();
+
+                            gamescene.setListcountry(v_listcountry);
+                            gamescene.init(pList, &circle);
+
+                            menuscene.isopen = false;
+                            gamescene.isopen = true;
+                        }
+                        else if(menuscene.getNameMenu(pos) == "addplayer"){
+                            if(state.numberPlayer < 5)
+                                state.numberPlayer++;
+                            cout << state.numberPlayer << endl;
                         }
                     }
                     // a faire 
@@ -191,9 +212,14 @@ void testSFML(State &state) {
                     // si le joueur veut rechoisir le pays attaquant, il peut utiliser le bouton a droit
                     if(status == 2)
                         status = 1;
+
+                    if(status == 1)
+                        cout << status << endl;
+                        status = 4;
                 }
         }
-        if (status == 3){
+        if(gamescene.isopen){
+            if (status == 3){
             m5.show(DISPLAY);
             // appuyer T pour attacker
             if(Keyboard::isKeyPressed(Keyboard::T))
@@ -220,21 +246,22 @@ void testSFML(State &state) {
                 m4.show(NO_DISPLAY);
                 m5.show(NO_DISPLAY);
             }
-        }
-        if(next){
-            if(Keyboard::isKeyPressed(Keyboard::P)){
-                state.ChangePlaying();
-                status = 0;
-                next = false;
-                getTroop = false;
-                m10.show(NO_DISPLAY);
             }
-        }
+            if(next){
+                if(Keyboard::isKeyPressed(Keyboard::P)){
+                    state.ChangePlaying();
+                    status = 0;
+                    next = false;
+                    getTroop = false;
+                    m10.show(NO_DISPLAY);
+                }
+            }
 
-        m1.setintMessage(pos.x);
-        m2.setintMessage(pos.y);
-        m6.setstrMessage(gamescene.const_findCountry(pos).getNameCountry());
-        m7.setintMessage(gamescene.const_findCountry(pos).getNumberCountry());
+            m1.setintMessage(pos.x);
+            m2.setintMessage(pos.y);
+            m6.setstrMessage(gamescene.const_findCountry(pos).getNameCountry());
+            m7.setintMessage(gamescene.const_findCountry(pos).getNumberCountry());
+        }
 
         if(menuscene.isopen)
             menuscene.display();
@@ -245,29 +272,9 @@ void testSFML(State &state) {
     }
 }
 
-// Fin test SFML
-void testgame(){
-    int num_player;
-
-    cout << "choose the number of player :(you need choose 3 for now) ";
-    cin >> num_player;
-
-    State state(num_player);
-
-    state.init();
-
-//initialiser la liste
-    v_listcountry = state.getListCountires();  
-
-//**************************************//
-    testSFML(state);
-//**************************************//
-
-}
-
 int main(int argc,char* argv[])
 {
-    testgame();
+    testSFML();
     //testgame();
 
     return 0;
