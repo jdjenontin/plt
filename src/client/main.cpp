@@ -184,21 +184,10 @@ void testSFML() {
                         }
                         else if(status == 4){
                             reinforce.setm_country(gamescene.findCountry(pos));
-                            if(gamescene.existCountry(pos)){
-                                if(reinforce.existM_country())
-                                    m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());
-                                    status++;
-                                    cout << "test" << endl;
-                            }
-                            
+                        
                         }
                         else if(status == 5){
                             reinforce.setn_country(gamescene.findCountry(pos));
-                            if(gamescene.existCountry(pos)){
-                                if(reinforce.existN_country())
-                                    cout << "test" << endl;
-                                    reinforce.execute();
-                            }
                         }
                     }
 
