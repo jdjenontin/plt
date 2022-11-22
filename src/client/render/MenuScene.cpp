@@ -4,9 +4,18 @@
 
 namespace render {
 
+int plist_size = 2;
+
+Colors color;
+
+sf::Texture* c = new sf::Texture();
+
 MenuScene::MenuScene (sf::RenderWindow* window) {
     this->window = window;
     isopen = true;
+
+    c->loadFromFile("res/button.png");
+    c->setSmooth(true);
 }
 
 MenuScene::~MenuScene () {
@@ -37,11 +46,31 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
     return "";
 }
 
+void MenuScene::addplayer (){
+    plist_size++;
+}
+
+void MenuScene::deleteplayer (){
+    plist_size--;
+}
+
 void MenuScene::display () {
     window->clear(sf::Color::White);
 
     for(auto m : listMenu){
         display_menu(m);
+    }
+
+    for (int i = 0; i < plist_size; i++)
+    {
+        Message m(860, 270 + (60 * i), "Player");
+        m.setintMessage(i + 1);
+        m.addMessage(":");
+
+        Button b(960, 265 + (60 * i), 25, color.colorList[i], c);
+
+        window->draw(m.text);
+        window->draw(b.circle);
     }
 }
 

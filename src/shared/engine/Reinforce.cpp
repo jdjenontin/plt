@@ -35,7 +35,6 @@ void Reinforce::setm_country (state::Country* m_country){
     this->m_country = m_country;
 }
 
-
 /**
  * @brief Set the country to reinforce
 */
@@ -43,6 +42,19 @@ void Reinforce::setn_country (state::Country* n_country){
     this->n_country = n_country;
 }
 
+/**
+ * @brief Detect if the m_country is in the list of player
+*/
+bool Reinforce::existM_country () {
+    return player->existCountry(*m_country);
+}
+
+/**
+ * @brief Detect if the n_country is in the list of player
+*/
+bool Reinforce::existN_country () {
+    return player->existCountry(*n_country);
+}
 
 /**
  * @brief Check if a n_country is connected to n_country and add troop if yes

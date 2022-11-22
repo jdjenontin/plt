@@ -8,13 +8,11 @@ using namespace std;
 namespace state{
 
 Player::Player () {
-    ownTroop = 35;
     status = PLAYING;
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
 Player::Player (int m_order) {
-    ownTroop = 35;
     status = PLAYING;
     order = m_order;
 }
@@ -66,6 +64,14 @@ bool Player::existCountry (Country country){
     }
 
     return false;
+}
+
+void Player::setStatus(GameStatus status){
+    this->status = status;
+}
+
+GameStatus Player::getStatus() const{
+    return this->status;
 }
 
 int Player::continentBonusTroop ()

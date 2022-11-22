@@ -25,19 +25,17 @@ void CardScene::init(){
     std::vector<state::Card*> clist = player->getListCard();
 
     for(unsigned int i = 0; i < clist.size(); i++){
-        std::cout << clist[i]->typeCard << std::endl;
-        std::cout << state::TypeCard::Infantry << std::endl;
         if(clist[i]->typeCard == state::TypeCard::Infantry){
-            Card card(100 + 200*i, 100);
+            Card card(100 + 250*i, 100, "Infantry", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
         else if(clist[i]->typeCard == state::TypeCard::Cavalry){
-            Card card(100 + 200*i, 300);
+            Card card(100 + 250*i, 100, "Cavalry", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
             
         else if(clist[i]->typeCard == state::TypeCard::Artillery){
-            Card card(100 + 200*i, 500);
+            Card card(100 + 250*i, 100, "Artillery", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
     }
@@ -67,6 +65,12 @@ void CardScene::display_card (Card card){
     sf::RectangleShape rec = card.getRectangle();
 
     window->draw(rec);
+    window->draw(card.getCountry()->text);
+    window->draw(card.getName()->text);
+
+    sf::Sprite pion = card.getPion();
+
+    window->draw(pion); 
 }
 
 }

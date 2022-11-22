@@ -134,6 +134,13 @@ void State::ChangePlaying () {
         orderPlayer = 0;
         IncrementTurn();
     }
+
+    if(playersList[orderPlayer].getListCountry().size() == 0){
+        orderPlayer++;
+        playersList[orderPlayer].setStatus(state::LOSE);
+        if(orderPlayer == (int)playersList.size())
+            orderPlayer = 0;
+    }
 }
 
 const std::vector<Country*>& State::getListCountires() const{
