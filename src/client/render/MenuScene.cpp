@@ -10,6 +10,8 @@ Colors color;
 
 sf::Texture* c = new sf::Texture();
 
+std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+
 MenuScene::MenuScene (sf::RenderWindow* window) {
     this->window = window;
     isopen = true;
@@ -27,13 +29,17 @@ void MenuScene::init () {
 
     listMenu.push_back(start);
 
-    Menu addplayer(640, 500, "addplayer");
+    Menu addplayer(640, 400, "addplayer");
 
     listMenu.push_back(addplayer);
 
-    Menu deleteplayer(640, 400, "deleteplayer");
+    Menu deleteplayer(640, 500, "deleteplayer");
 
     listMenu.push_back(deleteplayer);
+
+    Menu addbot(640, 600, "addbot");
+
+    listMenu.push_back(addbot);
 }
 
 std::string MenuScene::getNameMenu (sf::Vector2i pos) {
@@ -63,11 +69,10 @@ void MenuScene::display () {
 
     for (int i = 0; i < plist_size; i++)
     {
-        Message m(860, 270 + (60 * i), "Player");
-        m.setintMessage(i + 1);
+        Message m(860, 270 + (60 * i), listname[i]);
         m.addMessage(":");
 
-        Button b(960, 265 + (60 * i), 25, color.colorList[i], c);
+        Button b(940, 265 + (60 * i), 25, color.colorList[i], c);
 
         window->draw(m.text);
         window->draw(b.circle);

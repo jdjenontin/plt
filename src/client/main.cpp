@@ -65,7 +65,7 @@ void testSFML() {
             m6(50, 900, "It's the country "),
             m7(50, 935, "Number of country is "),
             m8(600, 50, "Turn : "),
-            m9(600, 10, "It's your turn player"),
+            m9(600, 10, "It's your turn "),
             m10(80, 35, "Press P to end your turn", NO_DISPLAY),
             m11(50, 865, "You have ", NO_DISPLAY);
 
@@ -82,8 +82,10 @@ void testSFML() {
         if(gamescene.isOpen()){
             player = pList[state->getOrderPlayer()];
 
+            string s = player->getName();
+
             m8.setintMessage(state->getTurn() + 1);
-            m9.setintMessage(state->getOrderPlayer() + 1);
+            m9.setstrMessage(s);
 
             place.setPlayer(player);
             attack.setPlayer(player);
@@ -231,6 +233,9 @@ void testSFML() {
                                 state->numberPlayer--;
                                 menuscene.deleteplayer();
                             } 
+                        }
+                        else if(menuscene.getNameMenu(pos) == "addbot"){
+                            cout << "its not availble now" << endl;
                         }
                     }
                     // a faire 

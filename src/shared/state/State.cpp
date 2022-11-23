@@ -24,7 +24,7 @@ std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest",
                             "Australie Occidentale"};
     
 State::State(){
-    
+    this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 }
 
 State::~State(){
@@ -37,7 +37,10 @@ void State::init()
 
     // Création de la liste des joueurs
     for(int i = 0; i < numberPlayer; i++){
-        playersList.push_back(Player(i));
+        Player p(i);
+
+        p.setName(listname[i]);
+        playersList.push_back(p);
     }
 
     for(unsigned i = 0; i < playersList.size(); i++){
@@ -69,11 +72,6 @@ void State::init()
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     auto rng = std::default_random_engine(seed);
     std::shuffle(begin(cardList), end(cardList), rng);
-
-    // Test 
-
-    for(auto ca : cardList)
-        cout << "Card " << ca.typeCard << ca.getNameCountry() << endl;
 
     //Affectation des pays et troupes aux joueurs
     vector<int> affectation_order;

@@ -138,14 +138,15 @@ void GameScene::display()
     for (unsigned j = 0; j < pList.size(); j++)
     {
         // afficher la liste de joueur
-        Message m(50, 480 + (60 * j), "Player");
-        m.setintMessage(j + 1);
+        std::string name = pList[j]->getName();
+
+        Message m(50, 480 + (60 * j), name);
         m.addMessage(":");
 
         if(pList[j]->getListCountry().size() == 0)
             m.setColor(sf::Color::Red);
 
-        Button b(150, 475 + (60 * j), 25, color.colorList[j], &cir);
+        Button b(130, 475 + (60 * j), 25, color.colorList[j], &cir);
 
         window->draw(m.text);
         window->draw(b.circle);

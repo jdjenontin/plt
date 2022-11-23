@@ -36,7 +36,7 @@ Card::Card(int x, int y, std::string name, std::string country) {
     }
 
     this->name = new Message(x + 50, y + 10, name);
-    this->country = new Message(x + 50, y + 250, country);
+    this->country = new Message(x + 55 - country.size(), y + 250, country);
 
     this->country->cutMessage();
 }

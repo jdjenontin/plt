@@ -74,6 +74,14 @@ GameStatus Player::getStatus() const{
     return this->status;
 }
 
+void Player::setName(const std::string& name){
+    this->name = name;
+}
+
+const std::string& Player::getName() const{
+    return this->name;
+}
+
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
