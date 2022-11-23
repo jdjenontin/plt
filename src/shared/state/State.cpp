@@ -13,6 +13,13 @@ using namespace std;
 
 namespace state
 {
+//Création de la liste de tous les pays
+std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
+                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
+                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
+                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
+                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
+                            "Australie Occidentale"};
     
 State::State(){
     
@@ -24,14 +31,6 @@ State::~State(){
 
 void State::init()
 {
-    //Création de la liste de tous les pays
-    std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
-                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
-                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
-                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
-                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
-                            "Australie Occidentale"};
-
     std::map <int, string> listcountry;
 
     // Création de la liste des joueurs
@@ -95,7 +94,7 @@ void State::init()
 
         int remainingTroop = initialTroop % playerCountries.size();
         
-        // Ajoout du nombre de troupe restant de façon aléatoire sur les territoires 
+        // Ajout du nombre de troupe restant de façon aléatoire sur les territoires 
         Dice dice(0, playerCountries.size() - 1);
         for(int k = 0; k != remainingTroop; k++)
         {

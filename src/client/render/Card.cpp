@@ -2,11 +2,12 @@
 
 namespace render{
 
+sf::Texture t;
+
 Card::Card(int x, int y, std::string name, std::string country) {
     sf::Vector2f size;
 
-    sf::Texture t;
-    t.loadFromFile("res/risk-pions.png");
+    t.loadFromFile("res/cartes-risk.png");
     pion.setTexture(t);
 
     size.x = 200;
@@ -22,16 +23,16 @@ Card::Card(int x, int y, std::string name, std::string country) {
     rectangle.setOutlineThickness(3);
 
     if(name == "Infantry"){
-        pion.setTextureRect(sf::IntRect(100, 50, 100, 150));
-        pion.setPosition(x + 50, y + 70);
+        pion.setTextureRect(sf::IntRect(620, 110, 80, 90));
+        pion.setPosition(x + 60, y + 100);
     }
     else if(name == "Cavalry"){
-        pion.setTextureRect(sf::IntRect(300, 50, 100, 150));
-        pion.setPosition(x + 50, y + 70);
+        pion.setTextureRect(sf::IntRect(620, 10, 80, 100));
+        pion.setPosition(x + 60, y + 100);
     }
     else if(name == "Artillery"){
-        pion.setTextureRect(sf::IntRect(500, 50, 100, 150));
-        pion.setPosition(x + 50, y + 70);
+        pion.setTextureRect(sf::IntRect(620, 200, 80, 70));
+        pion.setPosition(x + 60, y + 110);
     }
 
     this->name = new Message(x + 50, y + 10, name);
