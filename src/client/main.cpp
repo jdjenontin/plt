@@ -93,7 +93,7 @@ void testSFML() {
         while (window.pollEvent(mouse))
         {
             // recuperer le bonus de troup
-            // une fois le bonus de troup est recuperer, on ne rentre plus dans ce boucle jusqu'a le prochain joueur
+            // une fois le bonus de troup est recuperer, on ne rentre plus dans cette boucle jusqu'a le prochain joueur
             if(gamescene.isopen){
                 if(!getTroop){
                 if(state.getOrderPlayer() == (int)pList.size() - 1)
@@ -215,7 +215,6 @@ void testSFML() {
                 // appuyer T pour attacker
                 int win = 0;
                 cout << toggleAttack << endl;
-
                 if(Keyboard::isKeyPressed(Keyboard::T))
                 {   
                     m5.replaceMessage("Press S for one attack D for two attacks or M for Multiple attack");
@@ -235,7 +234,8 @@ void testSFML() {
 
                 else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
-                    win = attack.execute(1);
+                    attack.setVictory(0);
+                    win = attack.soloAttack();
                     status = 1;
                     next = true;
 
@@ -256,7 +256,8 @@ void testSFML() {
             
                 else if(Keyboard::isKeyPressed(Keyboard::D) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
-                    win = attack.execute(2);
+                    attack.setVictory(0);
+                    win = attack.doubleAttack();
                     status = 1;
                     next = true;
 
@@ -276,7 +277,8 @@ void testSFML() {
                 else if(Keyboard::isKeyPressed(Keyboard::M) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
                     cout << "Attack1" << endl;
-                    win = attack.execute(3);
+                    attack.setVictory(0);
+                    win = attack.multipleAttack();
                     cout << "Attack2" << endl;
                     status = 1;
                     next = true;
