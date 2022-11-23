@@ -73,7 +73,7 @@ void State::init()
     // Test 
 
     for(auto ca : cardList)
-        cout << "Card " <<ca.getNameCountry() << endl;
+        cout << "Card " << ca.typeCard << ca.getNameCountry() << endl;
 
     //Affectation des pays et troupes aux joueurs
     vector<int> affectation_order;
@@ -122,13 +122,6 @@ void State::init()
 
     for(unsigned i = 0; i < cardList.size(); i++){
         listCard.push_back(&cardList[i]);
-    }
-
-    //test
-    for(unsigned i = 0; i < playersList.size(); i+=3){
-        playersList[i].addCard(&cardList[i]);
-        playersList[i].addCard(&cardList[i+1]);
-        playersList[i].addCard(&cardList[i+2]);
     }
 }
 

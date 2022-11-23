@@ -47,12 +47,14 @@ void testSFML() {
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
 
-    // les trois commandes executables
+    // les quatre commandes executables
     Place place;
     Attack attack;
     Reinforce reinforce; 
+    DistributeCard distributecard;
 
     attack.setState(state);
+    distributecard.setState(state);
 
     // mettre des messages dans la fenetre
     Message m1(1150, 25, "X : "), 
@@ -86,6 +88,7 @@ void testSFML() {
             place.setPlayer(player);
             attack.setPlayer(player);
             reinforce.setPlayer(player);
+            distributecard.setPlayer(player);
         }
 
         Event mouse;
@@ -290,6 +293,7 @@ void testSFML() {
             if(next){
                 if(Keyboard::isKeyPressed(Keyboard::P)){
                     state->ChangePlaying();
+                    distributecard.execute();
                     status = 0;
                     next = false;
                     getTroop = false;
