@@ -8,6 +8,8 @@
 #include "Dice.h"
 #include "Calculation.h"
 
+#include "chrono"
+
 
 using namespace std;
 
@@ -63,6 +65,17 @@ void State::init()
         Card card3(countriesNames[i+2], Artillery);
         cardList.push_back(card3);
     }
+
+    // Shuffle the card
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    auto rng = std::default_random_engine(seed);
+    std::shuffle(begin(cardList), end(cardList), rng);
+
+    // Test 
+
+    for(auto ca : cardList)
+        cout << "Card " <<ca.getNameCountry() << endl;
+
     //Affectation des pays et troupes aux joueurs
     vector<int> affectation_order;
     Calculation calc;
