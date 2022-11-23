@@ -22,7 +22,7 @@ vector<Country*> v_listcountry;
 vector<state::Card*> v_listcard;
 
 void testSFML() {
-    State state;
+    State* state = new State();
 
     vector<Player*> pList;
 
@@ -47,12 +47,14 @@ void testSFML() {
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
 
-    // les trois commandes executables
+    // les quatre commandes executables
     Place place;
     Attack attack;
     Reinforce reinforce; 
+    DistributeCard distributecard;
 
-    attack.setState(&state);
+    attack.setState(state);
+    distributecard.setState(state);
 
     // mettre des messages dans la fenetre
     Message m1(1150, 25, "X : "), 
@@ -64,11 +66,11 @@ void testSFML() {
             m7(50, 935, "Number of country is "),
             m8(600, 50, "Turn : "),
             m9(600, 10, "It's your turn player"),
-            m10(60, 35, "Press P to end your turn", NO_DISPLAY),
+            m10(80, 35, "Press P to end your turn", NO_DISPLAY),
             m11(50, 865, "You have ", NO_DISPLAY);
 
     // et ajouter des messages dans la liste pour l'afficher
-    gamescene.addListMessage({&m1, &m2, &m3, &m4, &m5, &m6, &m7, &m8, &m9, &m10, &m11});
+    gamescene.addListMessage({&m3, &m4, &m5, &m6, &m7, &m8, &m9, &m10, &m11});
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -78,14 +80,15 @@ void testSFML() {
         Player* player;
 
         if(gamescene.isOpen()){
-            player = pList[state.getOrderPlayer()];
+            player = pList[state->getOrderPlayer()];
 
-            m8.setintMessage(state.getTurn() + 1);
-            m9.setintMessage(state.getOrderPlayer() + 1);
+            m8.setintMessage(state->getTurn() + 1);
+            m9.setintMessage(state->getOrderPlayer() + 1);
 
             place.setPlayer(player);
             attack.setPlayer(player);
             reinforce.setPlayer(player);
+            distributecard.setPlayer(player);
         }
 
         Event mouse;
@@ -95,7 +98,7 @@ void testSFML() {
             // une fois le bonus de troup est recuperer, on ne rentre plus dans ce boucle jusqu'a le prochain joueur
             if(gamescene.isOpen()){
                 if(!getTroop){  
-                if(state.getOrderPlayer() == (int)pList.size() - 1)
+                if(state->getOrderPlayer() == (int)pList.size() - 1)
                     place.bonus_troop = player->continentBonusTroop() + 1;
                 else
                     place.bonus_troop = player->continentBonusTroop();
@@ -123,7 +126,7 @@ void testSFML() {
                     //l'espace de travail de gamescene
                     else if(gamescene.isOpen()){
                         if(gamescene.isCardButton(pos)){
-                            player = pList[state.getOrderPlayer()];
+                            player = pList[state->getOrderPlayer()];
 
                             cardscene.setPlayer(player);
                             cardscene.init();
@@ -184,38 +187,50 @@ void testSFML() {
                         }
                         else if(status == 4){
                             reinforce.setm_country(gamescene.findCountry(pos));
-                        
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existM_country()){
+                                    m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry()); 
+                                    status++;
+                                }
+                            }
                         }
                         else if(status == 5){
                             reinforce.setn_country(gamescene.findCountry(pos));
+                            if(gamescene.existCountry(pos)){
+                                if(reinforce.existN_country()){
+                                    reinforce.execute();
+                                }
+                            }
                         }
                     }
 
                     if(menuscene.isOpen()){
                         if(menuscene.getNameMenu(pos) == "start"){
-                            state.init();
+                            state->init();
 
-                            pList = state.getListPlayers();
+                            pList = state->getListPlayers();
 
-                            v_listcountry = state.getListCountires();
+                            v_listcountry = state->getListCountires();
 
-                            v_listcard = state.getListCard();
+                            v_listcard = state->getListCard();
 
                             gamescene.setListcountry(v_listcountry);
-                            gamescene.init(pList, &circle);
+                            gamescene.init(pList);
 
                             menuscene.close();
                             gamescene.open();
                         }
                         else if(menuscene.getNameMenu(pos) == "addplayer"){
-                            if(state.numberPlayer < 5)
-                                state.numberPlayer++;
-                            cout << state.numberPlayer << endl; 
+                            if(state->numberPlayer < 5){
+                                state->numberPlayer++;
+                                menuscene.addplayer();
+                            }
                         }
                         else if(menuscene.getNameMenu(pos) == "deleteplayer"){
-                            if(state.numberPlayer > 2)
-                                state.numberPlayer--;
-                            cout << state.numberPlayer << endl; 
+                            if(state->numberPlayer > 2){
+                                state->numberPlayer--;
+                                menuscene.deleteplayer();
+                            } 
                         }
                     }
                     // a faire 
@@ -223,21 +238,32 @@ void testSFML() {
                 else if (mouse.key.code == Mouse::Right) 
                 {
                     // si le joueur gagne, il peut bouger ses troup en utilisant le bouton a droit
-                    if(player->winAttack){
-                        attack.movetroop();
-                    }
-                    // si le joueur veut rechoisir le pays attaquant, il peut utiliser le bouton a droit
-                    if(status == 2)
-                        status = 1;
+                    if(gamescene.isOpen()){
+                        if(player->winAttack){
+                            attack.movetroop();
+                        }
+                        // si le joueur veut rechoisir le pays attaquant, il peut utiliser le bouton a droit
+                        if(status == 2)
+                            status = 1;
 
-                    if(status == 1)
-                        cout << status << endl;
-                        status = 4;
+                        if(status == 5)
+                            status = 4;
+                    }
                 }
         }
         if(gamescene.isOpen()){
+            if(Keyboard::isKeyPressed(Keyboard::A)){
+                status = 4;
+            }
+
+            // if(Keyboard::isKeyPressed(Keyboard::R)){
+            //     gamescene.close();
+            //     menuscene.open();
+            // }
+
             if (status == 3){
             m5.show(DISPLAY);
+
             // appuyer T pour attacker
             if(Keyboard::isKeyPressed(Keyboard::T))
             {
@@ -266,7 +292,8 @@ void testSFML() {
             }
             if(next){
                 if(Keyboard::isKeyPressed(Keyboard::P)){
-                    state.ChangePlaying();
+                    state->ChangePlaying();
+                    distributecard.execute();
                     status = 0;
                     next = false;
                     getTroop = false;
@@ -274,8 +301,6 @@ void testSFML() {
                 }
             }
 
-            m1.setintMessage(pos.x);
-            m2.setintMessage(pos.y);
             m6.setstrMessage(gamescene.const_findCountry(pos).getNameCountry());
             m7.setintMessage(gamescene.const_findCountry(pos).getNumberCountry());
         }
@@ -286,6 +311,12 @@ void testSFML() {
             gamescene.display();
         else if(cardscene.isOpen())
             cardscene.display();
+
+        m1.setintMessage(pos.x);
+        m2.setintMessage(pos.y);
+
+        window.draw(m1.text);
+        window.draw(m2.text);
 
         window.display();
     }
