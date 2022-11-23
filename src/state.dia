@@ -4524,7 +4524,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
-        <dia:boolean val="true"/>
+        <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
@@ -4552,7 +4552,7 @@
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O3" connection="37"/>
-        <dia:connection handle="1" to="O16" connection="26"/>
+        <dia:connection handle="1" to="O16" connection="18"/>
       </dia:connections>
       <dia:childnode parent="O2"/>
     </dia:object>
