@@ -72,10 +72,12 @@ void UseCard::execute(){
     if(can_use){
         if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0)){
             m_bonusTroop = 10;
-            
+            std::cout << player->getListCard().size() << std::endl;
             player->deleteCard(*it_artillery);
+            std::cout << (*it_cavalry)->getNameCountry() << std::endl;
             player->deleteCard(*it_cavalry);
             player->deleteCard(*it_infantry);
+            std::cout << player->getListCard().size() << std::endl;
         }
         else if(m_number_artillery >= 3){
             m_bonusTroop = 8;

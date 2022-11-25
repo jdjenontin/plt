@@ -128,6 +128,7 @@ void testSFML() {
                         if(cardscene.isChangeButton(pos) && status == 0){
                             if(usecard.canUseCard()){
                                 usecard.execute();
+                                cardscene.init();
                                 place.bonus_troop += usecard.getM_bonusTroop();
                                 cout << "bonus :" << usecard.getM_bonusTroop() << endl;
                             }

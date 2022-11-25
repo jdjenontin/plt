@@ -11,6 +11,8 @@ sf::Texture* circle = new sf::Texture();
 Button gameb(20, 20, 25, sf::Color::Magenta, circle),
        changeb(1050, 20, 25, sf::Color::Blue, circle); 
 
+Message change(960, 30, "change");
+
 CardScene::CardScene(sf::RenderWindow* window){
     this->window = window;
     
@@ -24,19 +26,20 @@ CardScene::~CardScene(){
 
 void CardScene::init(){
     std::vector<state::Card*> clist = player->getListCard();
+    listCard = {};
 
     for(unsigned int i = 0; i < clist.size(); i++){
         if(clist[i]->typeCard == state::TypeCard::Infantry){
-            Card card(100 + 250*i, 100, "Infantry", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Infantry", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
         else if(clist[i]->typeCard == state::TypeCard::Cavalry){
-            Card card(100 + 250*i, 100, "Cavalry", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Cavalry", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
             
         else if(clist[i]->typeCard == state::TypeCard::Artillery){
-            Card card(100 + 250*i, 100, "Artillery", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Artillery", clist[i]->getNameCountry());
             listCard.push_back(card);
         }
     }
@@ -64,6 +67,7 @@ void CardScene::display(){
 
     window->draw(gameb.circle);
     window->draw(changeb.circle);
+    window->draw(change.text);
 
     for(auto c : listCard){
         display_card(c);
