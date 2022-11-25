@@ -98,7 +98,7 @@ void testSFML() {
         {
             // recuperer le bonus de troup
             // une fois le bonus de troup est recuperer, on ne rentre plus dans cette boucle jusqu'a le prochain joueur
-            if(gamescene.isopen){
+            if(gamescene.isOpen()){
                 if(!getTroop){
                 if(state.getOrderPlayer() == (int)pList.size() - 1)
                     place.bonus_troop = player->continentBonusTroop() + 1;
@@ -264,7 +264,6 @@ void testSFML() {
                     m4.show(NO_DISPLAY);
                     m5.show(NO_DISPLAY);
                 }
-
 
                 else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
