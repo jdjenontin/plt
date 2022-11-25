@@ -1,6 +1,7 @@
 #include "UseCard.h"
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 
 /**
  * Predicat
@@ -47,28 +48,6 @@ bool UseCard::canUseCard(){
     
     if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0) || m_number_artillery >3 || m_number_cavalry >3 || m_number_infantry>3)
         return true;
-    /*
-    for(auto card : list_card){
-        if(card->typeCard == state::Artillery)
-        {
-            m_usedCard.insert({1, card});
-            artillery++;
-        }        
-        else if (card->typeCard == state::Cavalry)
-        {
-            m_usedCard.insert({2, card});
-            cavalry++;
-        }
-        else
-        {
-            m_usedCard.insert({3, card});
-            infantry++;
-        }
-
-        if(artillery > 0 && cavalry > 0 && infantry > 0){
-            return true;
-        }
-    }*/
 
     return false;
 }
@@ -77,10 +56,18 @@ bool UseCard::canUseCard(){
  * @brief Compute the number of bonus troop and delete the cards from the player cards
 */
 void UseCard::execute(){
+    std::vector<state::Card *> list_card = player->getListCard();
+    std::vector<state::Card *>::iterator it_artillery = std::find_if(list_card.begin(), list_card.end(), cardType(state::Artillery));
+    std::vector<state::Card *>::iterator it_cavalry = std::find_if(list_card.begin(), list_card.end(), cardType(state::Cavalry));
+    std::vector<state::Card *>::iterator it_infantry = std::find_if(list_card.begin(), list_card.end(), cardType(state::Infantry));
     bool can_use = this->canUseCard();
     if(can_use){
         if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0)){
             m_bonusTroop = 10;
+            
+            player->deleteCard(*it_artillery);
+            player->deleteCard(*it_cavalry);
+            player->deleteCard(*it_infantry);
         }
         else if(m_number_artillery > 3){
             m_bonusTroop = 8;
