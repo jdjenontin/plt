@@ -75,19 +75,19 @@ void UseCard::execute(){
         }
         else if(m_number_artillery > 3){
             m_bonusTroop = 8;
-            for (i = 0; i<3; i++)
+            for (int i = 0; i<3; i++)
                 player->deleteCard(*(it_artillery+i));
         }
         else if (m_number_cavalry)
         {
             m_bonusTroop = 6;
-            for (i = 0; i<3; i++)
+            for (int i = 0; i<3; i++)
                 player->deleteCard(*(it_cavalry+i));
         }
         else if (m_number_infantry)
         {
             m_bonusTroop = 4;
-            for (i = 0; i<3; i++)
+            for (int i = 0; i<3; i++)
                 player->deleteCard(*(it_infantry+i));
         }
         
