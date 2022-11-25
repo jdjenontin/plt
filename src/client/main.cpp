@@ -25,7 +25,7 @@ void testSFML() {
     vector<Player*> pList;
 
     // create the window
-    RenderWindow window(sf::VideoMode(1280, 986), "RISK !", Style::Titlebar|Style::Close);
+    RenderWindow window(sf::VideoMode::getDesktopMode(), "RISK !", Style::Titlebar|Style::Close|Style::Fullscreen);
     Texture circle;
     
     circle.loadFromFile("res/button.png");
@@ -54,12 +54,12 @@ void testSFML() {
 
     // mettre des messages dans la fenetre
     // "Press S for one attack D for two attacks  or M for Multiple attack"
-    // "If you want to attack, please press T, if not, press F "
+    // "If you want to attack, please press A, if not, press F "
     Message m1(1150, 25, "X : "), 
             m2(1150, 50, "Y : "), 
             m3(600, 865, "You choose the country ", NO_DISPLAY), 
             m4(600, 900, "You will attack the country ", NO_DISPLAY), 
-            m5(600, 935, "If you want to attack, please press T, if not, press F ", NO_DISPLAY),
+            m5(600, 935, "If you want to attack, please press A, if not, press F ", NO_DISPLAY),
             m6(50, 900, "It's the country "),
             m7(50, 935, "Number of country is "),
             m8(600, 50, "Turn : "),
@@ -213,11 +213,13 @@ void testSFML() {
                 if (toggleAttack == 0) m5.show(DISPLAY);
                 
                 // appuyer T pour attacker
-                int win = 0;
+                //Conquered lets us know if the def country was completly defeated or not
+                int conquered = 0;
                 cout << toggleAttack << endl;
-                if(Keyboard::isKeyPressed(Keyboard::T))
+
+                if(Keyboard::isKeyPressed(Keyboard::A))
                 {   
-                    m5.replaceMessage("Press S for one attack D for two attacks or M for Multiple attack");
+                    m5.replaceMessage("Press S for solo attack D for double attack or M for Multiple attack");
                     toggleAttack = 1;
                 }
 
@@ -233,9 +235,8 @@ void testSFML() {
 
 
                 else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
-                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
-                    attack.setVictory(0);
-                    win = attack.soloAttack();
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    conquered = attack.soloAttack();
                     status = 1;
                     next = true;
 
@@ -244,7 +245,7 @@ void testSFML() {
                     m10.show(DISPLAY);
                     toggleAttack = 0;
 
-                    if(win == 1){
+                    if(conquered == 1){
                         m5.replaceMessage("Click right key to add the troop in your new country");
                     }
                     else{
@@ -255,40 +256,70 @@ void testSFML() {
                 
             
                 else if(Keyboard::isKeyPressed(Keyboard::D) and toggleAttack){
-                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
-                    attack.setVictory(0);
-                    win = attack.doubleAttack();
-                    status = 1;
-                    next = true;
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                        {
+                        conquered = attack.doubleAttack();
+                        status = 1;
+                        next = true;
 
-                    m3.show(NO_DISPLAY);
-                    m4.show(NO_DISPLAY);
-                    m10.show(DISPLAY);
-                    toggleAttack = 0;
+                        m3.show(NO_DISPLAY);
+                        m4.show(NO_DISPLAY);
+                        m10.show(DISPLAY);
+                        toggleAttack = 0;
 
-                    if(win == 1){
-                        m5.replaceMessage("Click right key to add the troop in your new country");
+                        if(conquered == 1){
+                            m5.replaceMessage("Click right key to add the troop in your new country");
+                        }
+                        else{
+                            m5.show(NO_DISPLAY);
+                        }
                     }
-                    else{
-                        m5.show(NO_DISPLAY);
+                    else
+                    {
+                        m5.replaceMessage("You cannot double attack");
+                    }
+                }
+
+                else if(Keyboard::isKeyPressed(Keyboard::T) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                        {
+                        conquered = attack.tripleAttack();
+                        status = 1;
+                        next = true;
+
+                        m3.show(NO_DISPLAY);
+                        m4.show(NO_DISPLAY);
+                        m10.show(DISPLAY);
+                        toggleAttack = 0;
+
+                        if(conquered == 1){
+                            m5.replaceMessage("Click right key to add the troop in your new country");
+                        }
+                        else{
+                            m5.show(NO_DISPLAY);
+                        }
+                    }
+                    else
+                    {
+                        m5.replaceMessage("You cannot triple attack");
                     }
                 }
 
                 else if(Keyboard::isKeyPressed(Keyboard::M) and toggleAttack){
-                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
                     cout << "Attack1" << endl;
-                    attack.setVictory(0);
-                    win = attack.multipleAttack();
+                    conquered = attack.multipleAttack();
                     cout << "Attack2" << endl;
                     status = 1;
                     next = true;
-
                     m3.show(NO_DISPLAY);
                     m4.show(NO_DISPLAY);
                     m10.show(DISPLAY);
                     toggleAttack = 0;
 
-                    if(win == 1){
+                    if(conquered == 1){
                         m5.replaceMessage("Click right key to add the troop in your new country");
                     }
                     else{
