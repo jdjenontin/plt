@@ -9,12 +9,14 @@ namespace state{
 
 Player::Player () {
     status = PLAYING;
+    typeplayer = HUMAN;
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
 Player::Player (int m_order) {
     status = PLAYING;
     order = m_order;
+    typeplayer = HUMAN;
 }
 
 Player::~Player () {

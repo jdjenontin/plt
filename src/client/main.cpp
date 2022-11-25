@@ -123,6 +123,9 @@ void testSFML() {
                             cardscene.close();
                             gamescene.open();
                         }
+                        if(cardscene.isChangeButton(pos)){
+                            cout << "its not availble now" << endl;
+                        }
                     }
 
                     //l'espace de travail de gamescene

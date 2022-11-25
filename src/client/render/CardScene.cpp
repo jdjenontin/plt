@@ -8,7 +8,8 @@ namespace render{
 
 sf::Texture* circle = new sf::Texture();
 
-Button gameb(20, 20, 25, sf::Color::Magenta, circle);
+Button gameb(20, 20, 25, sf::Color::Magenta, circle),
+       changeb(1050, 20, 25, sf::Color::Blue, circle); 
 
 CardScene::CardScene(sf::RenderWindow* window){
     this->window = window;
@@ -47,6 +48,13 @@ bool CardScene::isGameButton (sf::Vector2i pos){
     else return false;
 }
 
+bool CardScene::isChangeButton (sf::Vector2i pos){
+    if(abs(pos.x - 1075) < 25 && abs(pos.y - 45) < 25)
+        return true;
+    else return false;
+}
+
+
 void CardScene::setPlayer (state::Player* player){
     this->player = player;
 }
@@ -55,6 +63,7 @@ void CardScene::display(){
     window->clear(sf::Color::Cyan);
 
     window->draw(gameb.circle);
+    window->draw(changeb.circle);
 
     for(auto c : listCard){
         display_card(c);
