@@ -52,6 +52,7 @@ void testSFML() {
     Attack attack;
     Reinforce reinforce; 
     DistributeCard distributecard;
+    UseCard usecard;
 
     attack.setState(state);
     distributecard.setState(state);
@@ -91,6 +92,7 @@ void testSFML() {
             attack.setPlayer(player);
             reinforce.setPlayer(player);
             distributecard.setPlayer(player);
+            usecard.setPlayer(player);
         }
 
         Event mouse;
@@ -123,8 +125,14 @@ void testSFML() {
                             cardscene.close();
                             gamescene.open();
                         }
-                        if(cardscene.isChangeButton(pos)){
-                            cout << "its not availble now" << endl;
+                        if(cardscene.isChangeButton(pos) && status == 0){
+                            if(usecard.canUseCard()){
+                                usecard.execute();
+                                place.bonus_troop += usecard.getM_bonusTroop();
+                                cout << "bonus :" << usecard.getM_bonusTroop() << endl;
+                            }
+                            m11.setintMessage(place.bonus_troop);
+                            m11.addMessage(" troops now");
                         }
                     }
 
@@ -264,10 +272,9 @@ void testSFML() {
                 status = 4;
             }
 
-            // if(Keyboard::isKeyPressed(Keyboard::R)){
-            //     gamescene.close();
-            //     menuscene.open();
-            // }
+            if(Keyboard::isKeyPressed(Keyboard::R)){
+                distributecard.execute();
+            }
 
             if (status == 3){
             m5.show(DISPLAY);

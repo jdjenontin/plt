@@ -73,6 +73,10 @@ bool UseCard::canUseCard(){
     return false;
 }
 
+int UseCard::getM_bonusTroop() const{
+    return m_bonusTroop;
+}
+
 /**
  * @brief Compute the number of bonus troop and delete the cards from the player cards
 */
