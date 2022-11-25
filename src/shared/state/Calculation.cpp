@@ -32,57 +32,9 @@ void Calculation::init_lostroop () {
     lostTroopDefender = 0;
 }
 
-int Calculation::attack (Country* attacker, Country* defender) {
-    Dice dice(1,6);
-    int att, def;
-    int count = 1;
-
-    init_lostroop();
-
-    att = attacker->getNumberTroop() - 1;
-
-    std::cout << "attacker forces :"<< att << std::endl;
-
-    def = defender->getNumberTroop();
-
-    std::cout << "defender forces :"<< def << std::endl;
-
-    while(1){
-        std::cout << "turn :" << count << std::endl;
-
-        int x = dice.thrown();
-
-        std::cout << "attacker's dice number :"<< x << std::endl;
-
-        int y = dice.thrown();
-
-        std::cout << "defender's dice number :"<< y << std::endl;
-
-        if(x >= y){
-            std::cout << "attwin" << std::endl;
-            def -= 1;
-            lostTroopDefender += 1;
-            if (def == 0) {
-                std::cout << "you win the attack" << std::endl;
-                attacker->reduceNumberTroop(lostTroopAttacker + 1);
-                std::cout << "you have "<< attacker->getNumberTroop() << " troop now"<< std::endl;
-                defender->setNumberTroop(1);
-                return 0;
-            }
-        }
-        else {
-            std::cout << "defwin" << std::endl;
-            att -= 1;
-            lostTroopAttacker += 1;
-            if (att == 0) {
-                attacker->setNumberTroop(1);
-                defender->reduceNumberTroop(lostTroopDefender);
-                return 1;
-            }
-        }
-        count++;
+int Calculation::attack (Country* attacker, Country* defender, bool canAttack) {
+    
     }
-}
 
 
 /*

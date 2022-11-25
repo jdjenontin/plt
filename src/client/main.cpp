@@ -43,6 +43,7 @@ void testSFML() {
     menuscene.init();
 
     int status = 0; // afin de forcer les ordres des commandes.
+    int toggleAttack = 0; //Pour savoir si on peux attaquer
     bool next = false; // indiquer si le jouer a fait l'attack, si le joueur a fait au moins un attack, il peut passer le tour a le joueur suivant,
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
@@ -52,9 +53,13 @@ void testSFML() {
     Attack attack;
     Reinforce reinforce; 
 
+
+
     attack.setState(&state);
 
     // mettre des messages dans la fenetre
+    // "Press S for one attack D for two attacks  or M for Multiple attack"
+    // "If you want to attack, please press T, if not, press F "
     Message m1(1150, 25, "X : "), 
             m2(1150, 50, "Y : "), 
             m3(600, 865, "You choose the country ", NO_DISPLAY), 
@@ -92,9 +97,9 @@ void testSFML() {
         while (window.pollEvent(mouse))
         {
             // recuperer le bonus de troup
-            // une fois le bonus de troup est recuperer, on ne rentre plus dans ce boucle jusqu'a le prochain joueur
-            if(gamescene.isOpen()){
-                if(!getTroop){  
+            // une fois le bonus de troup est recuperer, on ne rentre plus dans cette boucle jusqu'a le prochain joueur
+            if(gamescene.isopen){
+                if(!getTroop){
                 if(state.getOrderPlayer() == (int)pList.size() - 1)
                     place.bonus_troop = player->continentBonusTroop() + 1;
                 else
@@ -148,10 +153,11 @@ void testSFML() {
                         else if(status == 1)
                         {
                             player->winAttack = false;
+
                             m5.show(NO_DISPLAY);
-                            attack.setc_country(gamescene.findCountry(pos));
+                            attack.setAttackCountry(gamescene.findCountry(pos));
                             if(gamescene.existCountry(pos)){
-                                if(attack.existC_country()){
+                                if(attack.existAttackCountry()){
                                     if(attack.abletoattack()){
                                         m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());    
                                         status++;
@@ -166,10 +172,10 @@ void testSFML() {
                         }
                         // choose the defend country, et inplementer le status
                         else if(status == 2){
-                            attack.setd_country(gamescene.findCountry(pos));
+                            attack.setDefCountry(gamescene.findCountry(pos));
                             if(gamescene.existCountry(pos)){
                                 if(attack.isadjacent()){
-                                    if(attack.existD_country()){
+                                    if(attack.existDefCountry()){
                                         m4.replaceMessage("you need choose your opponent's country !");
                                     }
                                     else{
@@ -237,33 +243,97 @@ void testSFML() {
         }
         if(gamescene.isOpen()){
             if (status == 3){
-            m5.show(DISPLAY);
-            // appuyer T pour attacker
-            if(Keyboard::isKeyPressed(Keyboard::T))
-            {
-                int win = attack.execute();
-                if(win == 1){
-                    m5.replaceMessage("Click right key to add the troop in your new country");
+                
+                if (toggleAttack == 0) m5.show(DISPLAY);
+                
+                // appuyer T pour attacker
+                int win = 0;
+                cout << toggleAttack << endl;
+                if(Keyboard::isKeyPressed(Keyboard::T))
+                {   
+                    m5.replaceMessage("Press S for one attack D for two attacks or M for Multiple attack");
+                    toggleAttack = 1;
                 }
-                else{
+
+
+                // appuyer F pour annuler
+                else if(Keyboard::isKeyPressed(Keyboard::F))
+                {
+                    status = 1;
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
                     m5.show(NO_DISPLAY);
                 }
-                status = 1;
-                next = true;
 
-                m3.show(NO_DISPLAY);
-                m4.show(NO_DISPLAY);
-                m10.show(DISPLAY);
+
+                else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
+                    attack.setVictory(0);
+                    win = attack.soloAttack();
+                    status = 1;
+                    next = true;
+
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
+                    m10.show(DISPLAY);
+                    toggleAttack = 0;
+
+                    if(win == 1){
+                        m5.replaceMessage("Click right key to add the troop in your new country");
+                    }
+                    else{
+                        m5.show(NO_DISPLAY);
+                    }
+                }
+
+                
+            
+                else if(Keyboard::isKeyPressed(Keyboard::D) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
+                    attack.setVictory(0);
+                    win = attack.doubleAttack();
+                    status = 1;
+                    next = true;
+
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
+                    m10.show(DISPLAY);
+                    toggleAttack = 0;
+
+                    if(win == 1){
+                        m5.replaceMessage("Click right key to add the troop in your new country");
+                    }
+                    else{
+                        m5.show(NO_DISPLAY);
+                    }
+                }
+
+                else if(Keyboard::isKeyPressed(Keyboard::M) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press T, if not, press F ");
+                    cout << "Attack1" << endl;
+                    attack.setVictory(0);
+                    win = attack.multipleAttack();
+                    cout << "Attack2" << endl;
+                    status = 1;
+                    next = true;
+
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
+                    m10.show(DISPLAY);
+                    toggleAttack = 0;
+
+                    if(win == 1){
+                        m5.replaceMessage("Click right key to add the troop in your new country");
+                    }
+                    else{
+                        m5.show(NO_DISPLAY);
+                    }
+                }
+                    
+
+                
             }
-            // appuyer F pour annuler
-            else if(Keyboard::isKeyPressed(Keyboard::F))
-            {
-                status = 1;
-                m3.show(NO_DISPLAY);
-                m4.show(NO_DISPLAY);
-                m5.show(NO_DISPLAY);
-            }
-            }
+
             if(next){
                 if(Keyboard::isKeyPressed(Keyboard::P)){
                     state.ChangePlaying();
