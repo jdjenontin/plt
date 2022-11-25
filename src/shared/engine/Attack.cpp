@@ -41,12 +41,13 @@ bool Attack::abletoattack () {
     return c_country->getNumberTroop() > 1;
 }
 
-bool Attack::isadjacent () {
+bool Attack:: isadjacent () {
     return c_country->isAdjacent(d_country->getNumberCountry());
 }
 
 int Attack::execute () {
     state::Calculation calcul;
+    state::Dice dice(1,6);
 
     calcul.compute(c_country, d_country);
 

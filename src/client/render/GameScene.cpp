@@ -9,6 +9,12 @@ using namespace std;
 namespace render
 {
 
+sf::Texture cir;
+
+Message cardm(17, 70, "Card");
+
+Button cardb(20, 20, 25, sf::Color::Magenta, &cir);
+
 GameScene::GameScene (sf::RenderWindow* window) {
     this->window = window;
 
@@ -25,25 +31,18 @@ GameScene::~GameScene () {
 
 }
 
-void GameScene::init(std::vector<state::Player *> &pList, sf::Texture *texture)
+void GameScene::init(std::vector<state::Player *> &pList)
 {
     this->pList = pList;
+
+    cir.loadFromFile("res/button.png");
+    cir.setSmooth(true);
 
     for (unsigned i = 0; i < pList.size(); i++)
     {
         Colors color;
 
-        Message m(50, 480 + (60 * i), "Player");
-        m.setintMessage(i + 1);
-        m.addMessage(":");
-
-        Button b(150, 475 + (60 * i), 25, color.colorList[i], texture);
-
         pList[i]->setColor(color.colorList[i]);
-
-        const_listButton.push_back(b);
-
-        const_listMessage.push_back(m);
 
         vector<state::Country *> cList = pList[i]->getListCountry();
 
@@ -107,40 +106,52 @@ void GameScene::addListMessage(std::vector<Message *> message)
     }
 }
 
+bool GameScene::isCardButton (sf::Vector2i pos){
+    if(abs(pos.x - 45) < 25 && abs(pos.y - 45) < 25)
+        return true;
+    else return false;
+}
+
 void GameScene::display()
 {
+    Colors color;
+
     sf::Texture t;
 
     t.loadFromFile("res/carte.png");
     sf::Sprite background(t);
 
+    // initialiser l'ecran
     window->clear(sf::Color::Cyan);
     window->draw(background);
 
+    // dessiner le bouton de la carte
+    window->draw(cardb.circle);
+    window->draw(cardm.text);
+
+    // afficher des messages 
     for (auto m : listMessage)
     {
         window->draw(m->text);
     }
-
-    for (auto m : const_listMessage)
-    {
-        window->draw(m.text);
-    }
-
-    for (auto b : const_listButton)
-    {
-        window->draw(b.circle);
-    }
-
-    Colors color;
-
-    sf::Texture circle;
-
-    circle.loadFromFile("res/button.png");
-    circle.setSmooth(true);
-
+    // affichage
     for (unsigned j = 0; j < pList.size(); j++)
     {
+        // afficher la liste de joueur
+        std::string name = pList[j]->getName();
+
+        Message m(50, 480 + (60 * j), name);
+        m.addMessage(":");
+
+        if(pList[j]->getListCountry().size() == 0)
+            m.setColor(sf::Color::Red);
+
+        Button b(130, 475 + (60 * j), 25, color.colorList[j], &cir);
+
+        window->draw(m.text);
+        window->draw(b.circle);
+
+        // afficher des bouton de pays et aussi le nombre de troup
         vector<state::Country *> cList = pList[j]->getListCountry();
 
         for (unsigned i = 0; i < cList.size(); i++)
@@ -151,7 +162,7 @@ void GameScene::display()
 
             Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberTroop()), sf::Color::White);
 
-            Button b(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[j], &circle);
+            Button b(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[j], &cir);
 
             window->draw(b.circle);
             window->draw(m.text);

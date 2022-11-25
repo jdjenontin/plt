@@ -8,44 +8,44 @@
 #include "Dice.h"
 #include "Calculation.h"
 
+#include "chrono"
+
 
 using namespace std;
 
 namespace state
 {
+//Création de la liste de tous les pays
+std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
+                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
+                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
+                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
+                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
+                            "Australie Occidentale"};
     
 State::State(){
-    
+    this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 }
 
 State::~State(){
     
 }
 
-State::State(int n_player){
-    numberPlayer = n_player;
+void State::init()
+{
+    std::map <int, string> listcountry;
 
     // Création de la liste des joueurs
-    for(int i = 0; i < n_player; i++){
-        playersList.push_back(Player(i));
+    for(int i = 0; i < numberPlayer; i++){
+        Player p(i);
+
+        p.setName(listname[i]);
+        playersList.push_back(p);
     }
 
     for(unsigned i = 0; i < playersList.size(); i++){
         listPlayers.push_back(&playersList[i]);
     }
-}
-
-void State::init()
-{
-    //Création de la liste de tous les pays
-    std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
-                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
-                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
-                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
-                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
-                            "Australie Occidentale"};
-
-    std::map <int, string> listcountry;
 
     for(int i = 0; i < (int)countriesNames.size(); i++) {
         listcountry[i] = countriesNames[i];
@@ -67,6 +67,12 @@ void State::init()
         Card card3(countriesNames[i+2], Artillery);
         cardList.push_back(card3);
     }
+
+    // Shuffle the card
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    auto rng = std::default_random_engine(seed);
+    std::shuffle(begin(cardList), end(cardList), rng);
+
     //Affectation des pays et troupes aux joueurs
     vector<int> affectation_order;
     Calculation calc;
@@ -99,7 +105,7 @@ void State::init()
 
         int remainingTroop = initialTroop % playerCountries.size();
         
-        // Ajoout du nombre de troupe restant de façon aléatoire sur les territoires 
+        // Ajout du nombre de troupe restant de façon aléatoire sur les territoires 
         Dice dice(0, playerCountries.size() - 1);
         for(int k = 0; k != remainingTroop; k++)
         {
@@ -110,6 +116,10 @@ void State::init()
 
     for(unsigned i = 0; i < countriesList.size(); i++){
         listCountires.push_back(&countriesList[i]);
+    }
+
+    for(unsigned i = 0; i < cardList.size(); i++){
+        listCard.push_back(&cardList[i]);
     }
 }
 
@@ -127,14 +137,21 @@ void State::ChangePlaying () {
         orderPlayer = 0;
         IncrementTurn();
     }
+
+    if(playersList[orderPlayer].getListCountry().size() == 0){
+        orderPlayer++;
+        playersList[orderPlayer].setStatus(state::LOSE);
+        if(orderPlayer == (int)playersList.size())
+            orderPlayer = 0;
+    }
 }
 
 const std::vector<Country*>& State::getListCountires() const{
     return listCountires;
 }
 
-std::vector<Card> State::getListCard() {
-    return cardList;
+const std::vector<Card*>& State::getListCard() const{
+    return listCard;
 }
 
 const std::vector<Player*>& State::getListPlayers() const{

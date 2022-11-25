@@ -16,7 +16,8 @@ Message::Message(){
 }
 
 Message::~Message(){
-
+    // std::string s = text.getString();
+    // std::cout << s << std::endl;
 }
 
 Message::Message(int x, int y){
@@ -113,6 +114,24 @@ void Message::addMessage (std::string message) {
     m_flux << message;
 
     text.setString(m_flux.str());
+}
+
+void Message::cutMessage (){
+    std::string str(text.getString());
+    std::string str2;
+
+    for(unsigned int i = 0; i < str.size(); i++){
+        str2.push_back(str[i]);
+        if(str[i] == ' '){
+            break;
+        }
+    }
+
+    text.setString(str2);
+}
+
+void Message::setColor (sf::Color color){
+    text.setFillColor(color);
 }
 
 void Message::show (bool display) {

@@ -8,25 +8,19 @@ using namespace std;
 namespace state{
 
 Player::Player () {
-    ownTroop = 35;
     status = PLAYING;
+    typeplayer = HUMAN;
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
 Player::Player (int m_order) {
-    ownTroop = 35;
     status = PLAYING;
     order = m_order;
+    typeplayer = HUMAN;
 }
 
 Player::~Player () {
 
-}
-
-Player::Player (std::vector<Country*> lcountry, std::vector<Card> lcard, int troop) {
-    listCountry = lcountry;
-    listCard = lcard;
-    ownTroop = troop;
 }
 
 void Player::addCountry (Country* country) {
@@ -41,13 +35,13 @@ void Player::deleteCountry (Country* country) {
     listCountry.erase(listCountry.begin() + i);
 }
 
-void Player::addCard (Card card) {
+void Player::addCard (Card* card) {
     listCard.push_back(card);
 }
 
-void Player::deleteCard (Card card) {
+void Player::deleteCard (Card* card) {
     int i = 0;
-    while(listCard[i].getNameCountry() != card.getNameCountry()){
+    while(listCard[i]->getNameCountry() != card->getNameCountry()){
         i++;
     }
     listCard.erase(listCard.begin() + i);
@@ -72,6 +66,22 @@ bool Player::existCountry (Country country){
     }
 
     return false;
+}
+
+void Player::setStatus(GameStatus status){
+    this->status = status;
+}
+
+GameStatus Player::getStatus() const{
+    return this->status;
+}
+
+void Player::setName(const std::string& name){
+    this->name = name;
+}
+
+const std::string& Player::getName() const{
+    return this->name;
 }
 
 int Player::continentBonusTroop ()
@@ -112,6 +122,10 @@ int Player::continentBonusTroop ()
 
 const std::vector<Country*>& Player::getListCountry () const {
     return listCountry;
+}
+
+const std::vector<Card*>& Player::getListCard() const{
+    return listCard;
 }
 
 int Player::getOrder () {

@@ -7,8 +7,8 @@ Card::Card () {
 }
 
 Card::Card(std::string nameCountry, TypeCard typeCard){
-    country = nameCountry;
-    typeCard = typeCard;
+    this->country = nameCountry;
+    this->typeCard = typeCard;
 }
 
 Card::~Card () {
