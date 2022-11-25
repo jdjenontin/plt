@@ -46,7 +46,11 @@ bool UseCard::canUseCard(){
     m_number_infantry = std::count_if(list_card.begin(), list_card.end(), cardType(state::Infantry));
 
     
-    if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0) || m_number_artillery >3 || m_number_cavalry >3 || m_number_infantry>3)
+
+    
+
+    
+    if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0) || m_number_artillery >=3 || m_number_cavalry >=3 || m_number_infantry>=3)
         return true;
 
     return false;
@@ -73,18 +77,18 @@ void UseCard::execute(){
             player->deleteCard(*it_cavalry);
             player->deleteCard(*it_infantry);
         }
-        else if(m_number_artillery > 3){
+        else if(m_number_artillery >= 3){
             m_bonusTroop = 8;
             for (int i = 0; i<3; i++)
                 player->deleteCard(*(it_artillery+i));
         }
-        else if (m_number_cavalry)
+        else if (m_number_cavalry >= 3)
         {
             m_bonusTroop = 6;
             for (int i = 0; i<3; i++)
                 player->deleteCard(*(it_cavalry+i));
         }
-        else if (m_number_infantry)
+        else if (m_number_infantry >= 3)
         {
             m_bonusTroop = 4;
             for (int i = 0; i<3; i++)
