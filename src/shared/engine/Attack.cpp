@@ -89,6 +89,14 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
     {
         std::cout << "Defender wins!" << std::endl;
         attackCountry->reduceNumberTroop(1);
+        if (attackCountry->getNumberTroop() == 1)  //If the attacking country only has one troop, the attack is a failure
+        {
+            attackCountry->setNumberTroop(1);
+            defCountry->reduceNumberTroop(1);
+            canAttack = 0;
+            std::cout << "Failed attack!" << std::endl;
+            return 0;
+        }
     }
 
     //Comparing min die to see who wins 
@@ -137,7 +145,7 @@ int Attack::soloAttack(){
 
     int att, def;
     int maxAtt, maxDef = 0;
-    int diceAtt, diceDef = 0;
+    int diceAtt = 0;
 
     att = attackCountry->getNumberTroop();
 
@@ -199,9 +207,9 @@ int Attack::soloAttack(){
 int Attack::doubleAttack(){
 
     int att, def;
-    int numberDieAtt, numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
-    int diceDef1, diceDef2 = 0;
-    int lostTroopDefender = 0;
+    int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
+
+
 
     att = attackCountry->getNumberTroop();
     std::cout << "attacker forces :"<< att << std::endl;
@@ -245,9 +253,9 @@ int Attack::tripleAttack(){
 
 
     int att, def;
-    int numberDieAtt, numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
-    int diceDef1, diceDef2 = 0;
-    int lostTroopDefender = 0;
+    int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
+
+
 
 
     att = attackCountry->getNumberTroop();
@@ -273,7 +281,7 @@ int Attack::tripleAttack(){
 
 
     //Generating die for the defender
-    if (numberDieDef = 2)
+    if (numberDieDef == 2)
     {
         maxDef1 = dice6.thrown();
         maxDef2 = dice6.thrown();
