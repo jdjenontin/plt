@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <vector>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 #include <SFML/Graphics.hpp>
 #include <sstream>
@@ -92,7 +94,7 @@ void testSFML() {
             //espace de travail de l'IA
             if(player->getTypeplayer() == BOT){
                 ai.setPlayer(player);
-                ai.execute(0);
+                ai.execute(Difficulty::EASY);
 
                 state->ChangePlaying();
                 status = 0;

@@ -1,4 +1,5 @@
 #include "Ai.h"
+#include <iostream>
 
 #include <engine.h>
 
@@ -6,17 +7,20 @@ using namespace engine;
 
 namespace ai{
 
+//les commandes 
 Place place;
 Attack attack;
 Reinforce reinforce; 
 DistributeCard distributecard;
 UseCard usecard;
 
-std::vector<state::Country*> listcountry;
+//la liste de pays de joueur
+std::vector<state::Country*> lcountry;
 
 Ai::Ai() {
     status = state::PLAYING;
     typeplayer = state::BOT;
+    difficulty = Difficulty::EASY;
 }
 
 Ai::~Ai() {
@@ -27,6 +31,7 @@ Ai::Ai(int order){
     this->order = order;
     status = state::PLAYING;
     typeplayer = state::BOT;
+    difficulty = Difficulty::EASY;
 }
 
 void Ai::setState (state::State* state){
@@ -44,18 +49,40 @@ void Ai::setPlayer (state::Player* player){
     usecard.setPlayer(player);
 }
 
-void Ai::setDifficulty (int dif){
-    this->difficulty = dif;
+void Ai::setDifficulty(Difficulty difficulty){
+    this->difficulty = difficulty;
 }
 
-void Ai::execute (int difficulty){
-    listcountry = player->getListCountry();
+Difficulty Ai::getDifficulty() const{
+    return this->difficulty;
+}
 
-    if(difficulty == 0){
-        place.setcountry(listCountry[0]);
-        for(int i = 0; i < player->continentBonusTroop(); i++){
+void Ai::execute (Difficulty difficulty){
+    lcountry = player->getListCountry();
+
+    //un exemple comment le IA fonctionne 
+    if(difficulty == Difficulty::EASY){
+        //place
+        place.setcountry(lcountry[1]);
+        int bonus_troop = player->continentBonusTroop();
+        for(int i = 0; i < bonus_troop; i++){
             place.execute();
         }
+        //attack
+        
+        //reinforce
+    }
+
+
+    else if(difficulty == Difficulty::NORMAL){
+
+    }
+
+    else if(difficulty == Difficulty::HARD){
+
+    }
+    else if(difficulty == Difficulty::INSANE){
+
     }
 }
 
