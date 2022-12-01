@@ -795,7 +795,8 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
        ||  strstr(name,"sf::Texture")
        ||  strstr(name,"sf::Text")
        ||  strstr(name,"sf::Vector2i")
-       ||  strstr(name,"sf::Color"))) {
+       ||  strstr(name,"sf::Color")
+       ||  strstr(name,"sf::Event"))) {
            print ("#include <SFML/Graphics.hpp>\n");
            si->sfmlGraphics = 1;
        }       

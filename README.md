@@ -61,7 +61,7 @@ Les cartes sont distribué une à une et de façon aléatoire à chaque tour de 
 
 Le diagramme des classes pour les états est présenté à la figure ci dessous.
 
-![RIsk](rapport/state.png)
+![State](rapport/state.png)
 
 La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
 
@@ -91,7 +91,7 @@ Pour le rendu d'un état, nous avons opté pour la réalisation de deux scène :
 ### La scène d'accueil 
 Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lancer une partie et "**addplayer**" (Pas encore fonctionnele) pour ajouter des joueurs.
 
-![RIsk](rapport/menu.png)
+![Menu](rapport/menu.png)
 
 ### La scène de jeu 
 
@@ -106,7 +106,7 @@ Nous supperposons ensuite sur cette image :
 
 Le diagramme des classes pour le rendu est le suivant :
 
-![RIsk](rapport/render.svg)
+![Render](rapport/render.svg)
 
 * **Coulors** : La classe coulors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
 * **Message** : La classe Message est l'une des classe de base du rendu, cette classe est utilisée pour afficher des chaines de caractères sur les différentes scènes. Elle dispose de divers constructeurs pour créer des Message à une position donnée de la scène ou encore pour définir la couleur du message à créer.
@@ -116,3 +116,17 @@ Le diagramme des classes pour le rendu est le suivant :
 * **GameScene** : GameScene est la classe qui se charge d'afficher la scène de jeu.
 * **Scene** est la classe principale de ce diagramme. C'est la classe mère de MenuScene et GameScene.
 
+# 4. Moteur de jeu
+
+## 4.1 Changement d'états
+
+Chaque tour de jeu se déroule en trois étapes majeures : **Distrubition** (Place), **Attaque** (Attack) et **Renforcement** (Reinforce). Le passage de l'état Distribution à l'état Attaque se fait de manière automatique dès que le joueur n'a plus de troupe à distribuer. Tous les autres changement d'état se font sur l'action des joueurs à travers les commandes.
+
+## 4.2 Conception logiciel
+
+Pour le moteur de Jeu, nous avons opter pour un pattern Strategy. Les classe Place (pour distribuer), Attack (pour attaquer), Reinforce (pour renforcer), DistributeCard (pour la distribution de carte) et UseCard(Pour utiliser les cartes) héritent toutes de la classe Command et implémentent toutes une méthode **execute()** qui sert à lancer l'action correspondante à la commande.
+Chacune de ses classes à travers son action engendre des moditicaton sur le state.
+
+Le diagramme UML du package engine se présente comme suit:
+
+![engine](rapport/engine.svg)

@@ -4,9 +4,20 @@
 
 namespace render {
 
+int plist_size = 2, blist_size = 0;
+
+Colors color;
+
+sf::Texture* c = new sf::Texture();
+
+std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+
 MenuScene::MenuScene (sf::RenderWindow* window) {
     this->window = window;
     isopen = true;
+
+    c->loadFromFile("res/button.png");
+    c->setSmooth(true);
 }
 
 MenuScene::~MenuScene () {
@@ -18,13 +29,21 @@ void MenuScene::init () {
 
     listMenu.push_back(start);
 
-    Menu addplayer(640, 500, "addplayer");
+    Menu addplayer(640, 400, "addplayer");
 
     listMenu.push_back(addplayer);
 
-    Menu deleteplayer(640, 400, "deleteplayer");
+    Menu deleteplayer(640, 500, "deleteplayer");
 
     listMenu.push_back(deleteplayer);
+
+    Menu addbot(640, 600, "addbot");
+
+    listMenu.push_back(addbot);
+
+    Menu deletebot(640, 700, "deletebot");
+
+    listMenu.push_back(deletebot);
 }
 
 std::string MenuScene::getNameMenu (sf::Vector2i pos) {
@@ -37,11 +56,49 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
     return "";
 }
 
+void MenuScene::addplayer (){
+    plist_size++;
+}
+
+void MenuScene::addbotplayer (){
+    blist_size++;
+}
+
+void MenuScene::deleteplayer (){
+    plist_size--;
+}
+
+void MenuScene::deletebotplayer (){
+    blist_size--;
+}
+
 void MenuScene::display () {
     window->clear(sf::Color::White);
 
     for(auto m : listMenu){
         display_menu(m);
+    }
+
+    for(int i = 0; i < plist_size; i++)
+    {
+        Message m(860, 270 + (60 * i), listname[i]);
+        m.addMessage(":");
+
+        Button b(940, 265 + (60 * i), 25, color.colorList[i], c);
+
+        window->draw(m.text);
+        window->draw(b.circle);
+    }
+
+    for(int i = 0; i < blist_size; i++)
+    {
+        Message m(860, 270 + (60 * (i + plist_size)), "Bot");
+        m.addMessage(":");
+
+        Button b(940, 265 + (60 * (i + plist_size)), 25, color.colorList[i+plist_size], c);
+
+        window->draw(m.text);
+        window->draw(b.circle);
     }
 }
 
