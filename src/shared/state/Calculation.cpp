@@ -31,10 +31,10 @@ void Calculation::init_lostroop () {
     lostTroopAttacker = 0;
     lostTroopDefender = 0;
 }
-
+/*
 int Calculation::attack (Country* attacker, Country* defender, bool canAttack) {
-    
-    }
+        return 0;
+    }*/
 
 
 /*
