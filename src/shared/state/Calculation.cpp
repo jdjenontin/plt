@@ -27,15 +27,6 @@ int Calculation::throwdice () {
     return (rand() % 6 + 1);
 }
 
-void Calculation::init_lostroop () {
-    lostTroopAttacker = 0;
-    lostTroopDefender = 0;
-}
-/*
-int Calculation::attack (Country* attacker, Country* defender, bool canAttack) {
-        return 0;
-    }*/
-
 
 /*
 * Generate a shuffle list containing a list of integer for 0 to numberOfElement
