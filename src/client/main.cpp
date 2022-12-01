@@ -10,12 +10,14 @@
 #include <state.h>
 #include <render.h>
 #include <engine.h>
+#include <ai.h>
 
 using namespace std;
 using namespace state;
 using namespace sf;
 using namespace render;
 using namespace engine;
+using namespace ai;
 
 vector<Country*> v_listcountry;
 
@@ -80,8 +82,22 @@ void testSFML() {
 
         Player* player;
 
+        Ai ai;
+
+        ai.setState(state);
+
         if(gamescene.isOpen()){
             player = pList[state->getOrderPlayer()];
+            //////////////////////////////////////////
+            //espace de travail de l'IA
+            if(player->getTypeplayer() == BOT){
+                ai.setPlayer(player);
+                ai.execute(0);
+
+                state->ChangePlaying();
+                status = 0;
+            }
+            ///////////////////////////////////////////
 
             string s = player->getName();
 
@@ -235,19 +251,28 @@ void testSFML() {
                             gamescene.open();
                         }
                         else if(menuscene.getNameMenu(pos) == "addplayer"){
-                            if(state->numberPlayer < 5){
+                            if(state->numberPlayer + state->numberBot < 5){
                                 state->numberPlayer++;
                                 menuscene.addplayer();
                             }
                         }
                         else if(menuscene.getNameMenu(pos) == "deleteplayer"){
-                            if(state->numberPlayer > 2){
+                            if(state->numberPlayer > 1){
                                 state->numberPlayer--;
                                 menuscene.deleteplayer();
                             } 
                         }
                         else if(menuscene.getNameMenu(pos) == "addbot"){
-                            cout << "its not availble now" << endl;
+                            if(state->numberPlayer + state->numberBot < 5){
+                                state->numberBot++;
+                                menuscene.addbotplayer();
+                            }
+                        }
+                        else if(menuscene.getNameMenu(pos) == "deletebot"){
+                            if(state->numberBot > 0){
+                                state->numberBot--;
+                                menuscene.deletebotplayer();
+                            }
                         }
                     }
                     // a faire 
