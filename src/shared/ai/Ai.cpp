@@ -121,6 +121,11 @@ void Ai::execute (Difficulty difficulty){
         }
 
         //reinforce
+
+        Dice aiDice(0,aiCountries.size()-1);
+        reinforce.setm_country(aiCountries[aiDice.thrown()]);
+        reinforce.setn_country(aiCountries[aiDice.thrown()]);
+        reinforce.execute();
         
     }
 
