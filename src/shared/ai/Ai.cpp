@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <engine.h>
+#include <vector>
 
 using namespace engine;
 using namespace state;
@@ -16,7 +17,16 @@ DistributeCard distributecard;
 UseCard usecard;
 
 //la liste de pays de joueur
-std::vector<state::Country*> lcountry;
+std::vector<state::Country*> aiCountries;
+
+//Liste de tous les pays
+std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
+                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
+                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
+                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
+                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
+                            "Australie Occidentale"};
+
 
 Ai::Ai() {
     status = state::PLAYING;
@@ -59,39 +69,57 @@ Difficulty Ai::getDifficulty() const{
 }
 
 void Ai::execute (Difficulty difficulty){
-    lcountry = player->getListCountry();
+    Dice reAttack(0,1);
+    int aiCanAttack = 1;
+    int willAttack = 1;
+    aiCountries = player->getListCountry();
+    std::vector<Country*> allCountries = state->getListCountires();
 
     //un exemple comment le IA fonctionne 
     if(difficulty == Difficulty::EASY){
         //place
-        place.setcountry(lcountry[1]);
+        place.setcountry(aiCountries[1]);
         int bonus_troop = player->continentBonusTroop();
         for(int i = 0; i < bonus_troop; i++){
             place.execute();
         }
+
         //attack
-        std::vector<Country*> aiCountries = getListCountry();
-        Dice aiDice(0,aiCountries.size()-1);  //This dice lets us choose a random attack country
-        engine::Attack attack;
+        while (willAttack and aiCanAttack) {
+            aiCanAttack = 0;
+            Dice aiDice(0,aiCountries.size()-1);  //This dice lets us choose a random attack country
 
-        Country* aiAttackCountry = aiCountries.at(aiDice.thrown());
+            Country* aiAttackCountry = aiCountries.at(aiDice.thrown());
 
-        std::vector<Country*> aiAttackableCountries; //
+            std::vector<Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
-        for(int i=0; i<42;i++) {
-            if (aiAttackCountry->isAdjacent(i)) {
-                aiAttackableCountries.push_back(lcountry[i]);
+            for(int i=0; i<42;i++) {
+                if (aiAttackCountry->isAdjacent(i)) {
+                    std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
+                    aiAttackableCountries.push_back(allCountries.at(i));
+                }
+            }
+
+
+            Dice aiAttackDice(0,aiAttackableCountries.size()-1);
+
+            //The ai will then choose a random neighbouring country to attack
+            
+            Country* aiDefCountry = aiAttackableCountries.at(aiAttackDice.thrown());
+
+            std::cout << "The AI will attack " << aiDefCountry->getNameCountry() << " with " << aiAttackCountry->getNameCountry() << "\n";
+
+            attack.setAttackCountry(aiAttackCountry);
+            attack.setDefCountry(aiDefCountry);
+            attack.multipleAttack();
+            willAttack = reAttack.thrown();
+            for (int i = 0; i<aiCountries.size()-1;i++) {
+                if(aiCountries.at(i)->getNumberTroop() > 1) {
+                    aiCanAttack = aiCanAttack | 1;
+                }
             }
         }
 
-        aiDice = Dice(0,aiAttackableCountries.size()-1);
-
-        //The ai will then choose a random neighbouring country to attack
-        Country* aiDefCountry = aiAttackableCountries.at(aiDice.thrown());
-
-        attack.setAttackCountry(aiAttackCountry);
-        attack.setDefCountry(aiDefCountry);
-        attack.multipleAttack();
         //reinforce
     }
 
