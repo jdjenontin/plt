@@ -69,6 +69,7 @@ Difficulty Ai::getDifficulty() const{
 }
 
 void Ai::execute (Difficulty difficulty){
+    
     Dice reAttack(0,1);
     int aiCanAttack = 1;
     int willAttack = 1;
@@ -78,7 +79,8 @@ void Ai::execute (Difficulty difficulty){
     //un exemple comment le IA fonctionne 
     if(difficulty == Difficulty::EASY){
         //place
-        place.setcountry(aiCountries[1]);
+        Dice aiDice(0,aiCountries.size()-1);
+        place.setcountry(aiCountries[aiDice.thrown()]);
         int bonus_troop = player->continentBonusTroop();
         for(int i = 0; i < bonus_troop; i++){
             place.execute();
@@ -87,7 +89,7 @@ void Ai::execute (Difficulty difficulty){
         //attack
         while (willAttack and aiCanAttack) {
             aiCanAttack = 0;
-            Dice aiDice(0,aiCountries.size()-1);  //This dice lets us choose a random attack country
+            aiDice.updateDice(0,aiCountries.size()-1);  //This dice lets us choose a random attack country
 
             Country* aiAttackCountry = aiCountries.at(aiDice.thrown());
 
@@ -122,10 +124,16 @@ void Ai::execute (Difficulty difficulty){
 
         //reinforce
 
-        Dice aiDice(0,aiCountries.size()-1);
-        reinforce.setm_country(aiCountries[aiDice.thrown()]);
+        aiDice.updateDice(0,aiCountries.size()-1);
+        state::Country* depatureCountry  = aiCountries[aiDice.thrown()];
+
+        reinforce.setm_country(depatureCountry);
         reinforce.setn_country(aiCountries[aiDice.thrown()]);
-        reinforce.execute();
+
+        aiDice.updateDice(0, depatureCountry->getNumberTroop() - 1);
+        
+        while(aiDice.thrown())
+            reinforce.execute();
         
     }
 
