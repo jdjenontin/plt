@@ -141,11 +141,11 @@ Le diagramme UML du package engine se présente comme suit:
 
 Cette stratégie consiste en des choix aléatoires à chaque étape du jeu.
 
-* **Distribution** Pour la phase de ditribution, l'ia choisit au hasard le pays où elle souhaite positioner ses troupes parmis la liste des pays dont elle dispose.
+* **Distribution** Pour la phase de ditribution, l'ia choisit au hasard le pays où elle souhaite positionner ses troupes parmi la liste des pays dont elle dispose.
 
-* **Attaque** Pendant la phase d'attaque, l'IA choisit au hasard le pays à partir duquel elle souhaite mener son attaque. Puis choisie le pays qu'elle souhaite attaquer de façon random parmis les pays adjacents au pays premier pays choisi. Elle décide ensuite, toujours de façon aléatoire, si elle souhaite éffectuer d'autres. Ce processus est effectué en boucle jusqu'au moment où elle décide de ne plus attaquer ou n'est plus en mesure d'attaquer.
+* **Attaque** Pendant la phase d'attaque, l'IA choisit au hasard le pays à partir duquel elle souhaite mener son attaque. Puis choisie le pays qu'elle souhaite attaquer de façon random parmi les pays adjacents au premier pays choisi. Elle décide ensuite, toujours de façon aléatoire, si elle souhaite effectuer d'autres. Ce processus est effectué en boucle jusqu'au moment où elle décide de ne plus attaquer ou n'est plus en mesure d'attaquer.
 
-* **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destionation. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
+* **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destination. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
 
 ## 5.2 Conception logiciel
 
