@@ -1,9 +1,10 @@
 #include "Ai.h"
 #include <iostream>
-
+#include <chrono>
 #include <engine.h>
 
 using namespace engine;
+using namespace state;
 
 namespace ai{
 
@@ -69,7 +70,28 @@ void Ai::execute (Difficulty difficulty){
             place.execute();
         }
         //attack
-        
+        std::vector<Country*> aiCountries = getListCountry();
+        Dice aiDice(0,aiCountries.size()-1);  //This dice lets us choose a random attack country
+        engine::Attack attack;
+
+        Country* aiAttackCountry = aiCountries.at(aiDice.thrown());
+
+        std::vector<Country*> aiAttackableCountries; //
+
+        for(int i=0; i<42;i++) {
+            if (aiAttackCountry->isAdjacent(i)) {
+                aiAttackableCountries.push_back(lcountry[i]);
+            }
+        }
+
+        aiDice = Dice(0,aiAttackableCountries.size()-1);
+
+        //The ai will then choose a random neighbouring country to attack
+        Country* aiDefCountry = aiAttackableCountries.at(aiDice.thrown());
+
+        attack.setAttackCountry(aiAttackCountry);
+        attack.setDefCountry(aiDefCountry);
+        attack.multipleAttack();
         //reinforce
     }
 
