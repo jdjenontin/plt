@@ -10,8 +10,8 @@
 
 #include "chrono"
 
-
 using namespace std;
+using namespace ai;
 
 namespace state
 {
@@ -41,6 +41,13 @@ void State::init()
 
         p.setName(listname[i]);
         playersList.push_back(p);
+    }
+
+    for(int i = 0; i < numberBot; i++){
+        Ai a(i);
+
+        a.setName("Bot");
+        playersList.push_back(a);
     }
 
     for(unsigned i = 0; i < playersList.size(); i++){
@@ -83,16 +90,16 @@ void State::init()
     for(auto i : affectation_order){
         playersList[j].addCountry(&countriesList[i]);
         j++;
-        j %= numberPlayer;
+        j %= numberPlayer + numberBot;
     }
     
     // Attribution des soldats :
     
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
-    int initialTroop = initialTroopMap[numberPlayer];
+    int initialTroop = initialTroopMap[numberPlayer + numberBot];
 
-    for (int i = 0; i != numberPlayer; i++){
+    for (int i = 0; i != numberPlayer + numberBot; i++){
         vector<Country*> playerCountries = playersList[i].getListCountry();
 
         // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst

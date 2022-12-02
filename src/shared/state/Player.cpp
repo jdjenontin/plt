@@ -84,6 +84,10 @@ const std::string& Player::getName() const{
     return this->name;
 }
 
+TypePlayer Player::getTypeplayer() const{
+    return this->typeplayer;
+}
+
 int Player::continentBonusTroop ()
 {
     int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);

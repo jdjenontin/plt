@@ -4,18 +4,22 @@
 #include <algorithm>
 #include <vector>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <state.h>
 #include <render.h>
 #include <engine.h>
+#include <ai.h>
 
 using namespace std;
 using namespace state;
 using namespace sf;
 using namespace render;
 using namespace engine;
+using namespace ai;
 
 vector<Country*> v_listcountry;
 
@@ -27,9 +31,8 @@ void testSFML() {
     vector<Player*> pList;
 
     // create the window
-    RenderWindow window(sf::VideoMode(1280, 986), "RISK !", Style::Titlebar|Style::Close);
-
-    Texture circle;    
+    RenderWindow window(sf::VideoMode::getDesktopMode(), "RISK !", Style::Titlebar|Style::Close|Style::Fullscreen);
+    Texture circle;
     
     circle.loadFromFile("res/button.png");
     circle.setSmooth(true);
@@ -43,6 +46,7 @@ void testSFML() {
     menuscene.init();
 
     int status = 0; // afin de forcer les ordres des commandes.
+    int toggleAttack = 0; //Pour savoir si on peux attaquer
     bool next = false; // indiquer si le jouer a fait l'attack, si le joueur a fait au moins un attack, il peut passer le tour a le joueur suivant,
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
@@ -58,11 +62,13 @@ void testSFML() {
     distributecard.setState(state);
 
     // mettre des messages dans la fenetre
+    // "Press S for one attack D for two attacks  or M for Multiple attack"
+    // "If you want to attack, please press A, if not, press F "
     Message m1(1150, 25, "X : "), 
             m2(1150, 50, "Y : "), 
             m3(600, 865, "You choose the country ", NO_DISPLAY), 
             m4(600, 900, "You will attack the country ", NO_DISPLAY), 
-            m5(600, 935, "If you want to attack, please press T, if not, press F ", NO_DISPLAY),
+            m5(600, 935, "If you want to attack, please press A, if not, press F ", NO_DISPLAY),
             m6(50, 900, "It's the country "),
             m7(50, 935, "Number of country is "),
             m8(600, 50, "Turn : "),
@@ -80,8 +86,22 @@ void testSFML() {
 
         Player* player;
 
+        Ai ai;
+
+        ai.setState(state);
+
         if(gamescene.isOpen()){
             player = pList[state->getOrderPlayer()];
+            //////////////////////////////////////////
+            //espace de travail de l'IA
+            if(player->getTypeplayer() == BOT){
+                ai.setPlayer(player);
+                ai.execute(Difficulty::EASY);
+
+                state->ChangePlaying();
+                status = 0;
+            }
+            ///////////////////////////////////////////
 
             string s = player->getName();
 
@@ -99,7 +119,7 @@ void testSFML() {
         while (window.pollEvent(mouse))
         {
             // recuperer le bonus de troup
-            // une fois le bonus de troup est recuperer, on ne rentre plus dans ce boucle jusqu'a le prochain joueur
+            // une fois le bonus de troup est recuperer, on ne rentre plus dans cette boucle jusqu'a le prochain joueur
             if(gamescene.isOpen()){
                 if(!getTroop){  
                 if(state->getOrderPlayer() == (int)pList.size() - 1)
@@ -165,10 +185,11 @@ void testSFML() {
                         else if(status == 1)
                         {
                             player->winAttack = false;
+
                             m5.show(NO_DISPLAY);
-                            attack.setc_country(gamescene.findCountry(pos));
+                            attack.setAttackCountry(gamescene.findCountry(pos));
                             if(gamescene.existCountry(pos)){
-                                if(attack.existC_country()){
+                                if(attack.existAttackCountry()){
                                     if(attack.abletoattack()){
                                         m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());    
                                         status++;
@@ -183,10 +204,10 @@ void testSFML() {
                         }
                         // choose the defend country, et inplementer le status
                         else if(status == 2){
-                            attack.setd_country(gamescene.findCountry(pos));
+                            attack.setDefCountry(gamescene.findCountry(pos));
                             if(gamescene.existCountry(pos)){
                                 if(attack.isadjacent()){
-                                    if(attack.existD_country()){
+                                    if(attack.existDefCountry()){
                                         m4.replaceMessage("you need choose your opponent's country !");
                                     }
                                     else{
@@ -235,19 +256,28 @@ void testSFML() {
                             gamescene.open();
                         }
                         else if(menuscene.getNameMenu(pos) == "addplayer"){
-                            if(state->numberPlayer < 5){
+                            if(state->numberPlayer + state->numberBot < 5){
                                 state->numberPlayer++;
                                 menuscene.addplayer();
                             }
                         }
                         else if(menuscene.getNameMenu(pos) == "deleteplayer"){
-                            if(state->numberPlayer > 2){
+                            if(state->numberPlayer > 1){
                                 state->numberPlayer--;
                                 menuscene.deleteplayer();
                             } 
                         }
                         else if(menuscene.getNameMenu(pos) == "addbot"){
-                            cout << "its not availble now" << endl;
+                            if(state->numberPlayer + state->numberBot < 5){
+                                state->numberBot++;
+                                menuscene.addbotplayer();
+                            }
+                        }
+                        else if(menuscene.getNameMenu(pos) == "deletebot"){
+                            if(state->numberBot > 0){
+                                state->numberBot--;
+                                menuscene.deletebotplayer();
+                            }
                         }
                     }
                     // a faire 
@@ -269,43 +299,137 @@ void testSFML() {
                 }
         }
         if(gamescene.isOpen()){
-            if(Keyboard::isKeyPressed(Keyboard::A)){
+            if(Keyboard::isKeyPressed(Keyboard::R)){
                 status = 4;
+                toggleAttack = 1;
             }
 
-            if(Keyboard::isKeyPressed(Keyboard::R)){
+            if(Keyboard::isKeyPressed(Keyboard::C)){
                 distributecard.execute();
             }
 
             if (status == 3){
-            m5.show(DISPLAY);
+                
+                if (toggleAttack == 0) m5.show(DISPLAY);
+                
+                // appuyer T pour attacker
+                //Conquered lets us know if the def country was completly defeated or not
+                int conquered = 0;
+                cout << toggleAttack << endl;
 
-            // appuyer T pour attacker
-            if(Keyboard::isKeyPressed(Keyboard::T))
-            {
-                int win = attack.execute();
-                if(win == 1){
-                    m5.replaceMessage("Click right key to add the troop in your new country");
+                if(Keyboard::isKeyPressed(Keyboard::A))
+                {   
+                    m5.replaceMessage("Press S for solo attack D for double attack or M for Multiple attack");
+                    toggleAttack = 1;
                 }
-                else{
+
+
+                // appuyer F pour annuler
+                else if(Keyboard::isKeyPressed(Keyboard::F))
+                {
+                    status = 1;
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
                     m5.show(NO_DISPLAY);
                 }
-                status = 1;
-                next = true;
 
-                m3.show(NO_DISPLAY);
-                m4.show(NO_DISPLAY);
-                m10.show(DISPLAY);
+                else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    conquered = attack.soloAttack();
+                    status = 1;
+                    next = true;
+
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
+                    m10.show(DISPLAY);
+                    toggleAttack = 0;
+
+                    if(conquered == 1){
+                        m5.replaceMessage("Click right key to add the troop in your new country");
+                    }
+                    else{
+                        m5.show(NO_DISPLAY);
+                    }
+                }
+
+                
+            
+                else if(Keyboard::isKeyPressed(Keyboard::D) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                        {
+                        conquered = attack.doubleAttack();
+                        status = 1;
+                        next = true;
+
+                        m3.show(NO_DISPLAY);
+                        m4.show(NO_DISPLAY);
+                        m10.show(DISPLAY);
+                        toggleAttack = 0;
+
+                        if(conquered == 1){
+                            m5.replaceMessage("Click right key to add the troop in your new country");
+                        }
+                        else{
+                            m5.show(NO_DISPLAY);
+                        }
+                    }
+                    else
+                    {
+                        m5.replaceMessage("You cannot double attack");
+                    }
+                }
+
+                else if(Keyboard::isKeyPressed(Keyboard::T) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                        {
+                        conquered = attack.tripleAttack();
+                        status = 1;
+                        next = true;
+
+                        m3.show(NO_DISPLAY);
+                        m4.show(NO_DISPLAY);
+                        m10.show(DISPLAY);
+                        toggleAttack = 0;
+
+                        if(conquered == 1){
+                            m5.replaceMessage("Click right key to add the troop in your new country");
+                        }
+                        else{
+                            m5.show(NO_DISPLAY);
+                        }
+                    }
+                    else
+                    {
+                        m5.replaceMessage("You cannot triple attack");
+                    }
+                }
+
+                else if(Keyboard::isKeyPressed(Keyboard::M) and toggleAttack){
+                    //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
+                    cout << "Attack1" << endl;
+                    conquered = attack.multipleAttack();
+                    cout << "Attack2" << endl;
+                    status = 1;
+                    next = true;
+                    m3.show(NO_DISPLAY);
+                    m4.show(NO_DISPLAY);
+                    m10.show(DISPLAY);
+                    toggleAttack = 0;
+
+                    if(conquered == 1){
+                        m5.replaceMessage("Click right key to add the troop in your new country");
+                    }
+                    else{
+                        m5.show(NO_DISPLAY);
+                    }
+                }
+                    
+
+                
             }
-            // appuyer F pour annuler
-            else if(Keyboard::isKeyPressed(Keyboard::F))
-            {
-                status = 1;
-                m3.show(NO_DISPLAY);
-                m4.show(NO_DISPLAY);
-                m5.show(NO_DISPLAY);
-            }
-            }
+
             if(next){
                 if(Keyboard::isKeyPressed(Keyboard::P)){
                     state->ChangePlaying();
@@ -340,7 +464,7 @@ void testSFML() {
 
 int main(int argc,char* argv[])
 {
+    srand((unsigned) time(NULL));
     testSFML();
-
     return 0;
 }
