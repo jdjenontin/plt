@@ -12,18 +12,25 @@ Dice::~Dice () {
 
 }
 
+/**
+ * @brief Creat a dice
+ * @param left The minimum value the dice can tahe
+ * @param right The max value ethe dice can return
+*/
+
 Dice::Dice(int left, int right){
-    std::uniform_int_distribution<int> m_distrib{left, right};
-    distrib = m_distrib;
+    m_left = left;
+    m_right = right;
 }
 
+
+/**
+ * Return a random value
+ * @return A random value
+*/
 int Dice::thrown () {
-    std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-    
-    for(int i = 0; i < 30; i++){
-        distrib(re);
-    }
-    return distrib(re);
+    return m_left + (rand()%m_right);
 }
+
 
 }
