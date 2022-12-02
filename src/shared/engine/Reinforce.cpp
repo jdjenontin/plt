@@ -1,7 +1,6 @@
 #include "Reinforce.h"
 #include <deque>
 
-
 namespace engine {
 
 /**
@@ -59,49 +58,18 @@ bool Reinforce::existN_country () {
 /**
  * @brief Check if a n_country is connected to n_country and add troop if yes
 */
-
 void Reinforce::execute(){
 
-    std::vector<state::Country *> playerCountry = player->getListCountry();
-    std::vector<state::Country *> visited;
-    
-    std::deque<state::Country *> node_que;
-    node_que.push_back(m_country);
-    state::Country * node;
-
-
-    // Detect the country accessible from m_country
-    while(!node_que.empty())
-    {
-        node = node_que.front();
-        node_que.pop_front();
-
-        if(!countryInList(node, visited)){
-            visited.push_back(node);
-
-            std::vector<state::Country *> unvisited;
-
-            for(auto country : playerCountry){
-                if(!countryInList(country, visited) && country->isAdjacent(node->getNumberCountry()))
-                    unvisited.push_back(country);
-            }
-
-            for(auto country : unvisited){
-                node_que.push_back(country);
-            }
-        }
-    }
+    bool connected = state::Calculation::areConnected(player, m_country, n_country);
         
     // Add a troop
-    for(auto country : visited){
-        if(country -> getNameCountry() ==  n_country -> getNameCountry()){
-            if(m_country -> getNumberTroop() > 1){
-                n_country -> addNumberTroop(1);
-                m_country -> reduceNumberTroop(1);
-            }
-            
+    
+    if(connected){
+        if(m_country -> getNumberTroop() > 1){
+            n_country -> addNumberTroop(1);
+            m_country -> reduceNumberTroop(1);
+        }       
     }
-}
 
 }
 }

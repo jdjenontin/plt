@@ -29,8 +29,13 @@ Dice::Dice(int left, int right){
  * @return A random value
 */
 int Dice::thrown () {
-    return m_left + (rand()%m_right);
+    return m_left + (rand()%(m_right-m_left+1));
 }
 
+
+void Dice::updateDice(int a_left, int a_right){
+    m_left = a_left;
+    m_right = a_right;
+}
 
 }
