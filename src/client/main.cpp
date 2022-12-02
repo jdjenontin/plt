@@ -299,11 +299,12 @@ void testSFML() {
                 }
         }
         if(gamescene.isOpen()){
-            if(Keyboard::isKeyPressed(Keyboard::A)){
+            if(Keyboard::isKeyPressed(Keyboard::R)){
                 status = 4;
+                toggleAttack = 1;
             }
 
-            if(Keyboard::isKeyPressed(Keyboard::R)){
+            if(Keyboard::isKeyPressed(Keyboard::C)){
                 distributecard.execute();
             }
 

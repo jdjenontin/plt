@@ -69,7 +69,7 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
         defCountry->reduceNumberTroop(1);
         if (defCountry->getNumberTroop() == 0) 
         {
-            std::cout << "Successful attack!" << std::endl;
+            std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
             attackCountry->reduceNumberTroop(1);
             std::cout << "You have "<< attackCountry->getNumberTroop() << " troop now"<< std::endl;
             defCountry->setNumberTroop(1);
@@ -94,7 +94,7 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
             attackCountry->setNumberTroop(1);
             defCountry->reduceNumberTroop(1);
             canAttack = 0;
-            std::cout << "Failed attack!" << std::endl;
+            std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
             return 0;
         }
     }
@@ -106,7 +106,7 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
         defCountry->reduceNumberTroop(1);
         if (defCountry->getNumberTroop() == 0) 
         {
-            std::cout << "Successful attack!" << std::endl;
+            std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
             attackCountry->reduceNumberTroop(1);
             std::cout << "You have "<< attackCountry->getNumberTroop() << " troop now"<< std::endl;
             defCountry->setNumberTroop(1);
@@ -131,7 +131,7 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
             attackCountry->setNumberTroop(1);
             defCountry->reduceNumberTroop(1);
             canAttack = 0;
-            std::cout << "Failed attack!" << std::endl;
+            std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
             return 0;
         }
         return 0;
@@ -172,7 +172,7 @@ int Attack::soloAttack(){
         def -= 1;
         defCountry->reduceNumberTroop(1);
         if (defCountry->getNumberTroop() == 0) {
-            std::cout << "Successful attack!" << std::endl;
+            std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
             attackCountry->reduceNumberTroop(1);
             std::cout << "You have "<< attackCountry->getNumberTroop() << " troop now"<< std::endl;
             defCountry->setNumberTroop(1);
@@ -195,7 +195,7 @@ int Attack::soloAttack(){
         if (attackCountry->getNumberTroop() == 1) {
             attackCountry->setNumberTroop(1);
             canAttack = 0;
-            std::cout << "Failed attack!" << std::endl;
+            std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
 
             return 0;
         }
