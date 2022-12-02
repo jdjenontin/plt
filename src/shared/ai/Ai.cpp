@@ -132,7 +132,7 @@ void Ai::execute (Difficulty difficulty){
 
         aiDice.updateDice(0, depatureCountry->getNumberTroop() - 1);
         
-        while(aiDice.thrown())
+        for(int i = 0; i < aiDice.thrown(); i++)
             reinforce.execute();
         
     }
