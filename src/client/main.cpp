@@ -315,7 +315,7 @@ void testSFML() {
                 // appuyer T pour attacker
                 //Conquered lets us know if the def country was completly defeated or not
                 int conquered = 0;
-                cout << toggleAttack << endl;
+                //cout << toggleAttack << endl;
 
                 if(Keyboard::isKeyPressed(Keyboard::A))
                 {   

@@ -96,7 +96,7 @@ void Ai::execute (Difficulty difficulty){
             std::vector<Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
             for(int i=0; i<42;i++) {
-                if (aiAttackCountry->isAdjacent(i)) {
+                if (aiAttackCountry->isAdjacent(i) && !Calculation::isCountryInList(allCountries.at(i), aiCountries)) {
                     std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
                     aiAttackableCountries.push_back(allCountries.at(i));
                 }
@@ -120,6 +120,7 @@ void Ai::execute (Difficulty difficulty){
                     aiCanAttack = aiCanAttack | 1;
                 }
             }
+            std::cout << "Attacking" << std::endl;
         }
 
         //reinforce
@@ -133,7 +134,10 @@ void Ai::execute (Difficulty difficulty){
         aiDice.updateDice(0, depatureCountry->getNumberTroop() - 1);
         
         for(int i = 0; i < aiDice.thrown(); i++)
+        {
             reinforce.execute();
+            std::cout << "Reinforcing" << std::endl;
+        }
         
     }
 
