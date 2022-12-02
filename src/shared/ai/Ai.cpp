@@ -86,4 +86,9 @@ void Ai::execute (Difficulty difficulty){
     }
 }
 
+void Ai::placeTroop(){
+
 }
+
+}
+

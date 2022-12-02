@@ -463,7 +463,7 @@ void testSFML() {
 
 int main(int argc,char* argv[])
 {
+    srand((unsigned) time(NULL));
     testSFML();
-
     return 0;
 }
