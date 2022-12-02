@@ -4,8 +4,9 @@
 #include <iterator>
 #include <algorithm>
 #include <chrono>
-
+#include <deque>
 #include "Calculation.h"
+#include "Player.h"
 
 namespace state{
 
@@ -44,6 +45,66 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
     std::shuffle(begin(temp_list), end(temp_list), rng);
 
     return temp_list;
+}
+
+
+/**
+ * @brief Check if a country is the list
+ * @param a_country The country to check
+ * @param a_listCountry The list to check in
+ * @return true if the country is in the list, false if not
+*/
+bool Calculation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
+    for(auto country : a_listCountry){
+        if(country->getNumberCountry() == a_country->getNumberCountry())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
+ * @brief Check if a depCountry is conected to destCountry
+ * @param depCountry Depature country 
+ * @param destCounty Destination country
+ * @return true if both countries are connected
+*/
+
+bool Calculation::areConnected(Player* player, state::Country* depCountry, state::Country* destCountry)
+{
+    std::vector<state::Country *> playerCountry = player->getListCountry();
+    std::vector<state::Country *> visited;
+    
+    std::deque<state::Country *> node_que;
+    node_que.push_back(depCountry);
+    state::Country * node;
+
+
+    // Detect the country accessible from m_country
+    while(!node_que.empty())
+    {
+        node = node_que.front();
+        node_que.pop_front();
+
+        if(!Calculation::isCountryInList(node, visited)){
+            visited.push_back(node);
+
+            std::vector<state::Country *> unvisited;
+
+            for(auto country : playerCountry){
+                if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getNumberCountry()))
+                    unvisited.push_back(country);
+            }
+
+            for(auto country : unvisited){
+                node_que.push_back(country);
+            }
+        }
+    }
+
+    return Calculation::isCountryInList(destCountry, visited);
 }
 
 }

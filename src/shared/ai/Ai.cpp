@@ -71,6 +71,7 @@ void Ai::execute (Difficulty difficulty){
         //attack
         
         //reinforce
+        
     }
 
 
