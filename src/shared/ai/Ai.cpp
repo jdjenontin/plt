@@ -95,12 +95,17 @@ void Ai::execute (Difficulty difficulty){
 
             std::vector<Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
+            while(aiAttackCountry->getNumberTroop() == 1) {
+                aiAttackCountry = aiCountries.at(aiDice.thrown());
+            }   
+
             for(int i=0; i<42;i++) {
                 if (aiAttackCountry->isAdjacent(i) & !Calculation::isCountryInList(allCountries.at(i), aiCountries)) {
                     std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
                     aiAttackableCountries.push_back(allCountries.at(i));
                 }
             }
+            
 
 
             Dice aiAttackDice(0,aiAttackableCountries.size()-1);
@@ -113,7 +118,23 @@ void Ai::execute (Difficulty difficulty){
 
             attack.setAttackCountry(aiAttackCountry);
             attack.setDefCountry(aiDefCountry);
-            int remo = attack.soloAttack();
+            aiDice.updateDice(0, 3);
+
+            //The will randomly do a single, double, triple or multiple attack
+            if (aiDice.thrown() == 0){
+                attack.soloAttack();
+            }
+
+            else if (aiDice.thrown() == 1){
+                attack.doubleAttack();
+            }
+
+            else if (aiDice.thrown() == 2){
+                attack.tripleAttack();
+            }
+
+            else attack.multipleAttack();
+            
             willAttack = reAttack.thrown();
             for (int i = 0; i<aiCountries.size()-1;i++) {
                 if(aiCountries.at(i)->getNumberTroop() > 1) {
