@@ -1,4 +1,4 @@
-/*#include "RandomAI.h"
+#include "EasyAi.h"
 #include <iostream>
 #include <chrono>
 #include <engine.h>
@@ -19,15 +19,15 @@ extern Reinforce aiReinforce;
 extern DistributeCard aiDistributecard;
 extern UseCard aiUsecard;
 
-RandomAI::RandomAI() {
+EasyAi::EasyAi() {
 
 }
 
-RandomAI::~RandomAI() {
+EasyAi::~EasyAi() {
 
 }
 
-void RandomAI::execute() {
+void EasyAi::execute() {
     Dice reAttack(0,1);
     int aiCanAttack = 1;
     int willAttack = 1;
@@ -146,4 +146,4 @@ void RandomAI::execute() {
     
 }
 
-}*/
+}

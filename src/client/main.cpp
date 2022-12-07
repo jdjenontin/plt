@@ -87,7 +87,7 @@ void testSFML() {
 
         Player* player;
 
-        Ai randAI;
+        EasyAi randAI;
 
         randAI.setState(state);
 
@@ -97,16 +97,16 @@ void testSFML() {
             //////////////////////////////////////////
             //espace de travail de l'IA
             if(player->getTypeplayer() == BOT){
-                //randAI.setPlayer(player);
-                //randAI.execute();
-               /* cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
+                randAI.setPlayer(player);
+                randAI.execute();
+                cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
                 if (randAI.conqueredCountries.size() > 0) {
                     for (long unsigned int i=randAI.conqueredCountries.size()-1; i>0; i--) {
                         aiMes.addMessage(randAI.conqueredCountries.at(i)->getNameCountry()+" ");
                         randAI.conqueredCountries.pop_back();
                     }
                 }
-                */
+                
                 state->ChangePlaying();
                 status = 0;
             }
