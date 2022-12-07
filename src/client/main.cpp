@@ -51,7 +51,7 @@ void testSFML() {
                        // sinon il ne peut pas passer.
     bool getTroop = false; // chaque joueur ne doit que prendre le bonus de troup une fois chaque tour.
 
-    // les quatre commandes executables
+    // les cinq commandes executables
     Place place;
     Attack attack;
     Reinforce reinforce; 
@@ -74,10 +74,11 @@ void testSFML() {
             m8(600, 50, "Turn : "),
             m9(600, 10, "It's your turn "),
             m10(80, 35, "Press P to end your turn", NO_DISPLAY),
-            m11(50, 865, "You have ", NO_DISPLAY);
+            m11(50, 865, "You have ", NO_DISPLAY),
+            aiMes(1300, 400, "The AI conquered: ");
 
     // et ajouter des messages dans la liste pour l'afficher
-    gamescene.addListMessage({&m3, &m4, &m5, &m6, &m7, &m8, &m9, &m10, &m11});
+    gamescene.addListMessage({&m3, &m4, &m5, &m6, &m7, &m8, &m9, &m10, &m11, &aiMes});
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -86,18 +87,26 @@ void testSFML() {
 
         Player* player;
 
-        Ai ai;
+        RandomAI randAI;
 
-        ai.setState(state);
+        randAI.setState(state);
+
 
         if(gamescene.isOpen()){
             player = pList[state->getOrderPlayer()];
             //////////////////////////////////////////
             //espace de travail de l'IA
             if(player->getTypeplayer() == BOT){
-                ai.setPlayer(player);
-                ai.execute(Difficulty::EASY);
-
+                randAI.setPlayer(player);
+                randAI.execute();
+                cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
+                if (randAI.conqueredCountries.size() > 0) {
+                    for (long unsigned int i=randAI.conqueredCountries.size()-1; i>0; i--) {
+                        aiMes.addMessage(randAI.conqueredCountries.at(i)->getNameCountry()+" ");
+                        randAI.conqueredCountries.pop_back();
+                    }
+                }
+                
                 state->ChangePlaying();
                 status = 0;
             }
@@ -332,6 +341,8 @@ void testSFML() {
                     m4.show(NO_DISPLAY);
                     m5.show(NO_DISPLAY);
                 }
+
+
 
                 else if(Keyboard::isKeyPressed(Keyboard::S) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
