@@ -308,6 +308,13 @@ void testSFML() {
                 distributecard.execute();
             }
 
+            if(Keyboard::isKeyPressed(Keyboard::P)){
+                state->ChangePlaying();
+                status = 0;
+                next = false;
+                getTroop = false;
+            }
+
             if (status == 3){
                 
                 if (toggleAttack == 0) m5.show(DISPLAY);
