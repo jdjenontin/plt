@@ -10,11 +10,11 @@ using namespace state;
 namespace ai{
 
 //les commandes 
-Place place;
-Attack attack;
-Reinforce reinforce; 
-DistributeCard distributecard;
-UseCard usecard;
+Place aiPlace;
+Attack aiAttack;
+Reinforce aiReinforce; 
+DistributeCard aiDistributecard;
+UseCard aiUsecard;
 
 //la liste de pays de joueur
 std::vector<state::Country*> aiCountries;
@@ -47,17 +47,17 @@ Ai::Ai(int order){
 
 void Ai::setState (state::State* state){
     this->state = state;
-    attack.setState(state);
-    distributecard.setState(state);
+    aiAttack.setState(state);
+    aiDistributecard.setState(state);
 }
 
 void Ai::setPlayer (state::Player* player){
     this->player = player;
-    place.setPlayer(player);
-    attack.setPlayer(player);
-    reinforce.setPlayer(player);
-    distributecard.setPlayer(player);
-    usecard.setPlayer(player);
+    aiPlace.setPlayer(player);
+    aiAttack.setPlayer(player);
+    aiReinforce.setPlayer(player);
+    aiDistributecard.setPlayer(player);
+    aiUsecard.setPlayer(player);
 }
 
 void Ai::setDifficulty(Difficulty difficulty){
@@ -80,6 +80,7 @@ void Ai::execute (Difficulty difficulty){
     //un exemple comment le IA fonctionne 
     if(difficulty == Difficulty::EASY){
         //place
+        /*
         Dice aiDice(0,aiCountries.size()-1);
         place.setcountry(aiCountries[aiDice.thrown()]);
         int bonus_troop = player->continentBonusTroop();
@@ -158,7 +159,7 @@ void Ai::execute (Difficulty difficulty){
             reinforce.execute();
             std::cout << "Reinforcing" << std::endl;
         }
-        
+        */
     }
 
 

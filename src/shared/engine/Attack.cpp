@@ -15,12 +15,11 @@ using namespace std;
 namespace engine {
 
 Attack::Attack() {
-    Dice dice(1,6);
     this->attackCountry = attackCountry;
     this->defCountry = defCountry;
     this->canAttack = canAttack;
     this->attackType = attackType;
-    this->dice6 = dice;
+    dice6.updateDice(1,6);
 }
 
 Attack::Attack(bool attackType) {
@@ -173,7 +172,7 @@ int Attack::soloAttack(){
         if (defCountry->getNumberTroop() == 0) {
             std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
             attackCountry->reduceNumberTroop(1);
-            std::cout << "You have "<< attackCountry->getNumberTroop() << " troop now"<< std::endl;
+            std::cout << "You have "<< attackCountry->getNumberTroop() << " troops now"<< std::endl;
             defCountry->setNumberTroop(1);
 
             state::Player* p = state->belongsto(defCountry);
@@ -205,44 +204,42 @@ int Attack::soloAttack(){
 int Attack::doubleAttack(){
 
     int att, def;
-    int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
+    int att1, att2, def1, def2, maxAtt, minAtt, maxDef, minDef = 0;
 
     att = attackCountry->getNumberTroop();
     std::cout << "attacker forces :"<< att << std::endl;
 
     def = defCountry->getNumberTroop();
-    numberDieDef = def;
     std::cout << "defender forces :"<< def << std::endl;
 
     //Generating die for the attacker
-    int diceAtt1 = dice6.thrown();
-    int diceAtt2 = dice6.thrown();
-    maxAtt1 = diceAtt1;
-    maxAtt2 = diceAtt2;
-    std::cout << "attacker's die numbers :"<< diceAtt1 << "\t" << diceAtt2 << std::endl;
-    vector<int> allAttackDie = {diceAtt1, diceAtt2};
+    att1 = dice6.thrown();
+    att2 = dice6.thrown();
+    std::cout << "attacker's die numbers :"<< att1 << "\t" << att2 << std::endl;
+    vector<int> allAttackDie = {att1, att2};
+    maxAtt = std::max(att1, att2);
+    minAtt = std::min(att1, att2);
 
 
     //Generating die for the defender
-    if (numberDieDef == 2)
+    if (defCountry->getNumberTroop() == 2)
     {
-        maxDef1 = dice6.thrown();
-        maxDef2 = dice6.thrown();
-        maxDeff = std::max(maxDef1, maxDef2);
-        minDeff = std::min(maxAtt1, maxDef2);
-        std::cout << "defender's dice number :"<< maxDef1 << "\t" << maxDef2 << std::endl;
+        def1 = dice6.thrown();
+        def2 = dice6.thrown();
+        maxDef = std::max(def1, def2);
+        minDef = std::min(def1, def2);
+        std::cout << "defender's dice number :"<< maxDef << "\t" << minDef << std::endl;
     } 
 
     else 
     {
-        maxDeff = dice6.thrown();   
-        std::cout << "defender's dice number :"<< maxDef1 << std::endl;
+        maxDef = dice6.thrown();
+        minDef = 0;  
+        std::cout << "defender's dice number :"<< maxDef << std::endl;
+
     }
 
-    maxAtt = std::max(maxAtt1, maxAtt2);
-    minAtt = std::min(maxAtt1, maxAtt2);
-
-    return execute(maxAtt, maxDeff, minAtt, minDeff);
+    return execute(maxAtt, maxDef, minAtt, maxDef);
 }
 
 int Attack::tripleAttack(){
@@ -310,6 +307,7 @@ int Attack::multipleAttack(){
             numAtt = soloAttack();
         }
         
+        return numAtt;
     }
     return 1;
 }
