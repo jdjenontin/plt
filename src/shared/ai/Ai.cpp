@@ -71,6 +71,7 @@ Difficulty Ai::getDifficulty() const{
 void Ai::execute (Difficulty difficulty){
     
     Dice reAttack(0,1);
+    Calculation cal;
     int aiCanAttack = 1;
     int willAttack = 1;
     aiCountries = player->getListCountry();
@@ -106,8 +107,6 @@ void Ai::execute (Difficulty difficulty){
                 }
             }
             
-
-
             Dice aiAttackDice(0,aiAttackableCountries.size()-1);
 
             //The ai will then choose a random neighbouring country to attack
@@ -138,7 +137,7 @@ void Ai::execute (Difficulty difficulty){
             willAttack = reAttack.thrown();
             for (int i = 0; i<aiCountries.size()-1;i++) {
                 if(aiCountries.at(i)->getNumberTroop() > 1) {
-                    aiCanAttack = aiCanAttack | 1;
+                    aiCanAttack = 1;
                 }
             }
             std::cout << "Attacking" << std::endl;
@@ -168,7 +167,7 @@ void Ai::execute (Difficulty difficulty){
     }
 
     else if(difficulty == Difficulty::HARD){
-
+        
     }
     else if(difficulty == Difficulty::INSANE){
 

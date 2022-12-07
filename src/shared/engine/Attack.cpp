@@ -14,7 +14,6 @@ using namespace std;
 
 namespace engine {
 
-
 Attack::Attack() {
     Dice dice(1,6);
     this->attackCountry = attackCountry;
@@ -201,15 +200,12 @@ int Attack::soloAttack(){
         }
         return 0;
     }
-
 }
 
 int Attack::doubleAttack(){
 
     int att, def;
     int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
-
-
 
     att = attackCountry->getNumberTroop();
     std::cout << "attacker forces :"<< att << std::endl;
@@ -250,13 +246,8 @@ int Attack::doubleAttack(){
 }
 
 int Attack::tripleAttack(){
-
-
     int att, def;
     int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
-
-
-
 
     att = attackCountry->getNumberTroop();
     std::cout << "attacker forces :"<< att << std::endl;
@@ -294,7 +285,7 @@ int Attack::tripleAttack(){
     {
         maxDeff = dice6.thrown();   
 
-        std::cout << "defender's dice number :"<< maxDef1 << std::endl;
+        std::cout << "defender's dice number :"<< maxDeff << std::endl;
     }
 
     maxAtt = std::max(maxAtt1, maxAtt2);

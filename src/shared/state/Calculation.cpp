@@ -56,6 +56,7 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
 */
 bool Calculation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
     for(auto country : a_listCountry){
+        std::cout << country->getNumberCountry() << a_country->getNumberCountry() << std::endl;
         if(country->getNumberCountry() == a_country->getNumberCountry())
         {
             return true;
