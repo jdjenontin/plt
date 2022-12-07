@@ -94,5 +94,10 @@ const sf::Color& Country::getColor() const{
     return color;
 }
 
+bool Country::comparaison(Country* a, Country* b)
+{
+    return a->numberTroop < b->numberCountry;
+}
+
 
 }
