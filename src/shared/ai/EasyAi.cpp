@@ -29,8 +29,8 @@ EasyAi::~EasyAi() {
 
 void EasyAi::execute() {
     Dice reAttack(0,1);
-    int aiCanAttack = 1;
-    int willAttack = 1;
+    bool aiCanAttack = true;
+    bool willAttack = true;
     std::vector<state::Country*> aiCountries = player->getListCountry();
     std::vector<state::Country*> allCountries = state->getListCountires();
     std::vector<state::Country*> aiAttackCountries;
@@ -44,31 +44,29 @@ void EasyAi::execute() {
         aiPlace.execute();
     }
 
-    sleep_for(milliseconds(100));
-
     //attack
+    std::vector<int> count = {};
+    std::vector<state::Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
+
+    for (long unsigned int i=0; i<aiCountries.size();i++) {
+        if (aiCountries.at(i)->getNumberTroop() > 1) {
+            aiAttackCountries.push_back(aiCountries.at(i));
+        }
+    }
+
+    //We make a list of all the countries we can attack
+    for(long unsigned int j=0; j<aiAttackCountries.size(); j++){
+        for(int i=0; i<42;i++) {
+            if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(allCountries.at(i), aiAttackCountries)) {
+                std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
+                aiAttackableCountries.push_back(allCountries.at(i));
+                count.push_back(j);
+            }
+        }
+    }
+
     while (willAttack and aiCanAttack) {
-        aiCanAttack = 0;
-        std::vector<int> count = {};
-
-        std::vector<state::Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
-
-        for (long unsigned int i=0; i<aiCountries.size();i++) {
-            if (aiCountries.at(i)->getNumberTroop() > 1) {
-                aiAttackCountries.push_back(aiCountries.at(i));
-            }
-        }
-
-        //We make a list of all the countries we can attack
-        for(long unsigned int j=0; j<aiAttackCountries.size(); j++){
-            for(int i=0; i<42;i++) {
-                if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(allCountries.at(i), aiAttackCountries)) {
-                    std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
-                    aiAttackableCountries.push_back(allCountries.at(i));
-                    count.push_back(j);
-                }
-            }
-        }
+        aiCanAttack = false;
         
         //If the ai can attack a country it will
         if (!aiAttackableCountries.empty()) {
@@ -88,48 +86,51 @@ void EasyAi::execute() {
             aiDice.updateDice(0, 3);
             int selectAttack = aiDice.thrown();
 
-            //The will randomly do a single, double, triple or multiple attack
-            if ( selectAttack == 0) numConqueredCountries += aiAttack.soloAttack();
-                
+            //The ai will randomly do a single, double, triple or multiple attack
+            if (aiAttack.abletoattack()) {
+                if ( selectAttack == 0) numConqueredCountries += aiAttack.soloAttack();
+                    
 
-            else if (selectAttack == 1 and ((aiDefCountry->getNumberTroop()==1 and aiAttackCountry->getNumberTroop()==2)  or aiAttackCountry->getNumberTroop()>2)){
-                numConqueredCountries += aiAttack.doubleAttack();
-            }
-
-            else if (selectAttack == 2 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.tripleAttack();
-
-            else if (selectAttack == 3) numConqueredCountries += aiAttack.multipleAttack();
-
-            else if (aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.soloAttack();
-            
-            willAttack = reAttack.thrown();
-            for (long unsigned int i = 0; i<aiAttackCountries.size()-1;i++) {
-                if(aiAttackCountries.at(i)->getNumberTroop() > 1) {
-                    aiCanAttack = aiCanAttack | 1;
+                else if (selectAttack == 1 and aiAttackCountry->getNumberTroop()>2){
+                    numConqueredCountries += aiAttack.doubleAttack();
                 }
-            }
+
+                else if (selectAttack == 2 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.doubleAttack();
+
+                else if (selectAttack == 3 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.doubleAttack();
+
+                else numConqueredCountries += aiAttack.soloAttack();
+                
+                willAttack = reAttack.thrown();
+                for (long unsigned int i = 0; i<aiAttackCountries.size()-1;i++) {
+                    if(aiAttackCountries.at(i)->getNumberTroop() > 1) {
+                        aiCanAttack = aiCanAttack | 1;
+                    }
+                }
+                
+                std::cout << "Attacking" << std::endl;
+                if (numConqueredCountries) {
+                    conqueredCountries.push_back(aiDefCountry);
+                }
+
+                for (int i = 0; i<aiAttackableCountries.size(); i++) {
+                    if(aiDefCountry->getNameCountry() == aiAttackableCountries.at(i)->getNameCountry()) {
+                        aiAttackableCountries.erase(aiAttackableCountries.begin() + i);
+                    }
+
+                }
             
-            std::cout << "Attacking" << std::endl;
-            if (numConqueredCountries) {
-                conqueredCountries.push_back(aiDefCountry);
             }
-            
 
         }
-        aiAttackableCountries.clear();
 
-        for(long unsigned int i =0; i<aiAttackableCountries.size(); i++) delete aiAttackableCountries.at(i);
-        sleep_for(milliseconds(100));
+        else
+            aiCanAttack = false;
+
     }
 
-    sleep_for(milliseconds(100));
-
-    aiAttackCountries.clear();
-    //We deallocate the memory because the vector class does not deallocate automatically
-    for(long unsigned int i =0; i<aiAttackCountries.size(); i++) delete aiAttackCountries.at(i);
 
     //reinforce
-
     aiDice.updateDice(0,aiCountries.size()-1);
     state::Country* depatureCountry  = aiCountries[aiDice.thrown()];
 
