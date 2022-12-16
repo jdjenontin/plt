@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(TestExemple)
   {
     Exemple ex {};
     ex.setX(21);
-    BOOST_CHECK_LE(ex.x, 32); // Less than equal
+    BOOST_CHECK_LE(ex.getX(), 32); // Less than equal
     BOOST_CHECK_GT(ex.x, 11); // Greater than equl
   }
 }

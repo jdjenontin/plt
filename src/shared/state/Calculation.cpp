@@ -22,15 +22,9 @@ void Calculation::compute (Country* attacker, Country* defender) {
     std::cout << "your win rate is :(its not available now)" << std::endl;
 }
 
-int Calculation::throwdice () {
-    srand(time(0));
-    std::cout << rand() << std::endl;
-    return (rand() % 6 + 1);
-}
-
 
 /*
-* Generate a shuffle list containing a list of integer for 0 to numberOfElement
+* Generate a shuffle list containing a list of integer for 0 to numberOfElement - 1
 */
 std::vector<int> Calculation::shuffledTab(int numberOfElement){
     std::vector<int> temp_list;

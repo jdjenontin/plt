@@ -55,10 +55,6 @@ const sf::Color& Player::getColor() const{
     return color;
 }
 
-int Player::getownTroop () {
-    return ownTroop;
-}
-
 bool Player::existCountry (Country country){
     for(auto c : listCountry){
         if(c->getNameCountry() == country.getNameCountry())
