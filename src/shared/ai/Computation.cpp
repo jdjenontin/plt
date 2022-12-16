@@ -19,7 +19,7 @@ namespace ai{
 
         for(int i=0; i<42;i++) {
             if (a_country->isAdjacent(i)) {
-                std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
+                //std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
                 adajcents.push_back(allCountries.at(i));
             }
         }
@@ -43,4 +43,5 @@ namespace ai{
         }
         return false;
     }
+
 }
