@@ -62,48 +62,47 @@ bool Attack::isadjacent () {
 int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
     cout << "Attack troops: " << attackCountry->getNumberTroop() << " with die numbers: " << maxAtt << " and " << minAtt << endl;
     cout << "Defense troops: " << defCountry->getNumberTroop() << " with die numbers: " << maxDef << " and " << minDef << endl;
-
     //Comparing max die to see who wins 
     if(maxAtt > maxDef)
     {
-        std::cout << "Attacker wins!" << std::endl;
         defCountry->reduceNumberTroop(1);
         if (defCountry->getNumberTroop() == 0) 
         {
-            std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
+            //std::cout << attackCountry->getNameCountry() << " conquered " << defCountry->getNameCountry() << std::endl;
             attackCountry->reduceNumberTroop(1);
-            std::cout << "You have "<< attackCountry->getNumberTroop() << " troop now"<< std::endl;
             defCountry->setNumberTroop(1);
 
             state::Player* p = state->belongsto(defCountry);
             p->deleteCountry(defCountry);
             player->addCountry(defCountry);
             player->winAttack = true;
-            canAttack = 0;
+            canAttack = false;
 
             return 1;
         }
+        abletoattack();
 
     }
 
     else if (maxDef >= maxAtt)
     {
-        std::cout << "Defender wins!" << std::endl;
         attackCountry->reduceNumberTroop(1);
         if (attackCountry->getNumberTroop() == 1)  //If the attacking country only has one troop, the attack is a failure
         {
             attackCountry->setNumberTroop(1);
             defCountry->reduceNumberTroop(1);
-            canAttack = 0;
+            canAttack = false;
             std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
             return 0;
         }
+        abletoattack();
     }
+
+    if (minDef == 0 or maxDef == 0 or maxAtt == 0 or minAtt == 0) return 0;
 
     //Comparing min die to see who wins 
     if (minAtt > minDef)
     {
-        std::cout << "Attacker wins!" << std::endl;
         defCountry->reduceNumberTroop(1);
         if (defCountry->getNumberTroop() == 0) 
         {
@@ -116,24 +115,25 @@ int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
             p->deleteCountry(defCountry);
             player->addCountry(defCountry);
             player->winAttack = true;
-            canAttack = 0;
+            canAttack = false;
 
             return 1;
         }
+        abletoattack();
     }
 
     else if (minDef >= minAtt)
     {
-        std::cout << "Defender wins!" << std::endl;
         attackCountry->reduceNumberTroop(1);
         if (attackCountry->getNumberTroop() == 1) 
         {
             attackCountry->setNumberTroop(1);
             defCountry->reduceNumberTroop(1);
-            canAttack = 0;
+            canAttack = false;
             std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
             return 0;
         }
+        abletoattack();
     }
 }
 
@@ -176,7 +176,7 @@ int Attack::soloAttack(){
                 p->deleteCountry(defCountry);
                 player->addCountry(defCountry);
                 player->winAttack = true;
-                canAttack = 0;
+                canAttack = false;
 
                 return 1;
             }
@@ -190,7 +190,7 @@ int Attack::soloAttack(){
             attackCountry->reduceNumberTroop(1);
             if (attackCountry->getNumberTroop() == 1) {
                 attackCountry->setNumberTroop(1);
-                canAttack = 0;
+                canAttack = false;
                 std::cout << defCountry->getNameCountry() << " survived the attack from " << attackCountry->getNameCountry() << std::endl;
 
                 return 0;
@@ -202,18 +202,12 @@ int Attack::soloAttack(){
 
 int Attack::doubleAttack(){
 
-    int att, def;
     int att1, att2, def1, def2, maxAtt, minAtt, maxDef, minDef = 0;
-
-    att = attackCountry->getNumberTroop();
-    std::cout << "attacker forces :"<< att << std::endl;
-
-    def = defCountry->getNumberTroop();
-    std::cout << "defender forces :"<< def << std::endl;
 
     //Generating die for the attacker
     att1 = dice6.thrown();
     att2 = dice6.thrown();
+
     std::cout << "attacker's die numbers :"<< att1 << "\t" << att2 << std::endl;
     vector<int> allAttackDie = {att1, att2};
     maxAtt = std::max(att1, att2);
@@ -251,11 +245,10 @@ int Attack::tripleAttack(){
 
     def = defCountry->getNumberTroop();
 
-    if (def > 1){
-        numberDieDef = 2;
-    }
+    if (def > 1) numberDieDef = 2;
 
-    else numberDieDef = 1;
+    else if (def == 1) numberDieDef = 1;
+
     std::cout << "defender forces :"<< def << std::endl;
 
     //Generating die for the attacker
@@ -274,7 +267,7 @@ int Attack::tripleAttack(){
         maxDef1 = dice6.thrown();
         maxDef2 = dice6.thrown();
         maxDeff = std::max(maxDef1, maxDef2);
-        minDeff = std::min(maxAtt1, maxDef2);
+        minDeff = std::min(maxDef1, maxDef2);
         std::cout << "defender's dice number :"<< maxDef1 << "\t" << maxDef2 << std::endl;
     } 
 
@@ -282,7 +275,7 @@ int Attack::tripleAttack(){
     {
         maxDeff = dice6.thrown();   
 
-        std::cout << "defender's dice number :"<< maxDeff << std::endl;
+        std::cout << "defender's dice number :"<< maxDeff << __func__ <<std::endl;
     }
 
     maxAtt = std::max(maxAtt1, maxAtt2);
@@ -304,7 +297,7 @@ int Attack::multipleAttack(){
         
         if(attackCountry->getNumberTroop() > 3){
             numAtt = tripleAttack();
-
+            
         }
 
         else if(attackCountry->getNumberTroop() == 3){
@@ -324,7 +317,7 @@ int Attack::multipleAttack(){
 //Getters Setters
 void Attack::setAttackCountry (state::Country* attackCountry){
     this->attackCountry = attackCountry;
-    this->canAttack = 1;
+    this->canAttack = attackCountry->getNumberTroop()>1;
 
 }
 

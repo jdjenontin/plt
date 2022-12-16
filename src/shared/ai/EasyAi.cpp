@@ -95,20 +95,15 @@ void EasyAi::execute() {
                     numConqueredCountries += aiAttack.doubleAttack();
                 }
 
-                else if (selectAttack == 2 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.doubleAttack();
+                else if (selectAttack == 2 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.tripleAttack();
 
-                else if (selectAttack == 3 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.doubleAttack();
+                else if (selectAttack == 3 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.multipleAttack();
 
                 else numConqueredCountries += aiAttack.soloAttack();
                 
                 willAttack = reAttack.thrown();
-                for (long unsigned int i = 0; i<aiAttackCountries.size()-1;i++) {
-                    if(aiAttackCountries.at(i)->getNumberTroop() > 1) {
-                        aiCanAttack = aiCanAttack | 1;
-                    }
-                }
                 
-                std::cout << "Attacking" << std::endl;
+                std::cout << "Attacking" << " 106 " << std::endl;
                 if (numConqueredCountries) {
                     conqueredCountries.push_back(aiDefCountry);
                 }

@@ -317,7 +317,7 @@ void testSFML() {
                 distributecard.execute();
             }
 
-            if(Keyboard::isKeyPressed(Keyboard::P)){
+            if(Keyboard::isKeyPressed(Keyboard::L)){
                 state->ChangePlaying();
                 status = 0;
                 next = false;
