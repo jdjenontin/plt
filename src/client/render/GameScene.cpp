@@ -75,12 +75,14 @@ state::Country *GameScene::findCountry(sf::Vector2i pos)
 
 state::Country GameScene::const_findCountry(sf::Vector2i pos)
 {
+    state::Country c(" ",0);
+
     for (unsigned i = 0; i < posCountry.size(); i++)
     {
         if ((abs(pos.x - posCountry[i][0]) < 30) && (abs(pos.y - posCountry[i][1]) < 30))
             return *listcountry[i];
     }
-    return {};
+    return c;
 }
 
 void GameScene::setListcountry(const std::vector<state::Country *> &listcountry)

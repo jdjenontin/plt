@@ -87,10 +87,9 @@ void testSFML() {
 
         Player* player;
 
-        EasyAi randAI;
+        HardAi randAI;
 
         randAI.setState(state);
-
 
         if(gamescene.isOpen()){
             player = pList[state->getOrderPlayer()];
@@ -99,13 +98,6 @@ void testSFML() {
             if(player->getTypeplayer() == BOT){
                 randAI.setPlayer(player);
                 randAI.execute();
-                cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
-                if (randAI.conqueredCountries.size() > 0) {
-                    for (long unsigned int i=randAI.conqueredCountries.size()-1; i>0; i--) {
-                        aiMes.addMessage(randAI.conqueredCountries.at(i)->getNameCountry()+" ");
-                        randAI.conqueredCountries.pop_back();
-                    }
-                }
                 
                 state->ChangePlaying();
                 status = 0;
@@ -317,7 +309,7 @@ void testSFML() {
                 distributecard.execute();
             }
 
-            if(Keyboard::isKeyPressed(Keyboard::P)){
+            if(Keyboard::isKeyPressed(Keyboard::L)){
                 state->ChangePlaying();
                 status = 0;
                 next = false;
@@ -484,5 +476,27 @@ int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
     testSFML();
+
+    // Country c1("a", 1), c2("b", 2);
+    // Attack att;
+    // float win = 0, lose = 0;
+    // float winrate;
+
+    // att.setAttackCountry(&c1);
+    // att.setDefCountry(&c2);
+
+    // while(1){
+    //     c1.setNumberTroop(10);
+    //     c2.setNumberTroop(2);
+
+    //     int status = att.tripleAttack();
+    //     if(status == 1) win++;
+    //     else lose++;
+    //     cout << win << " " << lose << endl;
+    //     winrate = win/(win + lose);
+    //     cout << "win rate is :" << winrate << endl;
+    // }
+
+
     return 0;
 }
