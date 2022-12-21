@@ -56,8 +56,8 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
 */
 bool Calculation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
     for(auto country : a_listCountry){
-        std::cout << country->getNumberCountry() << a_country->getNumberCountry() << std::endl;
-        if(country->getNumberCountry() == a_country->getNumberCountry())
+        std::cout << country->getId() << a_country->getId() << std::endl;
+        if(country->getId() == a_country->getId())
         {
             return true;
         }
@@ -95,7 +95,7 @@ bool Calculation::areConnected(Player* player, state::Country* depCountry, state
             std::vector<state::Country *> unvisited;
 
             for(auto country : playerCountry){
-                if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getNumberCountry()))
+                if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getId()))
                     unvisited.push_back(country);
             }
 

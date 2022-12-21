@@ -16,7 +16,7 @@ boost::test_tools::predicate_result validate_country_troop(vector<Country*> lCou
 {
 
   for (auto country : lCountry) {
-    if (country->getNumberTroop() < troopMin) return false;
+    if (country->getNumberOfTroop() < troopMin) return false;
   }
   return true;
 
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(TestState)
     int totalTroops(0);
 
     for (auto country : p1Countries){
-      totalTroops += country -> getNumberTroop();
+      totalTroops += country -> getNumberOfTroop();
     }
     BOOST_CHECK_EQUAL(totalTroops, 35);
     

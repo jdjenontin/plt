@@ -3,27 +3,21 @@
 
 namespace state{
 
-Country::Country () {
+Country::Country (std::string a_name , int a_id) {
+    name = a_name;
+    id = a_id;
+}
 
+Country::Country()
+{
+    
 }
 
 Country::~Country () {
 
 }
 
-Country::Country (std::string name , int number) {
-    nameCountry = name;
-    numberCountry = number;
-}
-
-std::string Country::getNameCountry () {
-    return nameCountry;
-}
-
-int Country::getNumberCountry () {
-    return numberCountry;
-}
-bool Country::isAdjacent (int idCountry) {
+bool Country::isAdjacent (int a_idCountry) {
 
     int matriceAdj[42][42] = {  {0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0},
                                 {1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -68,22 +62,37 @@ bool Country::isAdjacent (int idCountry) {
                                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
                                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0}};
 
-    return bool(matriceAdj[numberCountry][idCountry]);
+    return bool(matriceAdj[id][a_idCountry]);
 }
-int Country::getNumberTroop () {
-    return numberTroop;
-}
-
-void Country::setNumberTroop (int numTroop) {
-    numberTroop = numTroop;
+int Country::getNumberOfTroop() const {
+    return numberOfTroop;
 }
 
-void Country::addNumberTroop (int numTroop) {
-    numberTroop += numTroop;
+int Country::getId () const {
+    return id;
 }
 
-void Country::reduceNumberTroop (int numTroop) {
-    numberTroop -= numTroop;
+const std::string& Country::getName() const{
+    return name;
+}
+
+int Country::getOwnerId() const{
+    return ownerId;
+}
+void Country::setOwnerId(int a_ownerId){
+    ownerId = a_ownerId;
+}
+
+void Country::setNumberOfTroop (int a_nbTroop) {
+    numberOfTroop = a_nbTroop;
+}
+
+void Country::addTroop (int a_nbTroop) {
+    numberOfTroop += a_nbTroop;
+}
+
+void Country::reduceTroop (int a_nbTroop) {
+    numberOfTroop -= a_nbTroop;
 }
 
 void Country::setColor(const sf::Color& m_color){
@@ -94,9 +103,14 @@ const sf::Color& Country::getColor() const{
     return color;
 }
 
-bool Country::comparaison(Country* a, Country* b)
+bool Country::troopComparaison(std::shared_ptr<Country>& a, std::shared_ptr<Country>& b)
 {
-    return a->numberTroop < b->numberCountry;
+    return a->numberOfTroop < b->numberOfTroop;
+}
+
+bool Country::idComparaison(std::shared_ptr<Country>& a, std::shared_ptr<Country>& b)
+{
+    return a->id < b->id;
 }
 
 

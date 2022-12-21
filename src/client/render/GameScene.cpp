@@ -156,11 +156,11 @@ void GameScene::display()
 
         for (unsigned i = 0; i < cList.size(); i++)
         {
-            int num = cList[i]->getNumberCountry();
+            int num = cList[i]->getId();
 
             cList[i]->setColor(color.colorList[j]);
 
-            Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberTroop()), sf::Color::White);
+            Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberOfTroop()), sf::Color::White);
 
             Button b(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[j], &cir);
 

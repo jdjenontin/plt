@@ -102,7 +102,7 @@ void testSFML() {
                 cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
                 if (randAI.conqueredCountries.size() > 0) {
                     for (long unsigned int i=randAI.conqueredCountries.size()-1; i>0; i--) {
-                        aiMes.addMessage(randAI.conqueredCountries.at(i)->getNameCountry()+" ");
+                        aiMes.addMessage(randAI.conqueredCountries.at(i)->getName()+" ");
                         randAI.conqueredCountries.pop_back();
                     }
                 }
@@ -200,7 +200,7 @@ void testSFML() {
                             if(gamescene.existCountry(pos)){
                                 if(attack.existAttackCountry()){
                                     if(attack.abletoattack()){
-                                        m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry());    
+                                        m3.setstrMessage(gamescene.findCountry(pos)->getName());    
                                         status++;
                                     }
                                     else
@@ -220,7 +220,7 @@ void testSFML() {
                                         m4.replaceMessage("you need choose your opponent's country !");
                                     }
                                     else{
-                                        m4.setstrMessage(gamescene.findCountry(pos)->getNameCountry());
+                                        m4.setstrMessage(gamescene.findCountry(pos)->getName());
                                         status++; 
                                     }
                                 }
@@ -233,7 +233,7 @@ void testSFML() {
                             reinforce.setm_country(gamescene.findCountry(pos));
                             if(gamescene.existCountry(pos)){
                                 if(reinforce.existM_country()){
-                                    m3.setstrMessage(gamescene.findCountry(pos)->getNameCountry()); 
+                                    m3.setstrMessage(gamescene.findCountry(pos)->getName()); 
                                     status++;
                                 }
                             }
@@ -374,7 +374,7 @@ void testSFML() {
             
                 else if(Keyboard::isKeyPressed(Keyboard::D) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
-                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                    if(attack.getAttackCountry()->getNumberOfTroop() > 2)
                         {
                         conquered = attack.doubleAttack();
                         status = 1;
@@ -400,7 +400,7 @@ void testSFML() {
 
                 else if(Keyboard::isKeyPressed(Keyboard::T) and toggleAttack){
                     //m5.replaceMessage("If you want to attack, please press A, if not, press F ");
-                    if(attack.getAttackCountry()->getNumberTroop() > 2)
+                    if(attack.getAttackCountry()->getNumberOfTroop() > 2)
                         {
                         conquered = attack.tripleAttack();
                         status = 1;
@@ -459,8 +459,8 @@ void testSFML() {
                 }
             }
 
-            m6.setstrMessage(gamescene.const_findCountry(pos).getNameCountry());
-            m7.setintMessage(gamescene.const_findCountry(pos).getNumberCountry());
+            m6.setstrMessage(gamescene.const_findCountry(pos).getName());
+            m7.setintMessage(gamescene.const_findCountry(pos).getId());
         }
 
         if(menuscene.isOpen())

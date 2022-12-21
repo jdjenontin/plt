@@ -74,7 +74,7 @@ void UseCard::execute(){
             m_bonusTroop = 10;
             std::cout << player->getListCard().size() << std::endl;
             player->deleteCard(*it_artillery);
-            std::cout << (*it_cavalry)->getNameCountry() << std::endl;
+            std::cout << (*it_cavalry)->getName() << std::endl;
             player->deleteCard(*it_cavalry);
             player->deleteCard(*it_infantry);
             std::cout << player->getListCard().size() << std::endl;

@@ -19,9 +19,9 @@ BOOST_AUTO_TEST_CASE(TestCountry)
 
   // Test getters setters
   {
-    BOOST_CHECK_EQUAL(country.getNumberTroop(),0);
-    country.setNumberTroop(5);
-    BOOST_CHECK_EQUAL(country.getNumberTroop(),5);
+    BOOST_CHECK_EQUAL(country.getNumberOfTroop(),0);
+    country.setNumberOfTroop(5);
+    BOOST_CHECK_EQUAL(country.getNumberOfTroop(),5);
     BOOST_CHECK_EQUAL(country.getColor().toInteger(), 255);
     sf::Color rouge = sf::Color::Red;
     arg.setColor(rouge);
@@ -32,13 +32,13 @@ BOOST_AUTO_TEST_CASE(TestCountry)
 
   //Test other methods 
   {
-    country.addNumberTroop(2);
-    BOOST_CHECK_EQUAL(country.getNumberTroop(), 7);
-    country.reduceNumberTroop(4);
-    BOOST_CHECK_EQUAL(country.getNumberTroop(), 3);
-    BOOST_CHECK_EQUAL(country.getNameCountry(), "");
-    BOOST_CHECK_EQUAL(arg.getNameCountry(), "Argentine");
-    BOOST_CHECK_EQUAL(arg.getNumberCountry(), 12);
+    country.addTroop(2);
+    BOOST_CHECK_EQUAL(country.getNumberOfTroop(), 7);
+    country.reduceTroop(4);
+    BOOST_CHECK_EQUAL(country.getNumberOfTroop(), 3);
+    BOOST_CHECK_EQUAL(country.getName(), "");
+    BOOST_CHECK_EQUAL(arg.getName(), "Argentine");
+    BOOST_CHECK_EQUAL(arg.getId(), 12);
     BOOST_CHECK(arg.isAdjacent(10));
     BOOST_CHECK(!arg.isAdjacent(9));
   }

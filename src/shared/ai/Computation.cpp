@@ -19,7 +19,7 @@ namespace ai{
 
         for(int i=0; i<42;i++) {
             if (a_country->isAdjacent(i)) {
-                //std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
+                //std::cout << "The AI can attack " << allCountries.at(i)->getName() << ". \n";
                 adajcents.push_back(allCountries.at(i));
             }
         }
@@ -35,8 +35,8 @@ namespace ai{
     */
     bool Computation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
         for(auto country : a_listCountry){
-            std::cout << country->getNumberCountry() << a_country->getNumberCountry() << std::endl;
-            if(country->getNumberCountry() == a_country->getNumberCountry())
+            std::cout << country->getId() << a_country->getId() << std::endl;
+            if(country->getId() == a_country->getId())
             {
                 return true;
             }

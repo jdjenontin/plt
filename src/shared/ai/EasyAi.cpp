@@ -54,7 +54,7 @@ void EasyAi::execute() {
         std::vector<state::Country*> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
         for (long unsigned int i=0; i<aiCountries.size();i++) {
-            if (aiCountries.at(i)->getNumberTroop() > 1) {
+            if (aiCountries.at(i)->getNumberOfTroop() > 1) {
                 aiAttackCountries.push_back(aiCountries.at(i));
             }
         }
@@ -63,7 +63,7 @@ void EasyAi::execute() {
         for(long unsigned int j=0; j<aiAttackCountries.size(); j++){
             for(int i=0; i<42;i++) {
                 if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(allCountries.at(i), aiAttackCountries)) {
-                    std::cout << "The AI can attack " << allCountries.at(i)->getNameCountry() << ". \n";
+                    std::cout << "The AI can attack " << allCountries.at(i)->getName() << ". \n";
                     aiAttackableCountries.push_back(allCountries.at(i));
                     count.push_back(j);
                 }
@@ -81,7 +81,7 @@ void EasyAi::execute() {
 
             
 
-            std::cout << "The AI will attack " << aiDefCountry->getNameCountry() << " with " << aiAttackCountry->getNameCountry() << "\n";
+            std::cout << "The AI will attack " << aiDefCountry->getName() << " with " << aiAttackCountry->getName() << "\n";
 
             aiAttack.setAttackCountry(aiAttackCountry);
             aiAttack.setDefCountry(aiDefCountry);
@@ -92,19 +92,19 @@ void EasyAi::execute() {
             if ( selectAttack == 0) numConqueredCountries += aiAttack.soloAttack();
                 
 
-            else if (selectAttack == 1 and ((aiDefCountry->getNumberTroop()==1 and aiAttackCountry->getNumberTroop()==2)  or aiAttackCountry->getNumberTroop()>2)){
+            else if (selectAttack == 1 and ((aiDefCountry->getNumberOfTroop()==1 and aiAttackCountry->getNumberOfTroop()==2)  or aiAttackCountry->getNumberOfTroop()>2)){
                 numConqueredCountries += aiAttack.doubleAttack();
             }
 
-            else if (selectAttack == 2 and aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.tripleAttack();
+            else if (selectAttack == 2 and aiAttackCountry->getNumberOfTroop()>2) numConqueredCountries += aiAttack.tripleAttack();
 
             else if (selectAttack == 3) numConqueredCountries += aiAttack.multipleAttack();
 
-            else if (aiAttackCountry->getNumberTroop()>2) numConqueredCountries += aiAttack.soloAttack();
+            else if (aiAttackCountry->getNumberOfTroop()>2) numConqueredCountries += aiAttack.soloAttack();
             
             willAttack = reAttack.thrown();
             for (long unsigned int i = 0; i<aiAttackCountries.size()-1;i++) {
-                if(aiAttackCountries.at(i)->getNumberTroop() > 1) {
+                if(aiAttackCountries.at(i)->getNumberOfTroop() > 1) {
                     aiCanAttack = aiCanAttack | 1;
                 }
             }
@@ -136,7 +136,7 @@ void EasyAi::execute() {
     aiReinforce.setm_country(depatureCountry);
     aiReinforce.setn_country(aiCountries[aiDice.thrown()]);
 
-    aiDice.updateDice(0, depatureCountry->getNumberTroop() - 1);
+    aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
     
     for(int i = 0; i < aiDice.thrown(); i++)
     {

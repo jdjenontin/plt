@@ -29,7 +29,7 @@ void Player::addCountry (Country* country) {
 
 void Player::deleteCountry (Country* country) {
     int i = 0;
-    while(listCountry[i] -> getNameCountry() != country -> getNameCountry()){
+    while(listCountry[i] -> getName() != country -> getName()){
         i++;
     }
     listCountry.erase(listCountry.begin() + i);
@@ -41,7 +41,7 @@ void Player::addCard (Card* card) {
 
 void Player::deleteCard (Card* card) {
     int i = 0;
-    while(listCard[i]->getNameCountry() != card->getNameCountry()){
+    while(listCard[i]->getName() != card->getName()){
         i++;
     }
     listCard.erase(listCard.begin() + i);
@@ -61,7 +61,7 @@ int Player::getownTroop () {
 
 bool Player::existCountry (Country country){
     for(auto c : listCountry){
-        if(c->getNameCountry() == country.getNameCountry())
+        if(c->getName() == country.getName())
             return true;
     }
 
@@ -126,7 +126,7 @@ std::vector<int> Player::presenceOnContinents(){
     
     for(auto country : listCountry)
     {
-        int countryId = country->getNumberCountry();
+        int countryId = country->getId();
         if(countryId < 9)
             r_presence[0] += 1;
         else if (countryId < 13)

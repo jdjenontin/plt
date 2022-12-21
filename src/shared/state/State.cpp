@@ -107,7 +107,7 @@ void State::init()
 
         // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
-            country -> addNumberTroop(minTroopPerTeritory);
+            country -> addTroop(minTroopPerTeritory);
         }
 
         int remainingTroop = initialTroop % playerCountries.size();
@@ -117,7 +117,7 @@ void State::init()
         for(int k = 0; k != remainingTroop; k++)
         {
             int electedCountry = dice.thrown();
-            playerCountries[electedCountry]->addNumberTroop(1);
+            playerCountries[electedCountry]->addTroop(1);
         } 
     }
 

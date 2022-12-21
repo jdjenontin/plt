@@ -30,16 +30,16 @@ void CardScene::init(){
 
     for(unsigned int i = 0; i < clist.size(); i++){
         if(clist[i]->typeCard == state::TypeCard::Infantry){
-            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Infantry", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Infantry", clist[i]->getName());
             listCard.push_back(card);
         }
         else if(clist[i]->typeCard == state::TypeCard::Cavalry){
-            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Cavalry", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Cavalry", clist[i]->getName());
             listCard.push_back(card);
         }
             
         else if(clist[i]->typeCard == state::TypeCard::Artillery){
-            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Artillery", clist[i]->getNameCountry());
+            Card card(100 + 230*(i%5), 100 + 300*(i/5), "Artillery", clist[i]->getName());
             listCard.push_back(card);
         }
     }
