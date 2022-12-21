@@ -88,40 +88,60 @@ TypePlayer Player::getTypeplayer() const{
     return this->typeplayer;
 }
 
+/**
+ * @brief Compute the number of bonus troop
+ * @return Number of bonus troop
+*/
 int Player::continentBonusTroop ()
 {
-    int ameriqueN(0), ameriqueS(0), europe(0), afrique(0), oceanie(0), asie(0);
     int numberBonusTroop(3);
+
+    std::vector<int> r_presence(6,0);
+    r_presence = this->presenceOnContinents();
 
     if(listCountry.size() / 3 > 3){
         numberBonusTroop += (listCountry.size() / 3 - 3);
     }
 
-    for(auto country : listCountry){
-        int countryId = country->getNumberCountry();
-        if(countryId < 9)
-            ameriqueN += 1;
-        else if (countryId < 13)
-            ameriqueS += 1;
-        else if (countryId < 19)
-            afrique += 1;
-        else if (countryId < 26)
-            europe += 1;
-        else if (countryId < 38)
-            asie += 1;
-        else 
-            oceanie +=1;
-    }
 
     // Ajout des troupes bonus
-    if (ameriqueN == 9) numberBonusTroop += 5;
-    if (ameriqueS == 4) numberBonusTroop += 2;
-    if (afrique == 6) numberBonusTroop += 3;
-    if (europe == 7) numberBonusTroop += 5;
-    if (asie == 12) numberBonusTroop += 7;
-    if (oceanie == 4) numberBonusTroop += 2;
+    if (r_presence[0] == 9) numberBonusTroop += 5;
+    if (r_presence[1] == 4) numberBonusTroop += 2;
+    if (r_presence[2] == 6) numberBonusTroop += 3;
+    if (r_presence[3] == 7) numberBonusTroop += 5;
+    if (r_presence[4] == 12) numberBonusTroop += 7;
+    if (r_presence[5] == 4) numberBonusTroop += 2;
 
     return numberBonusTroop;
+}
+
+/**
+ * @brief Get the number of country own by a specific player each continent
+ * @param a_player A pointer on the player
+ * @return vector with the number of countries in this order [Amérique du Nord, Amérique du sud, Afrique, Europe, Asie]
+*/
+std::vector<int> Player::presenceOnContinents(){
+    
+    std::vector<int> r_presence(6,0);
+    
+    for(auto country : listCountry)
+    {
+        int countryId = country->getNumberCountry();
+        if(countryId < 9)
+            r_presence[0] += 1;
+        else if (countryId < 13)
+            r_presence[1] += 1;
+        else if (countryId < 19)
+            r_presence[2]+= 1;
+        else if (countryId < 26)
+            r_presence[3] += 1;
+        else if (countryId < 38)
+            r_presence[4] += 1;
+        else 
+            r_presence[5] +=1;
+    }
+
+    return r_presence;
 }
 
 const std::vector<Country*>& Player::getListCountry () const {
