@@ -1,1 +1,1 @@
-*.dia diff=xml
+src/*.dia diff=xml
