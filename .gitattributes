@@ -1,1 +1,1 @@
-src/*.dia diff=xml
+*.dia diff=xml
