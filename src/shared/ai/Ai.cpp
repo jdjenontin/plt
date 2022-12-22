@@ -74,7 +74,7 @@ void Ai::execute (Difficulty difficulty){
     Calculation cal;
     int aiCanAttack = 1;
     int willAttack = 1;
-    aiCountries = player->getCountriesLists();
+    aiCountries = player->getCountriesList();
     std::vector<Country*> allCountries = state->getListCountires();
 
     //un exemple comment le IA fonctionne 

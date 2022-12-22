@@ -44,7 +44,7 @@ void GameScene::init(std::vector<state::Player *> &pList)
 
         pList[i]->setColor(color.colorList[i]);
 
-        vector<state::Country *> cList = pList[i]->getCountriesLists();
+        vector<state::Country *> cList = pList[i]->getCountriesList();
 
         for (unsigned j = 0; j < cList.size(); j++)
         {
@@ -143,7 +143,7 @@ void GameScene::display()
         Message m(50, 480 + (60 * j), name);
         m.addMessage(":");
 
-        if(pList[j]->getCountriesLists().size() == 0)
+        if(pList[j]->getCountriesList().size() == 0)
             m.setColor(sf::Color::Red);
 
         Button b(130, 475 + (60 * j), 25, color.colorList[j], &cir);
@@ -152,7 +152,7 @@ void GameScene::display()
         window->draw(b.circle);
 
         // afficher des bouton de pays et aussi le nombre de troup
-        vector<state::Country *> cList = pList[j]->getCountriesLists();
+        vector<state::Country *> cList = pList[j]->getCountriesList();
 
         for (unsigned i = 0; i < cList.size(); i++)
         {

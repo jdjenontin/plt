@@ -35,13 +35,13 @@ BOOST_AUTO_TEST_CASE(TestState)
     state.init();
 
     // Second player's countries
-    vector<Country*> p1Countries = pList[1]->getCountriesLists();
+    vector<Country*> p1Countries = pList[1]->getCountriesList();
 
     // Check if the player 2 have 14 countries
     BOOST_CHECK_EQUAL(p1Countries.size(), 14);
 
     // Check if each country have minimun 2 troops
-    BOOST_CHECK(validate_country_troop(pList[1]->getCountriesLists(), 2));
+    BOOST_CHECK(validate_country_troop(pList[1]->getCountriesList(), 2));
 
     // Check the total troop own by player 2
     int totalTroops(0);
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(TestState)
     state.init();
 
     // Player1 total countries
-    vector<Country*> p5Countries = pList[4]->getCountriesLists();
+    vector<Country*> p5Countries = pList[4]->getCountriesList();
     BOOST_CHECK_EQUAL(p5Countries.size(), 8);
   } 
 
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(TestState)
   {
     State state(3);
     vector<Player*> pList = state.getListPlayers();
-    vector<Country*> lCountries = pList[1]->getCountriesLists();
+    vector<Country*> lCountries = pList[1]->getCountriesList();
     Country* a_country = lCountries[0];
     a_country->setColor(pList[1]->getColor());
 

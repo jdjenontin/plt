@@ -100,7 +100,7 @@ void State::init()
     int initialTroop = initialTroopMap[numberPlayer + numberBot];
 
     for (int i = 0; i != numberPlayer + numberBot; i++){
-        vector<Country*> playerCountries = playersList[i].getCountriesLists();
+        vector<Country*> playerCountries = playersList[i].getCountriesList();
 
         // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
@@ -145,7 +145,7 @@ void State::ChangePlaying () {
         IncrementTurn();
     }
 
-    if(playersList[orderPlayer].getCountriesLists().size() == 0){
+    if(playersList[orderPlayer].getCountriesList().size() == 0){
         orderPlayer++;
         playersList[orderPlayer].setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())

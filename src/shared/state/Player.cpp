@@ -24,15 +24,15 @@ Player::~Player () {
 }
 
 void Player::addCountry (Country* country) {
-    countriesLists.push_back(country);
+    countriesList.push_back(country);
 }
 
 void Player::deleteCountry (Country* country) {
     int i = 0;
-    while(countriesLists[i] -> getName() != country -> getName()){
+    while(countriesList[i] -> getName() != country -> getName()){
         i++;
     }
-    countriesLists.erase(countriesLists.begin() + i);
+    countriesList.erase(countriesList.begin() + i);
 }
 
 void Player::addCard (Card* card) {
@@ -60,7 +60,7 @@ int Player::getownTroop () {
 }
 
 bool Player::existCountry (Country country){
-    for(auto c : countriesLists){
+    for(auto c : countriesList){
         if(c->getName() == country.getName())
             return true;
     }
@@ -99,8 +99,8 @@ int Player::continentBonusTroop ()
     std::vector<int> r_presence(6,0);
     r_presence = this->presenceOnContinents();
 
-    if(countriesLists.size() / 3 > 3){
-        numberBonusTroop += (countriesLists.size() / 3 - 3);
+    if(countriesList.size() / 3 > 3){
+        numberBonusTroop += (countriesList.size() / 3 - 3);
     }
 
 
@@ -124,7 +124,7 @@ std::vector<int> Player::presenceOnContinents(){
     
     std::vector<int> r_presence(6,0);
     
-    for(auto country : countriesLists)
+    for(auto country : countriesList)
     {
         int countryId = country->getId();
         if(countryId < 9)
@@ -144,8 +144,8 @@ std::vector<int> Player::presenceOnContinents(){
     return r_presence;
 }
 
-const std::vector<Country*>& Player::getCountriesLists () const {
-    return countriesLists;
+const std::vector<Country*>& Player::getCountriesList () const {
+    return countriesList;
 }
 
 const std::vector<Card*>& Player::getCardsList() const{

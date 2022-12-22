@@ -31,7 +31,7 @@ void EasyAi::execute() {
     Dice reAttack(0,1);
     int aiCanAttack = 1;
     int willAttack = 1;
-    std::vector<state::Country*> aiCountries = player->getCountriesLists();
+    std::vector<state::Country*> aiCountries = player->getCountriesList();
     std::vector<state::Country*> allCountries = state->getListCountires();
     std::vector<state::Country*> aiAttackCountries;
     int numConqueredCountries = 0;
