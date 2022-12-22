@@ -75,7 +75,7 @@ bool Calculation::isCountryInList (state::Country* a_country, std::vector<Countr
 
 bool Calculation::areConnected(Player* player, state::Country* depCountry, state::Country* destCountry)
 {
-    std::vector<state::Country *> playerCountry = player->getListCountry();
+    std::vector<state::Country *> playerCountry = player->getCountriesLists();
     std::vector<state::Country *> visited;
     
     std::deque<state::Country *> node_que;

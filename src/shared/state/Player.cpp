@@ -9,14 +9,14 @@ namespace state{
 
 Player::Player () {
     status = PLAYING;
-    typeplayer = HUMAN;
+    type = HUMAN;
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
-Player::Player (int m_order) {
+Player::Player (int a_id) {
     status = PLAYING;
-    order = m_order;
-    typeplayer = HUMAN;
+    id = a_id;
+    type = HUMAN;
 }
 
 Player::~Player () {
@@ -24,27 +24,27 @@ Player::~Player () {
 }
 
 void Player::addCountry (Country* country) {
-    listCountry.push_back(country);
+    countriesLists.push_back(country);
 }
 
 void Player::deleteCountry (Country* country) {
     int i = 0;
-    while(listCountry[i] -> getName() != country -> getName()){
+    while(countriesLists[i] -> getName() != country -> getName()){
         i++;
     }
-    listCountry.erase(listCountry.begin() + i);
+    countriesLists.erase(countriesLists.begin() + i);
 }
 
 void Player::addCard (Card* card) {
-    listCard.push_back(card);
+    cardsList.push_back(card);
 }
 
 void Player::deleteCard (Card* card) {
     int i = 0;
-    while(listCard[i]->getName() != card->getName()){
+    while(cardsList[i]->getName() != card->getName()){
         i++;
     }
-    listCard.erase(listCard.begin() + i);
+    cardsList.erase(cardsList.begin() + i);
 }
 
 void Player::setColor(const sf::Color& m_color){
@@ -60,7 +60,7 @@ int Player::getownTroop () {
 }
 
 bool Player::existCountry (Country country){
-    for(auto c : listCountry){
+    for(auto c : countriesLists){
         if(c->getName() == country.getName())
             return true;
     }
@@ -84,8 +84,8 @@ const std::string& Player::getName() const{
     return this->name;
 }
 
-TypePlayer Player::getTypeplayer() const{
-    return this->typeplayer;
+TypePlayer Player::getType() const{
+    return this->type;
 }
 
 /**
@@ -99,8 +99,8 @@ int Player::continentBonusTroop ()
     std::vector<int> r_presence(6,0);
     r_presence = this->presenceOnContinents();
 
-    if(listCountry.size() / 3 > 3){
-        numberBonusTroop += (listCountry.size() / 3 - 3);
+    if(countriesLists.size() / 3 > 3){
+        numberBonusTroop += (countriesLists.size() / 3 - 3);
     }
 
 
@@ -118,13 +118,13 @@ int Player::continentBonusTroop ()
 /**
  * @brief Get the number of country own by a specific player each continent
  * @param a_player A pointer on the player
- * @return vector with the number of countries in this order [Amérique du Nord, Amérique du sud, Afrique, Europe, Asie]
+ * @return vector with the number of countries in this id [Amérique du Nord, Amérique du sud, Afrique, Europe, Asie]
 */
 std::vector<int> Player::presenceOnContinents(){
     
     std::vector<int> r_presence(6,0);
     
-    for(auto country : listCountry)
+    for(auto country : countriesLists)
     {
         int countryId = country->getId();
         if(countryId < 9)
@@ -144,16 +144,16 @@ std::vector<int> Player::presenceOnContinents(){
     return r_presence;
 }
 
-const std::vector<Country*>& Player::getListCountry () const {
-    return listCountry;
+const std::vector<Country*>& Player::getCountriesLists () const {
+    return countriesLists;
 }
 
-const std::vector<Card*>& Player::getListCard() const{
-    return listCard;
+const std::vector<Card*>& Player::getCardsList() const{
+    return cardsList;
 }
 
 int Player::getOrder () {
-    return order;
+    return id;
 }
 
 }

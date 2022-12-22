@@ -25,22 +25,22 @@ CardScene::~CardScene(){
 }
 
 void CardScene::init(){
-    std::vector<state::Card*> clist = player->getListCard();
-    listCard = {};
+    std::vector<state::Card*> clist = player->getCardsList();
+    cardsList = {};
 
     for(unsigned int i = 0; i < clist.size(); i++){
         if(clist[i]->typeCard == state::TypeCard::Infantry){
             Card card(100 + 230*(i%5), 100 + 300*(i/5), "Infantry", clist[i]->getName());
-            listCard.push_back(card);
+            cardsList.push_back(card);
         }
         else if(clist[i]->typeCard == state::TypeCard::Cavalry){
             Card card(100 + 230*(i%5), 100 + 300*(i/5), "Cavalry", clist[i]->getName());
-            listCard.push_back(card);
+            cardsList.push_back(card);
         }
             
         else if(clist[i]->typeCard == state::TypeCard::Artillery){
             Card card(100 + 230*(i%5), 100 + 300*(i/5), "Artillery", clist[i]->getName());
-            listCard.push_back(card);
+            cardsList.push_back(card);
         }
     }
 }
@@ -69,7 +69,7 @@ void CardScene::display(){
     window->draw(changeb.circle);
     window->draw(change.text);
 
-    for(auto c : listCard){
+    for(auto c : cardsList){
         display_card(c);
     }
 }

@@ -96,7 +96,7 @@ void testSFML() {
             player = pList[state->getOrderPlayer()];
             //////////////////////////////////////////
             //espace de travail de l'IA
-            if(player->getTypeplayer() == BOT){
+            if(player->getType() == BOT){
                 randAI.setPlayer(player);
                 randAI.execute();
                 cout << "The AI conquered " << randAI.conqueredCountries.size() << " countries" << endl;
@@ -256,7 +256,7 @@ void testSFML() {
 
                             v_listcountry = state->getListCountires();
 
-                            v_listcard = state->getListCard();
+                            v_listcard = state->getCardsList();
 
                             gamescene.setListcountry(v_listcountry);
                             gamescene.init(pList);

@@ -40,7 +40,7 @@ UseCard::~UseCard(){
  * @return true if yes
 */
 bool UseCard::canUseCard(){
-    std::vector<state::Card *> list_card = player->getListCard();
+    std::vector<state::Card *> list_card = player->getCardsList();
     m_number_artillery = std::count_if(list_card.begin(), list_card.end(), cardType(state::Artillery));
     m_number_cavalry = std::count_if(list_card.begin(), list_card.end(), cardType(state::Cavalry));
     m_number_infantry = std::count_if(list_card.begin(), list_card.end(), cardType(state::Infantry));
@@ -64,7 +64,7 @@ int UseCard::getM_bonusTroop() const{
  * @brief Compute the number of bonus troop and delete the cards from the player cards
 */
 void UseCard::execute(){
-    std::vector<state::Card *> list_card = player->getListCard();
+    std::vector<state::Card *> list_card = player->getCardsList();
     std::vector<state::Card *>::iterator it_artillery = std::find_if(list_card.begin(), list_card.end(), cardType(state::Artillery));
     std::vector<state::Card *>::iterator it_cavalry = std::find_if(list_card.begin(), list_card.end(), cardType(state::Cavalry));
     std::vector<state::Card *>::iterator it_infantry = std::find_if(list_card.begin(), list_card.end(), cardType(state::Infantry));
@@ -72,12 +72,12 @@ void UseCard::execute(){
     if(can_use){
         if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0)){
             m_bonusTroop = 10;
-            std::cout << player->getListCard().size() << std::endl;
+            std::cout << player->getCardsList().size() << std::endl;
             player->deleteCard(*it_artillery);
             std::cout << (*it_cavalry)->getName() << std::endl;
             player->deleteCard(*it_cavalry);
             player->deleteCard(*it_infantry);
-            std::cout << player->getListCard().size() << std::endl;
+            std::cout << player->getCardsList().size() << std::endl;
         }
         else if(m_number_artillery >= 3){
             m_bonusTroop = 8;

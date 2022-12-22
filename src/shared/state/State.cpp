@@ -100,7 +100,7 @@ void State::init()
     int initialTroop = initialTroopMap[numberPlayer + numberBot];
 
     for (int i = 0; i != numberPlayer + numberBot; i++){
-        vector<Country*> playerCountries = playersList[i].getListCountry();
+        vector<Country*> playerCountries = playersList[i].getCountriesLists();
 
         // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
@@ -126,7 +126,7 @@ void State::init()
     }
 
     for(unsigned i = 0; i < cardList.size(); i++){
-        listCard.push_back(&cardList[i]);
+        cardsList.push_back(&cardList[i]);
     }
 }
 
@@ -145,7 +145,7 @@ void State::ChangePlaying () {
         IncrementTurn();
     }
 
-    if(playersList[orderPlayer].getListCountry().size() == 0){
+    if(playersList[orderPlayer].getCountriesLists().size() == 0){
         orderPlayer++;
         playersList[orderPlayer].setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())
@@ -157,8 +157,8 @@ const std::vector<Country*>& State::getListCountires() const{
     return listCountires;
 }
 
-const std::vector<Card*>& State::getListCard() const{
-    return listCard;
+const std::vector<Card*>& State::getCardsList() const{
+    return cardsList;
 }
 
 const std::vector<Player*>& State::getListPlayers() const{

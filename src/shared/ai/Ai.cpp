@@ -30,7 +30,7 @@ std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest",
 
 Ai::Ai() {
     status = state::PLAYING;
-    typeplayer = state::BOT;
+    type = state::BOT;
     difficulty = Difficulty::EASY;
 }
 
@@ -38,10 +38,10 @@ Ai::~Ai() {
     
 }
 
-Ai::Ai(int order){
-    this->order = order;
+Ai::Ai(int id){
+    this->id = id;
     status = state::PLAYING;
-    typeplayer = state::BOT;
+    type = state::BOT;
     difficulty = Difficulty::EASY;
 }
 
@@ -74,7 +74,7 @@ void Ai::execute (Difficulty difficulty){
     Calculation cal;
     int aiCanAttack = 1;
     int willAttack = 1;
-    aiCountries = player->getListCountry();
+    aiCountries = player->getCountriesLists();
     std::vector<Country*> allCountries = state->getListCountires();
 
     //un exemple comment le IA fonctionne 
