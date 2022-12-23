@@ -30,14 +30,14 @@ Reinforce::~Reinforce() {
 /**
  * @brief Set the country to perform the reinforce from
 */
-void Reinforce::setm_country (state::Country* m_country){
+void Reinforce::setM_country(const std::shared_ptr<state::Country>& m_country){
     this->m_country = m_country;
 }
 
 /**
  * @brief Set the country to reinforce
 */
-void Reinforce::setn_country (state::Country* n_country){
+void Reinforce::setN_country(const std::shared_ptr<state::Country>& m_country){
     this->n_country = n_country;
 }
 

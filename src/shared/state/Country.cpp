@@ -99,6 +99,8 @@ void Country::setColor(const sf::Color& m_color){
     color = m_color;
 }
 
+
+// TO-DO : Delete
 const sf::Color& Country::getColor() const{
     return color;
 }

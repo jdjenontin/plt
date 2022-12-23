@@ -23,13 +23,13 @@ Player::~Player () {
 
 }
 
-void Player::addCountry (Country* country) {
-    countriesList.push_back(country);
+void Player::addCountry (std::shared_ptr<state::Country>& a_country) {
+    countriesList.push_back(a_country);
 }
 
-void Player::deleteCountry (Country* country) {
+void Player::deleteCountry (std::shared_ptr<state::Country>& a_country) {
     int i = 0;
-    while(countriesList[i] -> getName() != country -> getName()){
+    while(countriesList[i] -> getId() != a_country -> getId()){
         i++;
     }
     countriesList.erase(countriesList.begin() + i);
@@ -59,9 +59,11 @@ int Player::getownTroop () {
     return ownTroop;
 }
 
+// TO-DO : Indispensable ????
+
 bool Player::existCountry (Country country){
     for(auto c : countriesList){
-        if(c->getName() == country.getName())
+        if(c->getId() == country.getId())
             return true;
     }
 
@@ -144,7 +146,7 @@ std::vector<int> Player::presenceOnContinents(){
     return r_presence;
 }
 
-const std::vector<Country*>& Player::getCountriesList () const {
+const std::vector<std::shared_ptr<Country>>& Player::getCountriesList () const {
     return countriesList;
 }
 

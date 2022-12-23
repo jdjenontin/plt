@@ -17,7 +17,7 @@ DistributeCard aiDistributecard;
 UseCard aiUsecard;
 
 //la liste de pays de joueur
-std::vector<state::Country*> aiCountries;
+std::vector<std::shared_ptr<Country>> aiCountries;
 
 //Liste de tous les pays
 std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <SFML/Graphics.hpp>
 
 using namespace std;
@@ -44,7 +45,7 @@ void GameScene::init(std::vector<state::Player *> &pList)
 
         pList[i]->setColor(color.colorList[i]);
 
-        vector<state::Country *> cList = pList[i]->getCountriesList();
+        std::vector<std::shared_ptr<state::Country>> cList = pList[i]->getCountriesList();
 
         for (unsigned j = 0; j < cList.size(); j++)
         {
@@ -152,7 +153,7 @@ void GameScene::display()
         window->draw(b.circle);
 
         // afficher des bouton de pays et aussi le nombre de troup
-        vector<state::Country *> cList = pList[j]->getCountriesList();
+        std::vector<std::shared_ptr<state::Country>> cList = pList[j]->getCountriesList();
 
         for (unsigned i = 0; i < cList.size(); i++)
         {
