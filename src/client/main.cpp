@@ -252,9 +252,9 @@ vector<state::Card*> v_listcard;
 //                         if(menuscene.getNameMenu(pos) == "start"){
 //                             state->init();
 
-//                             pList = state->getListPlayers();
+//                             pList = state->getPlayersList();
 
-//                             v_listcountry = state->getListCountires();
+//                             v_listcountry = state->getCountriesList();
 
 //                             v_listcard = state->getCardsList();
 

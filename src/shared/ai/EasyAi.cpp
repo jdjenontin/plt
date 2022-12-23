@@ -32,7 +32,7 @@
 //     int aiCanAttack = 1;
 //     int willAttack = 1;
 //     std::vector<std::shared_ptr<Country>> aiCountries = player->getCountriesList();
-//     std::vector<state::Country*> allCountries = state->getListCountires();
+//     std::vector<state::Country*> allCountries = state->getCountriesList();
 //     std::vector<std::shared_ptr<Country>> aiAttackCountries;
 //     int numConqueredCountries = 0;
 

@@ -11,11 +11,11 @@ namespace ai{
      * @param a_country The country 
      * @return List of the countries
     */
-    std::vector<state::Country*> Computation::adjacentCountries (State* state, state::Country* a_country)
+    std::vector<std::shared_ptr<state::Country>> Computation::adjacentCountries (State* state, state::Country* a_country)
     {
-        std::vector<state::Country*>  adajcents;
+        std::vector<std::shared_ptr<Country>> adajcents;
 
-        std::vector<state::Country*> allCountries = state->getListCountires();
+        std::vector<std::shared_ptr<Country>> allCountries = state->getCountriesList();
 
         for(int i=0; i<42;i++) {
             if (a_country->isAdjacent(i)) {

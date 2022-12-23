@@ -75,7 +75,7 @@ void Ai::execute (Difficulty difficulty){
     int aiCanAttack = 1;
     int willAttack = 1;
     aiCountries = player->getCountriesList();
-    std::vector<Country*> allCountries = state->getListCountires();
+    std::vector<std::shared_ptr<Country>> allCountries = state->getCountriesList();
 
     //un exemple comment le IA fonctionne 
     if(difficulty == Difficulty::EASY){
