@@ -30,4 +30,8 @@ void Scene::close () {
     isopen = false;
 }
 
+void Scene::setWindow(sf::RenderWindow* window) {
+    this->window = window;
+}
+
 }

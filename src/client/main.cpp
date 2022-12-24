@@ -20,7 +20,7 @@ using namespace sf;
 using namespace render;
 using namespace engine;
 using namespace ai;
-
+/*
 vector<Country*> v_listcountry;
 
 vector<state::Card*> v_listcard;
@@ -37,11 +37,11 @@ void testSFML() {
     circle.loadFromFile("res/button.png");
     circle.setSmooth(true);
 
-    GameScene gamescene(&window);
+    GameScene gamescene;
 
-    MenuScene menuscene(&window);
+    MenuScene menuscene;
 
-    CardScene cardscene(&window);
+    CardScene cardscene;
 
     menuscene.init();
 
@@ -243,16 +243,11 @@ void testSFML() {
                     if(menuscene.isOpen()){
                         if(menuscene.getNameMenu(pos) == "start"){
                             state->init();
-
                             pList = state->getListPlayers();
-
                             v_listcountry = state->getListCountires();
-
                             v_listcard = state->getListCard();
-
                             gamescene.setListcountry(v_listcountry);
                             gamescene.init(pList);
-
                             menuscene.close();
                             gamescene.open();
                         }
@@ -470,33 +465,16 @@ void testSFML() {
 
         window.display();
     }
-}
+}*/
 
 int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
-    testSFML();
+    State* state = new State();
+    Game game;
 
-    // Country c1("a", 1), c2("b", 2);
-    // Attack att;
-    // float win = 0, lose = 0;
-    // float winrate;
-
-    // att.setAttackCountry(&c1);
-    // att.setDefCountry(&c2);
-
-    // while(1){
-    //     c1.setNumberTroop(10);
-    //     c2.setNumberTroop(2);
-
-    //     int status = att.tripleAttack();
-    //     if(status == 1) win++;
-    //     else lose++;
-    //     cout << win << " " << lose << endl;
-    //     winrate = win/(win + lose);
-    //     cout << "win rate is :" << winrate << endl;
-    // }
-
+    game.setState(state);
+    game.begin();
 
     return 0;
 }

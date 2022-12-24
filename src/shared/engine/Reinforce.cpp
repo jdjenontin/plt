@@ -58,7 +58,7 @@ bool Reinforce::existN_country () {
 /**
  * @brief Check if a n_country is connected to n_country and add troop if yes
 */
-void Reinforce::execute(){
+int Reinforce::execute(){
 
     bool connected = state::Calculation::areConnected(player, m_country, n_country);
         
@@ -70,6 +70,7 @@ void Reinforce::execute(){
             m_country -> reduceNumberTroop(1);
         }       
     }
-
+    else return 0;
+    return 1;
 }
 }

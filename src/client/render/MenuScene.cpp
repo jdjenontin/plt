@@ -12,8 +12,7 @@ sf::Texture* c = new sf::Texture();
 
 std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 
-MenuScene::MenuScene (sf::RenderWindow* window) {
-    this->window = window;
+MenuScene::MenuScene () {
     isopen = true;
 
     c->loadFromFile("res/button.png");

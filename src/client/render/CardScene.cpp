@@ -13,9 +13,7 @@ Button gameb(20, 20, 25, sf::Color::Magenta, circle),
 
 Message change(960, 30, "change");
 
-CardScene::CardScene(sf::RenderWindow* window){
-    this->window = window;
-    
+CardScene::CardScene(){
     circle->loadFromFile("res/button.png");
     circle->setSmooth(true);
 }

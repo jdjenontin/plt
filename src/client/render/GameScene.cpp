@@ -15,9 +15,7 @@ Message cardm(17, 70, "Card");
 
 Button cardb(20, 20, 25, sf::Color::Magenta, &cir);
 
-GameScene::GameScene (sf::RenderWindow* window) {
-    this->window = window;
-
+GameScene::GameScene () {
     posCountry = {{100, 140}, {210, 135}, {204, 208}, {290, 220}, {446, 90}, {367, 227}, 
                 {208, 302}, {298, 327}, {225, 416}, {310, 480}, {327, 593}, {400, 567}, 
                 {341, 685}, {602, 525}, {695, 489}, {752, 587}, {689, 637}, {704, 748}, 

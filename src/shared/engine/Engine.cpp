@@ -2,7 +2,11 @@
 
 #include "Engine.h"
 
+#define DEBUG 1
+
 namespace engine {
+
+int bonus_troop;
 
 Engine::Engine(){
 
@@ -11,5 +15,120 @@ Engine::Engine(){
 Engine::~Engine(){
     
 }
+
+void Engine::usecard_execute(){
+    usecard.execute();
+    bonus_troop = usecard.getM_bonusTroop();
+}
+
+void Engine::distribute_execute(){
+    distributecard.execute();
+}
+
+int Engine::reinforceN_execute(){
+#ifdef DEBUG
+    std::cout << "function :" << __func__ << std::endl;
+#endif
+    reinforce.setn_country(country);
+    return reinforce.execute();
+}
+
+int Engine::reinforceM_execute(){
+#ifdef DEBUG
+    std::cout << "function :" << __func__ << std::endl;
+#endif
+    if(country->getNumberTroop() > 1)
+        reinforce.setm_country(country);
+    else return 0;
+    return 1;
+}
+
+int Engine::attackD_execute(){
+    attack.setDefCountry(country);
+    if(attack.isadjacent()){
+        attack.multipleAttack();
+    }
+    else return 0;
+
+    return 1;
+}
+
+int Engine::attackA_execute(){
+    if(country->getNumberTroop() > 1)
+        attack.setAttackCountry(country);
+    else return 0;
+
+    return 1;
+}
+
+void Engine::place_execute(){
+    place.setcountry(country);
+    place.execute();
+}
+
+void Engine::init(state::State* state){
+    this->state = state;
+    attack.setState(state);
+    distributecard.setState(state);
+}
+
+void Engine::setPlayer(state::Player* player){
+    place.setPlayer(player);
+    attack.setPlayer(player);
+    reinforce.setPlayer(player);
+    distributecard.setPlayer(player);
+    usecard.setPlayer(player);
+}
+
+void Engine::setCountry(state::Country* country){
+    this->country = country;
+}
+
+/**
+ * @brief For the process place
+*/
+int Engine::getBonus_troop(){
+    return bonus_troop;
+}
+
+/**
+ * @brief The different process in the game
+ * @param status For different process
+ * @return Detect if the process execute successfully, if yes reuturn 1, if not return 0
+*/
+int Engine::execute(int status){
+#ifdef DEBUG
+    std::cout << "function :" << __func__ << std::endl;
+#endif
+    switch (status)
+    {
+    case 0:
+    place_execute();
+        break;
+    case 1:
+    return attackA_execute();
+        break;
+    case 2:
+    return attackD_execute();
+        break;
+    case 3:
+    return reinforceM_execute();
+        break;
+    case 4:
+    return reinforceN_execute();
+        break;
+    case 5:
+    distribute_execute();
+        break; 
+    case 6:
+    usecard_execute();
+        break;           
+    default:
+        break;
+    }
+
+    return 1;
+}
+
 
 }

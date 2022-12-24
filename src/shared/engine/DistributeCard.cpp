@@ -1,5 +1,5 @@
 #include "DistributeCard.h"
-
+#include <iostream>
 
 namespace engine {
 
@@ -17,7 +17,6 @@ void DistributeCard::execute(){
         player->addCard(list_card.back());
         list_card.pop_back();
     }
-    
 }
 
 }

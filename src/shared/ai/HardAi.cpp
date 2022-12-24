@@ -3,6 +3,8 @@
 
 #include "HardAi.h"
 
+#define DEBUG 1;
+
 using namespace std;
 using namespace state;
 
@@ -26,8 +28,10 @@ HardAi::~HardAi(){
 
 void HardAi::place(){
     
-
+    
+#ifdef DEBUG
     cout << "------------------------------------------" << endl;
+#endif
 }
 
 void HardAi::attack(){

@@ -317,7 +317,6 @@ int Attack::multipleAttack(){
 void Attack::setAttackCountry (state::Country* attackCountry){
     this->attackCountry = attackCountry;
     this->canAttack = 1;
-
 }
 
 state::Country* Attack::getAttackCountry (){
