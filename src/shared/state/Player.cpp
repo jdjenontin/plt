@@ -35,11 +35,11 @@ void Player::deleteCountry (std::shared_ptr<state::Country>& a_country) {
     countriesList.erase(countriesList.begin() + i);
 }
 
-void Player::addCard (Card* card) {
+void Player::addCard (std::shared_ptr<Card>& card) {
     cardsList.push_back(card);
 }
 
-void Player::deleteCard (Card* card) {
+void Player::deleteCard (std::shared_ptr<Card>& card) {
     int i = 0;
     while(cardsList[i]->getName() != card->getName()){
         i++;
@@ -150,7 +150,7 @@ const std::vector<std::shared_ptr<Country>>& Player::getCountriesList () const {
     return countriesList;
 }
 
-const std::vector<Card*>& Player::getCardsList() const{
+const std::vector<shared_ptr<Card>>& Player::getCardsList() const{
     return cardsList;
 }
 

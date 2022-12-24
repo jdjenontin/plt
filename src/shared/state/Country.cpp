@@ -8,6 +8,13 @@ Country::Country (std::string a_name , int a_id) {
     id = a_id;
 }
 
+Country::Country (std::string a_name , int a_id, int a_posX, int a_posY)
+{
+    Country(a_name, a_id);
+    posX = a_posX;
+    posY = a_posY;
+}
+
 Country::Country()
 {
     

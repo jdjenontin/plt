@@ -25,7 +25,7 @@ CardScene::~CardScene(){
 }
 
 void CardScene::init(){
-    std::vector<state::Card*> clist = player->getCardsList();
+    std::vector<std::shared_ptr<state::Card>> clist = player->getCardsList();
     cardsList = {};
 
     for(unsigned int i = 0; i < clist.size(); i++){
