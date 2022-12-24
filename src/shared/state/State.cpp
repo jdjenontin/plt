@@ -1,6 +1,6 @@
 // TO-Do reorganize includes 
 // Remove List name
-// Create card :: Maybe move JSON object to static varianle 
+// Create card :: Maybe move JSON object to static variable 
 
 
 #include "State.h"
@@ -144,7 +144,6 @@ void State::distibuteTroops(){
         // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
 
-        // Ajout d'un nombre min de troupe à tous less territoire
         for(auto country : playerCountries){
             country -> addTroop(minTroopPerTeritory);
         }
