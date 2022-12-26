@@ -1,337 +1,173 @@
-// #include "Attack.h"
+#include "Attack.h"
+#include <functional>
+#include <iostream>
+#include <algorithm>
 
-// #include <iostream>
-// #include <random>
-// #include <chrono>
-// #include <iterator>
-// #include <algorithm>
-// #include <chrono>
-// #include <vector>
+#define DEBUG 1
 
+using namespace state;
+using namespace std;
 
-// using namespace state;
-// using namespace std;
+namespace engine {
+    Attack::Attack() {
+        dice.updateDice(1,6);
+    }
 
-// namespace engine {
+    Attack::~Attack() {
 
-// Attack::Attack() {
-//     this->attackCountry = attackCountry;
-//     this->defCountry = defCountry;
-//     this->canAttack = canAttack;
-//     this->attackType = attackType;
-//     dice6.updateDice(1,6);
-// }
+    }
 
-// Attack::Attack(bool attackType) {
-//     this->attackType = attackType;
-    
-// }
+    int Attack::attackSimple(int nAttacker, int nDefender) {
+        if (nAttacker > 3 || nDefender > 2){
+            cerr << __FUNCTION__ <<" n'est valide que pour nAttacker > 3 et nDefender > 2)" << endl;
+            exit(1);
+        }
 
-// Attack::~Attack() {
+        vector <int> attDices(nAttacker, 0);
+        vector <int> defDices(nDefender, 0);
 
-// }
+        generate(attDices.begin(), attDices.end(), bind(&Dice::thrown, &dice));
+        generate(defDices.begin(), defDices.end(), bind(&Dice::thrown, &dice));
 
-// void Attack::movetroop () {
-//     int s = attackCountry->getNumberOfTroop();
-//     if(s > 1){
-//         defCountry->addTroop(1);
-//         attackCountry->reduceTroop(1);
-//     }
-//     else{
-//         player->winAttack = false;
-//     }
-// }
+        sort(attDices.begin(), attDices.end(), greater<int>());
+        sort(defDices.begin(), defDices.end(), greater<int>());
 
-// bool Attack::existAttackCountry () {
-//     return player->existCountry(*attackCountry);
-// }
+        int nDices = min(attDices.size(), defDices.size());
 
-// bool Attack::existDefCountry () {
-//     return player->existCountry(*defCountry);
-// }
+        int defenderLoss = 0;
 
-// bool Attack::abletoattack () {
-//     this->canAttack = attackCountry->getNumberOfTroop() > 1;
-//     return attackCountry->getNumberOfTroop() > 1;
-// }
+        for(int i = 0; i < nDices; i++)
+        {
+            if(attDices[i] > defDices[i])
+            {
+                defenderLoss++;
+            }
+        }
 
-// bool Attack::isadjacent () {
-//     return attackCountry->isAdjacent(defCountry->getId());
-// }
+        return defenderLoss;
+    }
 
-// int Attack::execute (int maxAtt, int maxDef, int minAtt, int minDef) {
-//     //Comparing max die to see who wins 
-//     if(maxAtt > maxDef)
-//     {
-//         std::cout << "Attacker wins!" << std::endl;
-//         defCountry->reduceTroop(1);
-//         if (defCountry->getNumberOfTroop() == 0) 
-//         {
-//             std::cout << attackCountry->getName() << " conquered " << defCountry->getName() << std::endl;
-//             attackCountry->reduceTroop(1);
-//             std::cout << "You have "<< attackCountry->getNumberOfTroop() << " troop now"<< std::endl;
-//             defCountry->setNumberOfTroop(1);
+    // TO-DO : Can be optimized 
+    map<string,int> Attack::attackNvM(int nAttacker, int nDefender)
+    {
+        if(DEBUG)
+        {
+            cout << "---------------------------" << endl;
+            cout << __FUNCTION__ << endl;
+            cout << "Number of att : " << nAttacker << endl;
+            cout << "Number of def : " << nDefender << endl;
+        }
 
-//             state::Player* p = state->belongsto(defCountry);
-//             p->deleteCountry(defCountry);
-//             player->addCountry(defCountry);
-//             player->winAttack = true;
-//             canAttack = 0;
+        map<string,int> attackSummary;
 
-//             return 1;
-//         }
-
-//     }
-
-//     else if (maxDef >= maxAtt)
-//     {
-//         std::cout << "Defender wins!" << std::endl;
-//         attackCountry->reduceTroop(1);
-//         if (attackCountry->getNumberOfTroop() == 1)  //If the attacking country only has one troop, the attack is a failure
-//         {
-//             attackCountry->setNumberOfTroop(1);
-//             defCountry->reduceTroop(1);
-//             canAttack = 0;
-//             std::cout << defCountry->getName() << " survived the attack from " << attackCountry->getName() << std::endl;
-//             return 0;
-//         }
-//     }
-
-//     //Comparing min die to see who wins 
-//     if (minAtt > minDef)
-//     {
-//         std::cout << "Attacker wins!" << std::endl;
-//         defCountry->reduceTroop(1);
-//         if (defCountry->getNumberOfTroop() == 0) 
-//         {
-//             std::cout << attackCountry->getName() << " conquered " << defCountry->getName() << std::endl;
-//             attackCountry->reduceTroop(1);
-//             std::cout << "You have "<< attackCountry->getNumberOfTroop() << " troop now"<< std::endl;
-//             defCountry->setNumberOfTroop(1);
-
-//             state::Player* p = state->belongsto(defCountry);
-//             p->deleteCountry(defCountry);
-//             player->addCountry(defCountry);
-//             player->winAttack = true;
-//             canAttack = 0;
-
-//             return 1;
-//         }
-//         return 0;
-//     }
-
-//     else if (minDef >= minAtt)
-//     {
-//         std::cout << "Defender wins!" << std::endl;
-//         attackCountry->reduceTroop(1);
-//         if (attackCountry->getNumberOfTroop() == 1) 
-//         {
-//             attackCountry->setNumberOfTroop(1);
-//             defCountry->reduceTroop(1);
-//             canAttack = 0;
-//             std::cout << defCountry->getName() << " survived the attack from " << attackCountry->getName() << std::endl;
-//             return 0;
-//         }
-//         return 0;
-//     }
-
-//     return 0;
-// }
-
-// //Different attack types
-// int Attack::soloAttack(){
-
-//     int att, def;
-//     int maxAtt, maxDef = 0;
-//     int diceAtt = 0;
-
-//     att = attackCountry->getNumberOfTroop();
-
-//     std::cout << "attacker forces :"<< att << std::endl;
-
-//     def = defCountry->getNumberOfTroop();
-
-//     std::cout << "defender forces :"<< def << std::endl;
-
-
-//     //Generating dice for the attacker
-//     diceAtt = dice6.thrown();
-//     maxAtt = diceAtt;
-//     std::cout << "attacker's die numbers :"<< diceAtt << std::endl;
-
-//     //Generating die for the defender
-//     maxDef = dice6.thrown();   
-//     std::cout << "defender's dice number :"<< maxDef << std::endl;
-
-//     //Comparing die to see who wins 
-//     if(maxAtt > maxDef){
-//         //Attacker wins
-//         std::cout << "Attacker wins!" << std::endl;
-//         def -= 1;
-//         defCountry->reduceTroop(1);
-//         if (defCountry->getNumberOfTroop() == 0) {
-//             std::cout << attackCountry->getName() << " conquered " << defCountry->getName() << std::endl;
-//             attackCountry->reduceTroop(1);
-//             std::cout << "You have "<< attackCountry->getNumberOfTroop() << " troops now"<< std::endl;
-//             defCountry->setNumberOfTroop(1);
-
-//             state::Player* p = state->belongsto(defCountry);
-//             p->deleteCountry(defCountry);
-//             player->addCountry(defCountry);
-//             player->winAttack = true;
-
-//             return 1;
-//         }
-//         return 0;
-//     }
-
-//     else{
-//         //Defender wins
-//         std::cout << "Defender wins!" << std::endl;
-//         att -= 1;
-//         attackCountry->reduceTroop(1);
-//         if (attackCountry->getNumberOfTroop() == 1) {
-//             attackCountry->setNumberOfTroop(1);
-//             canAttack = 0;
-//             std::cout << defCountry->getName() << " survived the attack from " << attackCountry->getName() << std::endl;
-
-//             return 0;
-//         }
-//         return 0;
-//     }
-// }
-
-// int Attack::doubleAttack(){
-
-//     int att, def;
-//     int att1, att2, def1, def2, maxAtt, minAtt, maxDef, minDef = 0;
-
-//     att = attackCountry->getNumberOfTroop();
-//     std::cout << "attacker forces :"<< att << std::endl;
-
-//     def = defCountry->getNumberOfTroop();
-//     std::cout << "defender forces :"<< def << std::endl;
-
-//     //Generating die for the attacker
-//     att1 = dice6.thrown();
-//     att2 = dice6.thrown();
-//     std::cout << "attacker's die numbers :"<< att1 << "\t" << att2 << std::endl;
-//     vector<int> allAttackDie = {att1, att2};
-//     maxAtt = std::max(att1, att2);
-//     minAtt = std::min(att1, att2);
-
-
-//     //Generating die for the defender
-//     if (defCountry->getNumberOfTroop() == 2)
-//     {
-//         def1 = dice6.thrown();
-//         def2 = dice6.thrown();
-//         maxDef = std::max(def1, def2);
-//         minDef = std::min(def1, def2);
-//         std::cout << "defender's dice number :"<< maxDef << "\t" << minDef << std::endl;
-//     } 
-
-//     else 
-//     {
-//         maxDef = dice6.thrown();
-//         minDef = 0;  
-//         std::cout << "defender's dice number :"<< maxDef << std::endl;
-
-//     }
-
-//     return execute(maxAtt, maxDef, minAtt, maxDef);
-// }
-
-// int Attack::tripleAttack(){
-//     int att, def;
-//     int numberDieDef, maxAtt1, maxAtt2, maxDef1, maxDef2, maxAtt, minAtt, maxDeff, minDeff = 0;
-
-//     att = attackCountry->getNumberOfTroop();
-//     std::cout << "attacker forces :"<< att << std::endl;
-
-//     def = defCountry->getNumberOfTroop();
-
-//     if (def > 1){
-//         numberDieDef = 2;
-//     }
-
-//     else numberDieDef = 1;
-//     std::cout << "defender forces :"<< def << std::endl;
-
-//     //Generating die for the attacker
-//     int diceAtt1 = dice6.thrown();
-//     int diceAtt2 = dice6.thrown();
-//     int diceAtt3 = dice6.thrown();
-    
-//     maxAtt1 = std::max(diceAtt1, diceAtt2);
-//     maxAtt2 = std::max(std::min(diceAtt1, diceAtt2), diceAtt3);
-//     std::cout << "attacker's die numbers :"<< diceAtt1 << "\t" << diceAtt2 << "\t" << diceAtt3 << std::endl;
-
-
-//     //Generating die for the defender
-//     if (numberDieDef == 2)
-//     {
-//         maxDef1 = dice6.thrown();
-//         maxDef2 = dice6.thrown();
-//         maxDeff = std::max(maxDef1, maxDef2);
-//         minDeff = std::min(maxAtt1, maxDef2);
-//         std::cout << "defender's dice number :"<< maxDef1 << "\t" << maxDef2 << std::endl;
-//     } 
-
-//     else 
-//     {
-//         maxDeff = dice6.thrown();   
-
-//         std::cout << "defender's dice number :"<< maxDeff << std::endl;
-//     }
-
-//     maxAtt = std::max(maxAtt1, maxAtt2);
-//     minAtt = std::min(maxAtt1, maxAtt2);
-
-//     return execute(maxAtt, maxDeff, minAtt, minDeff);
-// }
-
-// int Attack::multipleAttack(){
-//     //Tant qu'on peux attaquer, on attaque avec le nombre maximum de troupes
-//     while(canAttack){
-//         int numAtt = 0;
-//         if(attackCountry->getNumberOfTroop() > 3){
-//             numAtt = tripleAttack();
-//         }
-
-//         else if(attackCountry->getNumberOfTroop() == 3){
-//             numAtt = doubleAttack();
-//         }
-
-//         else if(attackCountry->getNumberOfTroop() == 2){
-//             numAtt = soloAttack();
-//         }
+        int defenderLoos(0), attackerLoos(0), defLoos(0), nDices(0);
         
-//         return numAtt;
-//     }
-//     return 1;
-// }
+        while((nAttacker > 0) & (nDefender > 0)){
+            if((nAttacker <= 3) & (nDefender <= 2)){
+                nDices = min(nAttacker, nDefender);
+                defLoos = attackSimple(nAttacker, nDefender);
+            }
+            else if((nAttacker > 3) & (nDefender <= 2)){
+                nDices = min(nAttacker, nDefender);
+                defLoos = attackSimple(3, nDefender);
+            }
+            else if((nAttacker <= 3 )& (nDefender > 2)){
+                nDices = min(nAttacker, nDefender);
+                defLoos = attackSimple(nAttacker, 2);
+            }
+            else{
+                nDices = 2;
+                defLoos = attackSimple(3, 2);
+            }
+            
+            nDefender -= defLoos;
+            defenderLoos += defLoos;
 
+            nAttacker -= (nDices-defLoos);
+            attackerLoos += (nDices - defLoos);
+        }
 
-// //Getters Setters
-// void Attack::setAttackCountry (state::Country* attackCountry){
-//     this->attackCountry = attackCountry;
-//     this->canAttack = 1;
+        // Attack summary 
+        attackSummary["win"] = (int)(nDefender == 0);
+        attackSummary["attackerLoos"] = attackerLoos;
+        attackSummary["defenderLoos"] = defenderLoos;
 
-// }
+        if(DEBUG)
+        {
+            cout << "## Summary" << endl;
+            for (auto it = attackSummary.begin(); it != attackSummary.end(); it++) {
+                cout << it->first << ": " << it->second << endl;
+            }
+        }
 
-// state::Country* Attack::getAttackCountry (){
-//     return attackCountry;
-// }
+        return attackSummary;
+    }
 
-// void Attack::setDefCountry (state::Country* defCountry){
-//     this->defCountry = defCountry;
-// }
+    // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
+    bool Attack::ableToAttack () {
+        bool isOwner = attackCountry->getOwnerId() == player->getId();
+        bool isntOwner = defCountry->getOwnerId() == player->getId();
 
+        bool adjacent = attackCountry->isAdjacent(defCountry->getId());
+        bool haveTroop = attackCountry->getNumberOfTroop() > 1;
 
-// state::Country* Attack::getDefCountry (){
-//     return defCountry;
-// }
+        return adjacent & haveTroop & isOwner & isntOwner;
+    }
 
-// }
+    void Attack::updateState(map<string,int> attackSummary )
+    {
+        attackCountry->reduceTroop(attackSummary["attackerLoos"]);
+        defCountry->reduceTroop(attackSummary["defenderLoos"]);
+
+        if(attackSummary["win"])
+        {
+            int defPlayerId = defCountry->getOwnerId();
+            shared_ptr<state::Player> defPlayer = state->getPlayersList()[defPlayerId];
+            defPlayer->deleteCountry(defCountry);
+            player->addCountry(defCountry);
+            this->moveTroop();
+        }
+    }
+
+    void Attack::moveTroop () {
+        int s = attackCountry->getNumberOfTroop();
+        if(s > 1){
+            defCountry->addTroop(1);
+            attackCountry->reduceTroop(1);
+        }
+    }
+
+    void Attack::execute()
+    {
+        if(this->ableToAttack()){
+            int nAtt = attackCountry->getNumberOfTroop()-1;
+            int nDef = defCountry->getNumberOfTroop();
+            map<string,int> attackSummary = this->attackNvM(nAtt, nDef);
+            this->updateState(attackSummary);
+        }
+        else
+        {
+            cout << "Attack impossible" << endl;
+        }
+        
+    }
+
+    //Getters Setters
+    void Attack::setAttackCountry(const std::shared_ptr<state::Country>& attackCountry){
+        this->attackCountry = attackCountry;
+    }
+
+    const std::shared_ptr<state::Country>& Attack::getAttackCountry() const{
+        return attackCountry;
+    }
+
+    void Attack::setDefCountry(const std::shared_ptr<state::Country>& defCountry){
+        this->defCountry = defCountry;
+    }
+
+    const std::shared_ptr<state::Country>& Attack::getDefCountry() const{
+        return defCountry;
+    }
+    
+}
 

@@ -17,13 +17,16 @@
 
 #include <fstream>
 #include <json/json.h>
+#include <unistd.h>
 
 using namespace std;
 using namespace ai;
 
 namespace state
 {
-    
+
+const string jsonPath = "res/countries.json";
+
 State::State(){
     this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 }
@@ -35,8 +38,9 @@ State::~State(){
 void State::init()
 {
     this->buildCountries();
+    this->createPlayers();
     this->distributeCountries();
-    this->distibuteTroops(); 
+    this->distibuteTroops();
 }
 
 
@@ -47,6 +51,10 @@ Json::Value State::jsonParser(std::string a_path){
     std::ifstream file(a_path);
     if (!file) {
         std::cerr << "Error opening file" << std::endl;
+        char buffer[FILENAME_MAX];
+        if (getcwd(buffer, FILENAME_MAX) != NULL) {
+            std::cout << "Current working directory: " << buffer << std::endl;
+        } 
         exit(1);
     }
 
@@ -106,7 +114,7 @@ int State::getOrderPlayer() const{
 void State::buildCountries(){
 
     // Parse the JSON file
-    Json::Value root = jsonParser("../res/countries.json");
+    Json::Value root = jsonParser(jsonPath);
 
     // Iterate through the keys and values
     for (const auto& key : root.getMemberNames()) {
@@ -119,7 +127,7 @@ void State::buildCountries(){
 
 void State::buildCards(){
     // Parse the JSON file
-    Json::Value root = jsonParser("../res/countries.json");
+    Json::Value root = jsonParser(jsonPath);
 
     TypeCard cardTypes[] = {Cavalry, Artillery, Infantry};
     // Iterate through the keys and values
@@ -148,11 +156,13 @@ void State::distributeCountries(){
     auto rng = std::default_random_engine(seed);
 
     std::shuffle(cp_countriesList.begin(), cp_countriesList.end(), rng);
+
     
     int i = 0;
 
     for(auto& country : cp_countriesList){
         playersList[i]->addCountry(country);
+        
         i++;
         i%=nbOfPlayer;
     }

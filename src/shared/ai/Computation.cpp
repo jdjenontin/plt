@@ -11,7 +11,7 @@ namespace ai{
      * @param a_country The country 
      * @return List of the countries
     */
-    std::vector<std::shared_ptr<state::Country>> Computation::adjacentCountries (State* state, state::Country* a_country)
+    std::vector<std::shared_ptr<state::Country>> Computation::adjacentCountries (std::shared_ptr<state::State>& state, std::shared_ptr<state::Country> a_country)
     {
         std::vector<std::shared_ptr<Country>> adajcents;
 
@@ -33,7 +33,7 @@ namespace ai{
      * @param a_listCountry The list to check in
      * @return true if the country is in the list, false if not
     */
-    bool Computation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
+    bool Computation::isCountryInList (std::shared_ptr<state::Country>& a_country, std::vector<std::shared_ptr<state::Country>>& a_listCountry){
         for(auto country : a_listCountry){
             std::cout << country->getId() << a_country->getId() << std::endl;
             if(country->getId() == a_country->getId())

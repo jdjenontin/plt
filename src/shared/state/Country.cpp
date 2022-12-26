@@ -102,15 +102,15 @@ void Country::reduceTroop (int a_nbTroop) {
     numberOfTroop -= a_nbTroop;
 }
 
-void Country::setColor(const sf::Color& m_color){
-    color = m_color;
-}
+// void Country::setColor(const sf::Color& m_color){
+//     color = m_color;
+// }
 
 
-// TO-DO : Delete
-const sf::Color& Country::getColor() const{
-    return color;
-}
+// // TO-DO : Delete
+// const sf::Color& Country::getColor() const{
+//     return color;
+// }
 
 bool Country::troopComparaison(std::shared_ptr<Country>& a, std::shared_ptr<Country>& b)
 {
@@ -122,5 +122,12 @@ bool Country::idComparaison(std::shared_ptr<Country>& a, std::shared_ptr<Country
     return a->id < b->id;
 }
 
+
+void Country::print()
+{
+    std::cout << "----"<< name << " : " << id << "----"<<std::endl;
+    std::cout << "Number of troop: " << numberOfTroop << std::endl;
+    std::cout << "Owner          : " << ownerId << std::endl;
+}
 
 }

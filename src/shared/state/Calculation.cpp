@@ -18,14 +18,6 @@ Calculation::~Calculation () {
 
 }
 
-
-int Calculation::throwdice () {
-    srand(time(0));
-    std::cout << rand() << std::endl;
-    return (rand() % 6 + 1);
-}
-
-
 /*
 * Generate a shuffle list containing a list of integer for 0 to numberOfElement
 */
@@ -70,7 +62,7 @@ bool Calculation::isCountryInList (std::shared_ptr<Country>& a_country, std::vec
  * @return true if both countries are connected
 */
 
-bool Calculation::areConnected(Player* player, std::shared_ptr<Country>& depCountry, std::shared_ptr<Country>& destCountry)
+bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr<Country>& depCountry, std::shared_ptr<Country>& destCountry)
 {
     std::vector<std::shared_ptr<Country>> playerCountry = player->getCountriesList();
     std::vector<std::shared_ptr<Country>> visited;

@@ -6,6 +6,11 @@
 using namespace std;
 
 namespace state{
+// Constants variables
+// TO-DO : Complete and change magic numbers 
+
+const int totalAsia = 12;
+
 
 Player::Player () {
     status = PLAYING;
@@ -23,23 +28,25 @@ Player::~Player () {
 
 }
 
-void Player::addCountry (std::shared_ptr<state::Country>& a_country) {
+void Player::addCountry (shared_ptr<state::Country>& a_country) {
+    a_country->setOwnerId(id);
     countriesList.push_back(a_country);
 }
 
-void Player::deleteCountry (std::shared_ptr<state::Country>& a_country) {
+void Player::deleteCountry (shared_ptr<state::Country>& a_country) {
     int i = 0;
     while(countriesList[i] -> getId() != a_country -> getId()){
         i++;
     }
+    a_country->setOwnerId(-1); // -1 error id
     countriesList.erase(countriesList.begin() + i);
 }
 
-void Player::addCard (std::shared_ptr<Card>& card) {
+void Player::addCard (shared_ptr<Card>& card) {
     cardsList.push_back(card);
 }
 
-void Player::deleteCard (std::shared_ptr<Card>& card) {
+void Player::deleteCard (shared_ptr<Card>& card) {
     int i = 0;
     while(cardsList[i]->getName() != card->getName()){
         i++;
@@ -47,15 +54,15 @@ void Player::deleteCard (std::shared_ptr<Card>& card) {
     cardsList.erase(cardsList.begin() + i);
 }
 
-void Player::setColor(const sf::Color& m_color){
-    color = m_color;
-}
+// void Player::setColor(const sf::Color& m_color){
+//     color = m_color;
+// }
 
-const sf::Color& Player::getColor() const{
-    return color;
-}
+// const sf::Color& Player::getColor() const{
+//     return color;
+// }
 
-int Player::getownTroop () {
+const int & Player::getOwnTroop() const {
     return ownTroop;
 }
 
@@ -78,11 +85,11 @@ GameStatus Player::getStatus() const{
     return this->status;
 }
 
-void Player::setName(const std::string& name){
+void Player::setName(const string& name){
     this->name = name;
 }
 
-const std::string& Player::getName() const{
+const string& Player::getName() const{
     return this->name;
 }
 
@@ -98,7 +105,7 @@ int Player::continentBonusTroop ()
 {
     int numberBonusTroop(3);
 
-    std::vector<int> r_presence(6,0);
+    vector<int> r_presence(6,0);
     r_presence = this->presenceOnContinents();
 
     if(countriesList.size() / 3 > 3){
@@ -122,9 +129,9 @@ int Player::continentBonusTroop ()
  * @param a_player A pointer on the player
  * @return vector with the number of countries in this id [Amérique du Nord, Amérique du sud, Afrique, Europe, Asie]
 */
-std::vector<int> Player::presenceOnContinents(){
+vector<int> Player::presenceOnContinents(){
     
-    std::vector<int> r_presence(6,0);
+    vector<int> r_presence(6,0);
     
     for(auto country : countriesList)
     {
@@ -146,16 +153,29 @@ std::vector<int> Player::presenceOnContinents(){
     return r_presence;
 }
 
-const std::vector<std::shared_ptr<Country>>& Player::getCountriesList () const {
+const vector<shared_ptr<Country>>& Player::getCountriesList () const {
     return countriesList;
 }
 
-const std::vector<shared_ptr<Card>>& Player::getCardsList() const{
+const vector<shared_ptr<Card>>& Player::getCardsList() const{
     return cardsList;
 }
 
-int Player::getOrder () {
+int Player::getId() const {
     return id;
+}
+
+void Player::print()
+{
+    cout << "---- " << "Player" << id << "----" << endl;
+    cout << "Number of country : " << countriesList.size() << endl; 
+    cout << "Number of card    : " << cardsList.size() << endl; 
+    cout << "(Countries, troop)" << endl; 
+    for(auto& country : countriesList){
+        cout << "(" << country->getName() <<","<< country->getNumberOfTroop()<<") ";
+    }
+
+    cout<<endl;
 }
 
 }

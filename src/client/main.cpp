@@ -199,7 +199,7 @@ vector<state::Card*> v_listcard;
 //                             attack.setAttackCountry(gamescene.findCountry(pos));
 //                             if(gamescene.existCountry(pos)){
 //                                 if(attack.existAttackCountry()){
-//                                     if(attack.abletoattack()){
+//                                     if(attack.ableToAttack()){
 //                                         m3.setstrMessage(gamescene.findCountry(pos)->getName());    
 //                                         status++;
 //                                     }
@@ -296,7 +296,7 @@ vector<state::Card*> v_listcard;
 //                     // si le joueur gagne, il peut bouger ses troup en utilisant le bouton a droit
 //                     if(gamescene.isOpen()){
 //                         if(player->winAttack){
-//                             attack.movetroop();
+//                             attack.moveTroop();
 //                         }
 //                         // si le joueur veut rechoisir le pays attaquant, il peut utiliser le bouton a droit
 //                         if(status == 2)
@@ -483,6 +483,24 @@ vector<state::Card*> v_listcard;
 int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
-    //testSFML();
+    shared_ptr<State> state (new State());
+    state->nbOfPlayer = 3;
+    state->init();
+
+    std::vector<shared_ptr<Player>> players = state->getPlayersList();
+
+    for(auto& player : players)
+    {
+        player->print();
+    }
+
+    Attack att;
+    att.setPlayer(players[0]);
+    att.setAttackCountry(players[0]->getCountriesList()[0]);
+    att.setDefCountry(players[0]->getCountriesList()[0]);
+    att.setState(state);
+
+    att.execute();
+
     return 0;
 }
