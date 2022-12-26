@@ -1,23 +1,17 @@
 // TO-Do reorganize includes 
-// Remove List name
-// Create card :: Maybe move JSON object to static variable 
-
-
-#include "State.h"
-#include <iostream>
-#include <map>
-
-#include <random>
-#include <SFML/Graphics.hpp>
-
-#include "Dice.h"
-#include "Calculation.h"
-
-#include "chrono"
 
 #include <fstream>
 #include <json/json.h>
 #include <unistd.h>
+#include <iostream>
+#include <map>
+#include <chrono>
+#include <random>
+
+#include "State.h"
+#include "Dice.h"
+#include "Calculation.h"
+
 
 using namespace std;
 using namespace ai;
@@ -43,32 +37,6 @@ void State::init()
     this->distibuteTroops();
 }
 
-
-/**
- * @brief Create a json object using a path
-*/
-Json::Value State::jsonParser(std::string a_path){
-    std::ifstream file(a_path);
-    if (!file) {
-        std::cerr << "Error opening file" << std::endl;
-        char buffer[FILENAME_MAX];
-        if (getcwd(buffer, FILENAME_MAX) != NULL) {
-            std::cout << "Current working directory: " << buffer << std::endl;
-        } 
-        exit(1);
-    }
-
-    // Parse the JSON file
-    Json::Value root;
-    Json::CharReaderBuilder builder;
-    std::string errors;
-    if (!Json::parseFromStream(builder, file, &root, &errors)) {
-        std::cerr << "Error parsing JSON: " << errors << std::endl;
-        exit(1);
-    }
-
-    return root;
-}
 
 void State::IncrementTurn () {
     turn++;
@@ -113,10 +81,8 @@ int State::getOrderPlayer() const{
 
 void State::buildCountries(){
 
-    // Parse the JSON file
-    Json::Value root = jsonParser(jsonPath);
+    Json::Value root = FileOps::jsonParser(jsonPath);
 
-    // Iterate through the keys and values
     for (const auto& key : root.getMemberNames()) {
         countriesList.push_back(std::shared_ptr<Country>(new Country(key, 
                                                                     root[key]["id"].asInt())));
@@ -126,11 +92,11 @@ void State::buildCountries(){
 }
 
 void State::buildCards(){
-    // Parse the JSON file
-    Json::Value root = jsonParser(jsonPath);
+
+    Json::Value root = FileOps::jsonParser(jsonPath);
 
     TypeCard cardTypes[] = {Cavalry, Artillery, Infantry};
-    // Iterate through the keys and values
+
     for (const auto& key : root.getMemberNames()) {
         int typeId = root[key]["card"].asInt();
         cardsList.push_back(std::shared_ptr<Card>(new Card(key,

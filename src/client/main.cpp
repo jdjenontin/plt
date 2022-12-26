@@ -480,12 +480,25 @@ vector<state::Card*> v_listcard;
 //     }
 // }
 
+
+// TO-DO : Test of attacks !
 int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
     shared_ptr<State> state (new State());
     state->nbOfPlayer = 3;
     state->init();
+    std::cout << "cell" << std::endl;
+
+    std::vector<std::vector<bool>> mat = FileOps::csvParser("res/adjacentMat.txt");
+
+    std::vector<shared_ptr<Country>> countries = state->getCountriesList();
+
+    std::cout << "0 et 12 :" << countries[0]->isAdjacent(12) << endl;
+    std::cout << "0 et 41 :" << countries[0]->isAdjacent(41) << endl;
+    std::cout << "1 et 2 :" << countries[1]->isAdjacent(2) << endl;
+    std::cout << "2 et 1 :" << countries[1]->isAdjacent(2) << endl;
+    std::cout << "41 et 0 :" << countries[41]->isAdjacent(0) << endl;
 
     std::vector<shared_ptr<Player>> players = state->getPlayersList();
 
