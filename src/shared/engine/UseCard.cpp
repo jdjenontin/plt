@@ -44,11 +44,6 @@ bool UseCard::canUseCard(){
     m_number_artillery = std::count_if(list_card.begin(), list_card.end(), cardType(state::Artillery));
     m_number_cavalry = std::count_if(list_card.begin(), list_card.end(), cardType(state::Cavalry));
     m_number_infantry = std::count_if(list_card.begin(), list_card.end(), cardType(state::Infantry));
-
-    
-
-    
-
     
     if ((m_number_artillery > 0 && m_number_cavalry > 0 && m_number_infantry > 0) || m_number_artillery >=3 || m_number_cavalry >=3 || m_number_infantry>=3)
         return true;

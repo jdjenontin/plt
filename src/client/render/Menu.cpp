@@ -1,6 +1,10 @@
 #include "Menu.h"
 
+#include <iostream>
+
 namespace render {
+
+sf::Texture button;
 
 Menu::Menu (int x, int y) {
     position.x = x;
@@ -16,15 +20,39 @@ Menu::Menu (int x, int y, std::string name) {
 
     size.x = 200;
     size.y = 50;
+    button.loadFromFile("res/m_button.png");
 
     this->name = name;
     position.x = x;
     position.y = y;
+    float t = (float)name.size() / 2;
 
-    message = new Message(x - 50, y - 13, name);
+    this->message = new Message(x - t*10 - 8, y - 14, name);
+    this->message->setColor(sf::Color::White);
     rectangle.setSize(size);
     rectangle.setPosition(x - 100, y - 25);
-    rectangle.setFillColor(sf::Color::Green);
+    rectangle.setTexture(&button);
+}
+
+Menu::Menu (int x, int y, int length, int height, sf::Texture* texture, std::string name){
+    sf::Vector2f size(length, height);
+    position.x = x;
+    position.y = y;
+
+    this->name = name;
+    float t = (float)name.size() / 2;
+    this->message = new Message(x - t*10 - 8, y - 14, name);
+    this->message->setColor(sf::Color::White);
+    rectangle.setSize(size);
+    rectangle.setPosition(x - length/2, y - height/2);
+    rectangle.setTexture(texture);
+}
+
+void Menu::addMessage (int x, int y, int size, std::string message, sf::Color color){
+    this->message = new Message(x, y, message);
+    this->message->setColor(color);
+    this->message->setSize(size);
+    this->name = message;
 }
 
 const sf::RectangleShape& Menu::getRectangle() const{

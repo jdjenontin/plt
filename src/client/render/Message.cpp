@@ -5,10 +5,12 @@
 #include <iostream>
 #include <string>
 
+#define FONT_PATH "res/arial.ttf"
+
 namespace render{
 
 Message::Message(){
-    if (!font.loadFromFile("res/arial/arial.ttf"))
+    if (!font.loadFromFile(FONT_PATH))
         return;
     text.setFillColor(color.Black);
     text.setFont(font);
@@ -21,7 +23,7 @@ Message::~Message(){
 }
 
 Message::Message(int x, int y){
-    if (!font.loadFromFile("res/arial/arial.ttf"))
+    if (!font.loadFromFile(FONT_PATH))
         return;
 
     position.x = x;
@@ -34,7 +36,7 @@ Message::Message(int x, int y){
 }
 
 Message::Message(int x, int y, std::string string){
-    if (!font.loadFromFile("res/arial/arial.ttf"))
+    if (!font.loadFromFile(FONT_PATH))
         return;
 
     position.x = x;
@@ -49,7 +51,7 @@ Message::Message(int x, int y, std::string string){
 }
 
 Message::Message(int x, int y, std::string string, sf::Color color){
-    if (!font.loadFromFile("res/arial/arial.ttf"))
+    if (!font.loadFromFile(FONT_PATH))
         return;
 
     position.x = x;
@@ -65,7 +67,7 @@ Message::Message(int x, int y, std::string string, sf::Color color){
 
 
 Message::Message (int x, int y, std::string string, bool m_display){
-    if (!font.loadFromFile("res/arial/arial.ttf"))
+    if (!font.loadFromFile(FONT_PATH))
         return;
 
     position.x = x;
@@ -95,6 +97,10 @@ void Message::setintMessage (int message){
     m_flux << message;
 
     text.setString(m_flux.str());
+}
+
+void Message::setSize(int size){
+    text.setCharacterSize(size);
 }
 
 void Message::replaceMessage (std::string message){

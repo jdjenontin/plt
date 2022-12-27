@@ -26,14 +26,30 @@ using namespace render;
 using namespace engine;
 using namespace ai;
 
+// La liste de pays recupere dans le state
 vector<Country*> v_listcountry;
+// La liste de carte recupere dans le state
 vector<state::Card*> v_listcard;
+// La liste de player recupere dans le state
 vector<Player*> pList;
+// Le joueur actuel
 Player* player;
-Country* country;
+// Le pays que le joueur choisi pendant son tour
+// Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
+Country *country, *country_a, *country_d;
+// Le nombre de bonus troop recupere chaque tour
 int bonus_troop;
+// Le status correspond trois evenement : place, attack et reinforce
 int status = 0;
+// Des qu'on passe le joueur suivant, il faut reinitialiser le bonus troop et les status, donc il faut un parametre initPlayer 
+// pour dire s'il est initialise
 bool initPlayer = false;
+
+// Les quatre chiffre pour indiquer si le pays est choisi
+int attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+
+// Des messages pour etre affiche dans le gameMenu
+Message *m1, *m2, *m3, *m4, *m5, *m6, *m7;
 
 namespace render{
 
@@ -46,21 +62,22 @@ Game::~Game(){
 }
 
 void Game::reinforce_event(){
-    static int m = 0, n = 0;
-
     if(player->existCountry(*country)){
-        if(m == 0)   m = engine.execute(REINFORCE_M);
-        else    n = engine.execute(REINFORCE_N);
+        if(reinforce_m == 0)   reinforce_m = engine.execute(REINFORCE_M);
+        else    reinforce_n = engine.execute(REINFORCE_N);
     }
 }
 
 void Game::attack_event(){
-    int a = 0, d = 0;
-
-    if(player->existCountry(*country))
-        a = engine.execute(ATTACK_A);
-    else
-        d = engine.execute(ATTACK_D);
+    if(player->existCountry(*country)){
+        attack_a = engine.execute(ATTACK_A);
+        country_a = country;
+    }
+    else{
+        attack_d = engine.execute(ATTACK_D);
+        country_d = country;
+    }
+        
 }
 
 
@@ -75,7 +92,7 @@ void Game::place_event(){
  * @brief Change the state for the country event
 */
 void Game::change_status(){
-    status = (status < 7) ? (status + 1) : 0;
+    status = (status < 2) ? (status + 1) : status;
 }
 
 /**
@@ -107,6 +124,7 @@ void Game::country_event(){
 */
 void Game::init_player(){
     bonus_troop = player->continentBonusTroop();
+    attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
     initPlayer = true;
 }
 
@@ -114,7 +132,7 @@ void Game::init_player(){
  * @brief Init the menu before opening the window
 */
 void Game::init_menu(){
-    menuScene.init();
+    menuScene.init_main();
     menuScene.setWindow(window);
 }
 
@@ -143,7 +161,7 @@ void Game::init_state(){
 */
 void Game::menuScene_event(int button){
     if(button == LEFT){
-        if(menuScene.getNameMenu(pos) == "start"){
+        if(menuScene.getNameMenu(pos) == "Start"){
             init_state();
     #ifdef DEBUG
             std::cout << "state init !" << std::endl;
@@ -153,25 +171,31 @@ void Game::menuScene_event(int button){
             menuScene.close();
             gameScene.open();
         }
-        else if(menuScene.getNameMenu(pos) == "addplayer"){
+        else if(menuScene.getNameMenu(pos) == "Option")
+            menuScene.init_option();
+        else if(menuScene.getNameMenu(pos) == "Quit")
+            window->close();
+        else if(menuScene.getNameMenu(pos) == "Back")
+            menuScene.init_main();
+        else if(menuScene.getNameMenu(pos) == "AddHuman"){
             if(state->numberPlayer + state->numberBot < 5){
                 state->numberPlayer++;
                 menuScene.addplayer();
             }
         }
-        else if(menuScene.getNameMenu(pos) == "deleteplayer"){
+        else if(menuScene.getNameMenu(pos) == "DeleteHuman"){
             if(state->numberPlayer > 1){
                 state->numberPlayer--;
                 menuScene.deleteplayer();
             } 
         }
-        else if(menuScene.getNameMenu(pos) == "addbot"){
+        else if(menuScene.getNameMenu(pos) == "AddBot"){
             if(state->numberPlayer + state->numberBot < 5){
                 state->numberBot++;
                 menuScene.addbotplayer();
             }
         }
-        else if(menuScene.getNameMenu(pos) == "deletebot"){
+        else if(menuScene.getNameMenu(pos) == "DeleteBot"){
             if(state->numberBot > 0){
                 state->numberBot--;
                 menuScene.deletebotplayer();
@@ -180,6 +204,18 @@ void Game::menuScene_event(int button){
     }
     else if(button == RIGHT){
 
+    }
+}
+
+void Game::gameMenuEvent(){
+    if(abs(pos.x - 1735) < 185 && abs(pos.y - 960) < 40){
+        change_status();
+    }
+    else if(abs(pos.x - 1735) < 185 && abs(pos.y - 1040) < 40){
+        state->ChangePlaying();
+        engine.execute(DISTRIBUTE);
+        status = 0;
+        initPlayer = false;
     }
 }
 
@@ -196,10 +232,16 @@ void Game::gameScene_event(int button){
         country = gameScene.findCountry(pos);
         if(country)
             country_event();
+        else
+            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+        gameMenuEvent();
     }
     else if(button == RIGHT){
-        // For test 
-        change_status();
+        if(status == ATTACK && attack_a == 1 && attack_d == 1){
+            country_a->reduceNumberTroop(1);
+            country_d->addNumberTroop(1);
+        }
+
     }
 }
 
@@ -271,12 +313,52 @@ void Game::mouse_event(Event* mouse){
     }
 }
 
+void Game::updateMessage(){
+    m1->setintMessage(state->getTurn() + 1);
+    m2->setstrMessage(player->getName());
+    switch (status)
+    {
+    case PLACE:
+    m6->setstrMessage("Place");
+    m7->setintMessage(bonus_troop);
+    m7->addMessage(" troops now");
+        break;
+    case ATTACK:
+    m6->setstrMessage("Attack");
+        break;
+    case REINFORCE:
+    m6->setstrMessage("Reinforce");
+    default:
+        break;
+    }
+}
+
+void Game::createMessage(){
+    m1 = new Message(1570, 30, "Turn : ");
+    m2 = new Message(1570, 90, "It's your turn : ");
+    m3 = new Message(1570, 150, "Player list : ");
+    m4 = new Message(1640, 940, "Next Phase");
+    m5 = new Message(1650, 1020, "End Turn");
+    m6 = new Message(1570, 510, "You are doing : ");
+    m7 = new Message(1570, 570, "You have ");
+
+    m1->setSize(30);
+    m2->setSize(30);
+    m3->setSize(30);
+    m4->setSize(35);
+    m5->setSize(35);
+    m6->setSize(30);
+    m7->setSize(30);
+    gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7});
+}
+
 /**
  * @brief The process for the game scene
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
     engine.setPlayer(player);
+    updateMessage();
     if(!initPlayer) init_player();
 }
 
@@ -286,6 +368,9 @@ void Game::game_process(){
 void Game::window_begin(){
     Event mouse;
     engine.init(state);
+    createMessage();
+    Message x(1150, 25, "X : "), 
+            y(1150, 50, "Y : ");
 
     while(window->isOpen())
     {
@@ -304,6 +389,11 @@ void Game::window_begin(){
             cardScene.display();
         else if(menuScene.isOpen())
             menuScene.display();
+
+        x.setintMessage(pos.x);
+        y.setintMessage(pos.y);
+        window->draw(x.text);
+        window->draw(y.text);
 
         window->display();
     }
