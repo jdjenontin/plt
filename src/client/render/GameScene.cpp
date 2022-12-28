@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <SFML/Graphics.hpp>
 
 using namespace std;
@@ -65,13 +66,13 @@ void GameScene::init(std::vector<state::Player *> &pList)
     {
         Colors color;
 
-        pList[i]->setColor(color.colorList[i]);
+        //pList[i]->setColor(color.colorList[i]);
 
-        vector<state::Country *> cList = pList[i]->getListCountry();
+        std::vector<std::shared_ptr<state::Country>> cList = pList[i]->getCountriesList();
 
         for (unsigned j = 0; j < cList.size(); j++)
         {
-            cList[j]->setColor(color.colorList[i]);
+            //cList[j]->setColor(color.colorList[i]);
         }
     }
     initMenu();
@@ -176,8 +177,8 @@ void GameScene::display()
         Message m(1600, 210 + (60 * j), name);
         m.addMessage(":");
 
-        if(pList[j]->getListCountry().size() == 0)
-            m.setColor(sf::Color::Red);
+        if(pList[j]->getCountriesList().size() == 0)
+           m.setColor(sf::Color::Red);
 
         Button b(1680, 205 + (60 * j), 25, color.colorList[j], &cir);
 
@@ -185,15 +186,15 @@ void GameScene::display()
         window->draw(b.circle);
 
         // afficher des bouton de pays et aussi le nombre de troup
-        vector<state::Country *> cList = pList[j]->getListCountry();
+        std::vector<std::shared_ptr<state::Country>> cList = pList[j]->getCountriesList();
 
         for (unsigned i = 0; i < cList.size(); i++)
         {
-            int num = cList[i]->getNumberCountry();
+            int num = cList[i]->getId();
 
-            cList[i]->setColor(color.colorList[j]);
+            //cList[i]->setColor(color.colorList[j]);
 
-            Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberTroop()), sf::Color::White);
+            Message m(posCountry[num][0] - 5, posCountry[num][1] - 11, to_string(cList[i]->getNumberOfTroop()), sf::Color::White);
 
             Button b(posCountry[num][0] - 20, posCountry[num][1] - 20, 25, color.colorList[j], &cir);
 

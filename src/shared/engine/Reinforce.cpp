@@ -11,7 +11,7 @@ namespace engine {
 */
 bool countryInList(state::Country* a_country, std::vector<state::Country*> a_listCountry){
     for(auto country : a_listCountry){
-        if(country->getNumberCountry() == a_country->getNumberCountry())
+        if(country->getId() == a_country->getId())
         {
             return true;
         }
@@ -30,14 +30,14 @@ Reinforce::~Reinforce() {
 /**
  * @brief Set the country to perform the reinforce from
 */
-void Reinforce::setm_country (state::Country* m_country){
+void Reinforce::setM_country(const std::shared_ptr<state::Country>& m_country){
     this->m_country = m_country;
 }
 
 /**
  * @brief Set the country to reinforce
 */
-void Reinforce::setn_country (state::Country* n_country){
+void Reinforce::setN_country(const std::shared_ptr<state::Country>& m_country){
     this->n_country = n_country;
 }
 
@@ -65,9 +65,9 @@ int Reinforce::execute(){
     // Add a troop
     
     if(connected){
-        if(m_country -> getNumberTroop() > 1){
-            n_country -> addNumberTroop(1);
-            m_country -> reduceNumberTroop(1);
+        if(m_country -> getNumberOfTroop() > 1){
+            n_country -> addTroop(1);
+            m_country -> reduceTroop(1);
         }       
     }
     else return 0;

@@ -1,28 +1,26 @@
-#include "State.h"
+// TO-Do reorganize includes 
+
+#include <fstream>
+#include <json/json.h>
+#include <unistd.h>
 #include <iostream>
 #include <map>
-
+#include <chrono>
 #include <random>
-#include <SFML/Graphics.hpp>
 
+#include "State.h"
 #include "Dice.h"
 #include "Calculation.h"
 
-#include "chrono"
 
 using namespace std;
 using namespace ai;
 
 namespace state
 {
-//Création de la liste de tous les pays
-std::vector<std::string> countriesNames = {"Alaska", "Territoire du Nord-Ouest", "Alberta", "Ontario", "Groenland", "Quebec", "Ouest des Etat-Unis", "Est des Etats-Unis", 
-                        "Amerique Centrale", "Venezuela", "Perou", "Bresil", "Argentine", "Afrique du Nord", "Egypte", "Afrique de l'Est",
-                         "Congo", "Afrique du Sud", "Madagascar", "Islande", "Grande-Bretagne", "Scandinavie", "Europe du Nord",
-                          "Ukraine", "Europe de l'Ouest", "Europe du Sud", "Moyen-Orient", "Afghanistan", "Ural", "Siberie", "Yakutsk",
-                           "Irkoutsk", "Mongolie", "Kamchatka", "Japon", "Chine", "Inde", "Siam", "Indonesie", "Nouvelle-Guinee", "Australie Orientale",
-                            "Australie Occidentale"};
-    
+
+const string jsonPath = "res/countries.json";
+
 State::State(){
     this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 }
@@ -33,102 +31,12 @@ State::~State(){
 
 void State::init()
 {
-    std::map <int, string> listcountry;
-
-    // Création de la liste des joueurs
-    for(int i = 0; i < numberPlayer; i++){
-        Player p(i);
-
-        p.setName(listname[i]);
-        playersList.push_back(p);
-    }
-
-    for(int i = 0; i < numberBot; i++){
-        Ai a(i);
-
-        a.setName("Bot");
-        playersList.push_back(a);
-    }
-
-    for(unsigned i = 0; i < playersList.size(); i++){
-        listPlayers.push_back(&playersList[i]);
-    }
-
-    for(int i = 0; i < (int)countriesNames.size(); i++) {
-        listcountry[i] = countriesNames[i];
-    }
-
-    for (map<int,string>::iterator it=listcountry.begin(); it!=listcountry.end(); ++it) {
-        Country country(it->second, it->first);
-        countriesList.push_back(country);
-    }
-
-    //Creation de la liste de toutes les cartes 
-    for(int i = 0; i < 42; i+=3){
-        Card card1(countriesNames[i], Infantry);
-        cardList.push_back(card1);
-
-        Card card2(countriesNames[i+1], Cavalry);
-        cardList.push_back(card2);
-
-        Card card3(countriesNames[i+2], Artillery);
-        cardList.push_back(card3);
-    }
-
-    // Shuffle the card
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    auto rng = std::default_random_engine(seed);
-    std::shuffle(begin(cardList), end(cardList), rng);
-
-    //Affectation des pays et troupes aux joueurs
-    vector<int> affectation_order;
-    Calculation calc;
-    affectation_order = calc.shuffledTab(42);
-
-    // Attribution des pays : Dans certains cas les premiers ont plus de pays que les derniers
-    int j = 0;
-    for(auto i : affectation_order){
-        playersList[j].addCountry(&countriesList[i]);
-        j++;
-        j %= numberPlayer + numberBot;
-    }
-    
-    // Attribution des soldats :
-    
-    map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
-
-    int initialTroop = initialTroopMap[numberPlayer + numberBot];
-
-    for (int i = 0; i != numberPlayer + numberBot; i++){
-        vector<Country*> playerCountries = playersList[i].getListCountry();
-
-        // On aurait pu le faire hors de la boucle mais le nombre de pays n'est pas tjr cst
-        int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
-
-        // Ajout d'un nombre min de troupe à tous less territoire
-        for(auto country : playerCountries){
-            country -> addNumberTroop(minTroopPerTeritory);
-        }
-
-        int remainingTroop = initialTroop % playerCountries.size();
-        
-        // Ajout du nombre de troupe restant de façon aléatoire sur les territoires 
-        Dice dice(0, playerCountries.size() - 1);
-        for(int k = 0; k != remainingTroop; k++)
-        {
-            int electedCountry = dice.thrown();
-            playerCountries[electedCountry]->addNumberTroop(1);
-        } 
-    }
-
-    for(unsigned i = 0; i < countriesList.size(); i++){
-        listCountires.push_back(&countriesList[i]);
-    }
-
-    for(unsigned i = 0; i < cardList.size(); i++){
-        listCard.push_back(&cardList[i]);
-    }
+    this->buildCountries();
+    this->createPlayers();
+    this->distributeCountries();
+    this->distibuteTroops();
 }
+
 
 void State::IncrementTurn () {
     turn++;
@@ -138,6 +46,8 @@ const int & State::getTurn() const {
     return turn;
 }
 
+
+// TO-DO : Improve with XIAO
 void State::ChangePlaying () {
     orderPlayer++;
     if(orderPlayer == (int)playersList.size()){
@@ -145,39 +55,126 @@ void State::ChangePlaying () {
         IncrementTurn();
     }
 
-    if(playersList[orderPlayer].getListCountry().size() == 0){
+    if(playersList[orderPlayer]->getCountriesList().size() == 0){
         orderPlayer++;
-        playersList[orderPlayer].setStatus(state::LOSE);
+        playersList[orderPlayer]->setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())
             orderPlayer = 0;
     }
 }
 
-const std::vector<Country*>& State::getListCountires() const{
-    return listCountires;
+const std::vector<std::shared_ptr<Country>>& State::getCountriesList() const{
+    return countriesList;
 }
 
-const std::vector<Card*>& State::getListCard() const{
-    return listCard;
+const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
+    return cardsList;
 }
 
-const std::vector<Player*>& State::getListPlayers() const{
-    return listPlayers;
+const std::vector<std::shared_ptr<Player>> & State::getPlayersList() const{
+    return playersList;
 }
 
 int State::getOrderPlayer() const{
     return orderPlayer;
 }
 
-Player* State::belongsto (Country* country){
-    for(unsigned i = 0; i < playersList.size(); i++){
-        sf::Color c1 = playersList[i].getColor();   
-        sf::Color c2 = country->getColor();
-        if(c1.toInteger() == c2.toInteger())
-            return &playersList[i];
+void State::buildCountries(){
+
+    Json::Value root = FileOps::jsonParser(jsonPath);
+
+    for (const auto& key : root.getMemberNames()) {
+        countriesList.push_back(std::shared_ptr<Country>(new Country(key, 
+                                                                    root[key]["id"].asInt())));
     }
 
-    return {};
+    std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
 }
+
+void State::buildCards(){
+
+    Json::Value root = FileOps::jsonParser(jsonPath);
+
+    TypeCard cardTypes[] = {Cavalry, Artillery, Infantry};
+
+    for (const auto& key : root.getMemberNames()) {
+        int typeId = root[key]["card"].asInt();
+        cardsList.push_back(std::shared_ptr<Card>(new Card(key,
+                                                            cardTypes[typeId])));
+    }
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    auto rng = std::default_random_engine(seed);
+    std::shuffle(cardsList.begin(), cardsList.end(), rng);
+}
+
+void State::createPlayers(){
+    for(int i = 0; i<nbOfPlayer; i++){
+        playersList.push_back(std::shared_ptr<Player>(new Player(i)));
+    }
+}
+
+void State::distributeCountries(){
+
+    std::vector<std::shared_ptr<Country>> cp_countriesList = countriesList;
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    auto rng = std::default_random_engine(seed);
+
+    std::shuffle(cp_countriesList.begin(), cp_countriesList.end(), rng);
+
+    
+    int i = 0;
+
+    for(auto& country : cp_countriesList){
+        playersList[i]->addCountry(country);
+        
+        i++;
+        i%=nbOfPlayer;
+    }
+
+}
+
+void State::distibuteTroops(){
+    
+    // TO-DO : Make it a const
+
+    // Depending on the number of player, the initaial troop for each player vary
+    map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
+
+    int initialTroop = initialTroopMap[nbOfPlayer + nbOfBot];
+
+    for (int i = 0; i != nbOfPlayer + nbOfBot; i++){
+        std::vector<std::shared_ptr<Country>> playerCountries = playersList[i]->getCountriesList();
+
+        int minTroopPerTeritory = (int) initialTroop/playerCountries.size();
+
+        for(auto country : playerCountries){
+            country -> addTroop(minTroopPerTeritory);
+        }
+
+        int remainingTroop = initialTroop % playerCountries.size();
+        
+        // Ajout du nombre de troupe restant de façon aléatoire sur les territoires 
+        Dice dice(0, playerCountries.size() - 1);
+        for(int k = 0; k != remainingTroop; k++)
+        {
+            int electedCountry = dice.thrown();
+            playerCountries[electedCountry]->addTroop(1);
+        } 
+    }
+}
+
+// TO-Do : Use ownerId instead !
+// Player* State::belongsto (Country* country){
+//     for(unsigned i = 0; i < playersList.size(); i++){
+//         sf::Color c1 = playersList[i].getColor();   
+//         sf::Color c2 = country->getColor();
+//         if(c1.toInteger() == c2.toInteger())
+//             return &playersList[i];
+//     }
+
+//     return {};
+// }
 
 } // namespace state

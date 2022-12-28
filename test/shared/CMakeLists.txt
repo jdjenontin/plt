@@ -1,5 +1,5 @@
 # List of test functions
-add_custom_test(shared_dummy)
+#add_custom_test(shared_dummy)
 add_custom_test(country)
 #   add_custom_test(dice)
 add_custom_test(calculation)

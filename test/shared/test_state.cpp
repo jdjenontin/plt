@@ -16,7 +16,7 @@ boost::test_tools::predicate_result validate_country_troop(vector<Country*> lCou
 {
 
   for (auto country : lCountry) {
-    if (country->getNumberTroop() < troopMin) return false;
+    if (country->getNumberOfTroop() < troopMin) return false;
   }
   return true;
 
@@ -26,60 +26,60 @@ BOOST_AUTO_TEST_CASE(TestState)
 {
   { // Constructor's and getPlayerList test
     State state(3);
-    vector<Player*> pList = state.getListPlayers();
+    vector<Player*> pList = state.getPlayersList();
     BOOST_CHECK_EQUAL(pList.size(), 3); 
   }
   { // Test init()
     State state(3);
-    vector<Player*> pList = state.getListPlayers();
+    vector<Player*> pList = state.getPlayersList();
     state.init();
 
     // Second player's countries
-    vector<Country*> p1Countries = pList[1]->getListCountry();
+    vector<Country*> p1Countries = pList[1]->getCountriesList();
 
     // Check if the player 2 have 14 countries
     BOOST_CHECK_EQUAL(p1Countries.size(), 14);
 
     // Check if each country have minimun 2 troops
-    BOOST_CHECK(validate_country_troop(pList[1]->getListCountry(), 2));
+    BOOST_CHECK(validate_country_troop(pList[1]->getCountriesList(), 2));
 
     // Check the total troop own by player 2
     int totalTroops(0);
 
     for (auto country : p1Countries){
-      totalTroops += country -> getNumberTroop();
+      totalTroops += country -> getNumberOfTroop();
     }
     BOOST_CHECK_EQUAL(totalTroops, 35);
     
   }
   {
     State state(5);
-    vector<Player*> pList = state.getListPlayers();
+    vector<Player*> pList = state.getPlayersList();
     state.init();
 
     // Player1 total countries
-    vector<Country*> p5Countries = pList[4]->getListCountry();
+    vector<Country*> p5Countries = pList[4]->getCountriesList();
     BOOST_CHECK_EQUAL(p5Countries.size(), 8);
   } 
 
   {
     State state(5);
-    vector<Country*> lCountries = state.getListCountires();
-    vector<Card> lCards = state.getListCard();
+    vector<Country*> lCountries = state.getCountriesList();
+    vector<Card> lCards = state.getCardsList();
     //BOOST_CHECK_EQUAL(lCountries.size(), 16);
     //BOOST_CHECK_EQUAL(lCards.size(), 16);
 
   }
   {
-    State state(3);
-    vector<Player*> pList = state.getListPlayers();
-    vector<Country*> lCountries = pList[1]->getListCountry();
-    Country* a_country = lCountries[0];
-    a_country->setColor(pList[1]->getColor());
+    // State state(3);
+    // vector<Player*> pList = state.getPlayersList();
+    // vector<Country*> lCountries = pList[1]->getCountriesList();
+    // Country* a_country = lCountries[0];
+    // //a_country->setColor(pList[1]->getColor());
 
-    Player* owner = state.belongsto(a_country);
+    // Player* owner = state.belongsto(a_country);
 
-    BOOST_CHECK_EQUAL(owner, pList[1]);
+    // BOOST_CHECK_EQUAL(owner, pList[1]);
   }
 
 }

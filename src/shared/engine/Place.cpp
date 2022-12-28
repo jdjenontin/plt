@@ -16,7 +16,7 @@ void Place::setcountry (state::Country* country){
 
 void Place::execute (){
     if(player->existCountry(*country)){
-        country->addNumberTroop(1);
+        country->addTroop(1);
         bonus_troop--;
     }
 }

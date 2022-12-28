@@ -12,10 +12,10 @@ DistributeCard::~DistributeCard(){
 }
 
 void DistributeCard::execute(){
-    static std::vector<state::Card *> list_card = state->getListCard();
-    if(list_card.size()!=0){
-        player->addCard(list_card.back());
-        list_card.pop_back();
+    std::vector<std::shared_ptr<state::Card>> cardsList = state->getCardsList();
+    if(cardsList.size()!=0){
+        player->addCard(cardsList.back());
+        cardsList.pop_back();
     }
 }
 

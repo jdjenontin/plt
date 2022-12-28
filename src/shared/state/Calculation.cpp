@@ -18,17 +18,6 @@ Calculation::~Calculation () {
 
 }
 
-void Calculation::compute (Country* attacker, Country* defender) {
-    std::cout << "your win rate is :(its not available now)" << std::endl;
-}
-
-int Calculation::throwdice () {
-    srand(time(0));
-    std::cout << rand() << std::endl;
-    return (rand() % 6 + 1);
-}
-
-
 /*
 * Generate a shuffle list containing a list of integer for 0 to numberOfElement
 */
@@ -54,9 +43,9 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
  * @param a_listCountry The list to check in
  * @return true if the country is in the list, false if not
 */
-bool Calculation::isCountryInList (state::Country* a_country, std::vector<Country*> a_listCountry){
+bool Calculation::isCountryInList (std::shared_ptr<Country>& a_country, std::vector<std::shared_ptr<Country>>& a_listCountry){
     for(auto country : a_listCountry){
-        if(country->getNumberCountry() == a_country->getNumberCountry())
+        if(country->getId() == a_country->getId())
         {
             return true;
         }
@@ -72,14 +61,14 @@ bool Calculation::isCountryInList (state::Country* a_country, std::vector<Countr
  * @return true if both countries are connected
 */
 
-bool Calculation::areConnected(Player* player, state::Country* depCountry, state::Country* destCountry)
+bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr<Country>& depCountry, std::shared_ptr<Country>& destCountry)
 {
-    std::vector<state::Country *> playerCountry = player->getListCountry();
-    std::vector<state::Country *> visited;
+    std::vector<std::shared_ptr<Country>> playerCountry = player->getCountriesList();
+    std::vector<std::shared_ptr<Country>> visited;
     
-    std::deque<state::Country *> node_que;
+    std::deque<std::shared_ptr<Country>> node_que;
     node_que.push_back(depCountry);
-    state::Country * node;
+    std::shared_ptr<Country> node;
 
 
     // Detect the country accessible from m_country
@@ -91,10 +80,10 @@ bool Calculation::areConnected(Player* player, state::Country* depCountry, state
         if(!Calculation::isCountryInList(node, visited)){
             visited.push_back(node);
 
-            std::vector<state::Country *> unvisited;
+            std::vector<std::shared_ptr<Country>> unvisited;
 
             for(auto country : playerCountry){
-                if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getNumberCountry()))
+                if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getId()))
                     unvisited.push_back(country);
             }
 

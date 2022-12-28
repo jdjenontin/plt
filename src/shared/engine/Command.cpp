@@ -10,12 +10,12 @@ Command::~Command() {
 
 }
 
-void Command::setPlayer (state::Player* m_player){
-    player = m_player;
+void Command::setPlayer(const std::shared_ptr<state::Player>& player){
+    this->player = player;
 }
 
-void Command::setState (state::State* m_state){
-    state = m_state;
+void Command::setState(const std::shared_ptr<state::State>& state){
+    this->state = state;
 }
 
 }
