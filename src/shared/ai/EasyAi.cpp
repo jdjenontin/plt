@@ -38,7 +38,7 @@
 
 //     //place
 //     Dice aiDice(0,aiCountries.size()-1);
-//     aiPlace.setcountry(aiCountries.at(aiDice.thrown()));
+//     aiPlace.setCountry(aiCountries.at(aiDice.thrown()));
 //     int bonus_troop = player->continentBonusTroop();
 //     for(int i = 0; i < bonus_troop; i++){
 //         aiPlace.execute();
@@ -133,8 +133,8 @@
 //     aiDice.updateDice(0,aiCountries.size()-1);
 //     state::Country* depatureCountry  = aiCountries[aiDice.thrown()];
 
-//     aiReinforce.setm_country(depatureCountry);
-//     aiReinforce.setn_country(aiCountries[aiDice.thrown()]);
+//     aiReinforce.setM_country(depatureCountry);
+//     aiReinforce.setN_country(aiCountries[aiDice.thrown()]);
 
 //     aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
     

@@ -10,7 +10,7 @@ Place::~Place(){
 
 }
 
-void Place::setcountry (state::Country* country){
+void Place::setCountry(const std::shared_ptr<state::Country>& country){
     this->country = country;
 }
 

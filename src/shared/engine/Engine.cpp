@@ -29,7 +29,7 @@ int Engine::reinforceN_execute(){
 #ifdef DEBUG
     std::cout << "function :" << __func__ << std::endl;
 #endif
-    reinforce.setn_country(country);
+    reinforce.setN_country(country);
     return reinforce.execute();
 }
 
@@ -37,16 +37,16 @@ int Engine::reinforceM_execute(){
 #ifdef DEBUG
     std::cout << "function :" << __func__ << std::endl;
 #endif
-    if(country->getNumberTroop() > 1)
-        reinforce.setm_country(country);
+    if(country->getNumberOfTroop() > 1)
+        reinforce.setM_country(country);
     else return 0;
     return 1;
 }
 
 int Engine::attackD_execute(){
     attack.setDefCountry(country);
-    if(attack.isadjacent()){
-        attack.multipleAttack();
+    if(attack.isAdjacent()){
+        attack.execute();
     }
     else return 0;
 
@@ -54,7 +54,7 @@ int Engine::attackD_execute(){
 }
 
 int Engine::attackA_execute(){
-    if(country->getNumberTroop() > 1)
+    if(country->getNumberOfTroop() > 1)
         attack.setAttackCountry(country);
     else return 0;
 
@@ -62,17 +62,17 @@ int Engine::attackA_execute(){
 }
 
 void Engine::place_execute(){
-    place.setcountry(country);
+    place.setCountry(country);
     place.execute();
 }
 
-void Engine::init(state::State* state){
+void Engine::init (std::shared_ptr<state::State>& state){
     this->state = state;
     attack.setState(state);
     distributecard.setState(state);
 }
 
-void Engine::setPlayer(state::Player* player){
+void Engine::setPlayer (std::shared_ptr<state::Player>& player){
     place.setPlayer(player);
     attack.setPlayer(player);
     reinforce.setPlayer(player);
@@ -80,7 +80,7 @@ void Engine::setPlayer(state::Player* player){
     usecard.setPlayer(player);
 }
 
-void Engine::setCountry(state::Country* country){
+void Engine::setCountry(const std::shared_ptr<state::Country>& country){
     this->country = country;
 }
 

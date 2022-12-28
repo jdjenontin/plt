@@ -152,6 +152,11 @@ namespace engine {
         
     }
 
+    bool Attack::isAdjacent()
+    {
+        return attackCountry->isAdjacent(defCountry->getId());
+    }
+
     //Getters Setters
     void Attack::setAttackCountry(const std::shared_ptr<state::Country>& attackCountry){
         this->attackCountry = attackCountry;

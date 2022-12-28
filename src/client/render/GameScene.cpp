@@ -55,7 +55,7 @@ void GameScene::initMenu(){
     rec3.setTexture(&t2);
 }
 
-void GameScene::init(std::vector<state::Player *> &pList)
+void GameScene::init (std::vector<std::shared_ptr<state::Player>>& pList)
 {
     this->pList = pList;
 
@@ -88,12 +88,12 @@ bool GameScene::existCountry(sf::Vector2i pos)
     return false;
 }
 
-state::Country *GameScene::findCountry(sf::Vector2i pos)
+std::shared_ptr<state::Country> GameScene::findCountry(sf::Vector2i pos)
 {
     for (unsigned i = 0; i < posCountry.size(); i++)
     {
         if ((abs(pos.x - posCountry[i][0]) < 30) && (abs(pos.y - posCountry[i][1]) < 30))
-            return listcountry[i];
+            return countriesList[i];
     }
     return {};
 }
@@ -105,19 +105,19 @@ state::Country GameScene::const_findCountry(sf::Vector2i pos)
     for (unsigned i = 0; i < posCountry.size(); i++)
     {
         if ((abs(pos.x - posCountry[i][0]) < 30) && (abs(pos.y - posCountry[i][1]) < 30))
-            return *listcountry[i];
+            return *countriesList[i];
     }
     return c;
 }
 
-void GameScene::setListcountry(const std::vector<state::Country *> &listcountry)
+void GameScene::setCountriesList(const std::vector<std::shared_ptr<state::Country>>& countriesList)
 {
-    this->listcountry = listcountry;
+    this->countriesList = countriesList;
 }
 
-const std::vector<state::Country *> &GameScene::getListcountry() const
+const std::vector<std::shared_ptr<state::Country>>& GameScene::getCountriesList() const
 {
-    return listcountry;
+    return countriesList;
 }
 
 void GameScene::addMessage(Message *message)

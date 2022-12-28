@@ -56,7 +56,7 @@ bool CardScene::isChangeButton (sf::Vector2i pos){
 }
 
 
-void CardScene::setPlayer (state::Player* player){
+void CardScene::setPlayer (std::shared_ptr<state::Player>& player){
     this->player = player;
 }
 

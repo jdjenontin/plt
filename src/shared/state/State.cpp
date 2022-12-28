@@ -22,6 +22,7 @@ namespace state
 const string jsonPath = "res/countries.json";
 
 State::State(){
+    //TO-DO : Remove
     this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 }
 

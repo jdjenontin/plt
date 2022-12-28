@@ -27,16 +27,16 @@ using namespace engine;
 using namespace ai;
 
 // La liste de pays recupere dans le state
-vector<Country*> v_listcountry;
+vector<shared_ptr<state::Country>> v_listcountry;
 // La liste de carte recupere dans le state
-vector<state::Card*> v_listcard;
+vector<shared_ptr<state::Card>> v_listcard;
 // La liste de player recupere dans le state
-vector<Player*> pList;
+vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
-Player* player;
+shared_ptr<state::Player> player;
 // Le pays que le joueur choisi pendant son tour
 // Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
-Country *country, *country_a, *country_d;
+shared_ptr<state::Country> country, country_a, country_d;
 // Le nombre de bonus troop recupere chaque tour
 int bonus_troop;
 // Le status correspond trois evenement : place, attack et reinforce
@@ -151,9 +151,9 @@ void Game::init_card(){
 void Game::init_state(){
     gameScene.setWindow(window);
     state->init();
-    pList = state->getListPlayers();
-    v_listcountry = state->getListCountires();
-    v_listcard = state->getListCard();
+    pList = state->getPlayersList();
+    v_listcountry = state->getCountriesList();
+    v_listcard = state->getCardsList();
 }
 
 /**
@@ -166,7 +166,7 @@ void Game::menuScene_event(int button){
     #ifdef DEBUG
             std::cout << "state init !" << std::endl;
     #endif
-            gameScene.setListcountry(v_listcountry);
+            gameScene.setCountriesList(v_listcountry);
             gameScene.init(pList);
             menuScene.close();
             gameScene.open();
@@ -178,26 +178,26 @@ void Game::menuScene_event(int button){
         else if(menuScene.getNameMenu(pos) == "Back")
             menuScene.init_main();
         else if(menuScene.getNameMenu(pos) == "AddHuman"){
-            if(state->numberPlayer + state->numberBot < 5){
-                state->numberPlayer++;
+            if(state->nbOfPlayer + state->nbOfBot < 5){
+                state->nbOfPlayer++;
                 menuScene.addplayer();
             }
         }
         else if(menuScene.getNameMenu(pos) == "DeleteHuman"){
-            if(state->numberPlayer > 1){
-                state->numberPlayer--;
+            if(state->nbOfPlayer > 1){
+                state->nbOfPlayer--;
                 menuScene.deleteplayer();
             } 
         }
         else if(menuScene.getNameMenu(pos) == "AddBot"){
-            if(state->numberPlayer + state->numberBot < 5){
-                state->numberBot++;
+            if(state->nbOfPlayer + state->nbOfBot < 5){
+                state->nbOfBot++;
                 menuScene.addbotplayer();
             }
         }
         else if(menuScene.getNameMenu(pos) == "DeleteBot"){
-            if(state->numberBot > 0){
-                state->numberBot--;
+            if(state->nbOfBot > 0){
+                state->nbOfBot--;
                 menuScene.deletebotplayer();
             }
         }
@@ -238,8 +238,8 @@ void Game::gameScene_event(int button){
     }
     else if(button == RIGHT){
         if(status == ATTACK && attack_a == 1 && attack_d == 1){
-            country_a->reduceNumberTroop(1);
-            country_d->addNumberTroop(1);
+            country_a->reduceTroop(1);
+            country_d->addTroop(1);
         }
 
     }
@@ -399,7 +399,7 @@ void Game::window_begin(){
     }
 }
 
-void Game::setState(State* state){
+void Game::setState (std::shared_ptr<state::State>& state){
     this->state = state;
 }
 

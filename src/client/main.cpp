@@ -172,7 +172,7 @@ vector<state::Card*> v_listcard;
 //                         // quand status = 0, on distribute les troups, jusqu'a le bonus troup est nul, on passe le status 1 
 //                         if(status == 0){
 //                             if(gamescene.existCountry(pos)){
-//                                 place.setcountry(gamescene.findCountry(pos));
+//                                 place.setCountry(gamescene.findCountry(pos));
 //                                 place.execute();
 //                             }
 //                             m11.setintMessage(place.bonus_troop);
@@ -207,7 +207,7 @@ vector<state::Card*> v_listcard;
 //                         else if(status == 2){
 //                             attack.setDefCountry(gamescene.findCountry(pos));
 //                             if(gamescene.existCountry(pos)){
-//                                 if(attack.isadjacent()){
+//                                 if(attack.isAdjacent()){
 //                                     if(attack.existDefCountry()){
 //                                         m4.replaceMessage("you need choose your opponent's country !");
 //                                     }
@@ -222,7 +222,7 @@ vector<state::Card*> v_listcard;
 //                             }
 //                         }
 //                         else if(status == 4){
-//                             reinforce.setm_country(gamescene.findCountry(pos));
+//                             reinforce.setM_country(gamescene.findCountry(pos));
 //                             if(gamescene.existCountry(pos)){
 //                                 if(reinforce.existM_country()){
 //                                     m3.setstrMessage(gamescene.findCountry(pos)->getName()); 
@@ -231,7 +231,7 @@ vector<state::Card*> v_listcard;
 //                             }
 //                         }
 //                         else if(status == 5){
-//                             reinforce.setn_country(gamescene.findCountry(pos));
+//                             reinforce.setN_country(gamescene.findCountry(pos));
 //                             if(gamescene.existCountry(pos)){
 //                                 if(reinforce.existN_country()){
 //                                     reinforce.execute();
@@ -243,35 +243,35 @@ vector<state::Card*> v_listcard;
                     if(menuscene.isOpen()){
                         if(menuscene.getNameMenu(pos) == "start"){
                             state->init();
-                            pList = state->getListPlayers();
-                            v_listcountry = state->getListCountires();
-                            v_listcard = state->getListCard();
-                            gamescene.setListcountry(v_listcountry);
+                            pList = state->getPlayersList();
+                            v_listcountry = state->getCountriesList();
+                            v_listcard = state->getCardsList();
+                            gamescene.setCountriesList(v_listcountry);
                             gamescene.init(pList);
                             menuscene.close();
                             gamescene.open();
                         }
                         else if(menuscene.getNameMenu(pos) == "addplayer"){
-                            if(state->numberPlayer + state->numberBot < 5){
-                                state->numberPlayer++;
+                            if(state->nbOfPlayer + state->nbOfBot < 5){
+                                state->nbOfPlayer++;
                                 menuscene.addplayer();
                             }
                         }
                         else if(menuscene.getNameMenu(pos) == "deleteplayer"){
-                            if(state->numberPlayer > 1){
-                                state->numberPlayer--;
+                            if(state->nbOfPlayer > 1){
+                                state->nbOfPlayer--;
                                 menuscene.deleteplayer();
                             } 
                         }
                         else if(menuscene.getNameMenu(pos) == "addbot"){
-                            if(state->numberPlayer + state->numberBot < 5){
-                                state->numberBot++;
+                            if(state->nbOfPlayer + state->nbOfBot < 5){
+                                state->nbOfBot++;
                                 menuscene.addbotplayer();
                             }
                         }
                         else if(menuscene.getNameMenu(pos) == "deletebot"){
-                            if(state->numberBot > 0){
-                                state->numberBot--;
+                            if(state->nbOfBot > 0){
+                                state->nbOfBot--;
                                 menuscene.deletebotplayer();
                             }
                         }
@@ -472,7 +472,8 @@ vector<state::Card*> v_listcard;
 int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
-    State* state = new State();
+    std::shared_ptr<State> state(new State());
+
     Game game;
 
     game.setState(state);
