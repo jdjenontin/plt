@@ -13,6 +13,7 @@
 
 #define ATTACK_A 1
 #define ATTACK_D 2
+#define ATTACK_MOVE 7
 #define REINFORCE_M 3
 #define REINFORCE_N 4
 
@@ -35,8 +36,7 @@ vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
 shared_ptr<state::Player> player;
 // Le pays que le joueur choisi pendant son tour
-// Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
-shared_ptr<state::Country> country, country_a, country_d;
+shared_ptr<state::Country> country;
 // Le nombre de bonus troop recupere chaque tour
 int bonus_troop;
 // Le status correspond trois evenement : place, attack et reinforce
@@ -69,15 +69,10 @@ void Game::reinforce_event(){
 }
 
 void Game::attack_event(){
-    if(player->existCountry(*country)){
+    if(player->existCountry(*country))
         attack_a = engine.execute(ATTACK_A);
-        country_a = country;
-    }
-    else{
+    else
         attack_d = engine.execute(ATTACK_D);
-        country_d = country;
-    }
-        
 }
 
 
@@ -237,11 +232,8 @@ void Game::gameScene_event(int button){
         gameMenuEvent();
     }
     else if(button == RIGHT){
-        if(status == ATTACK && attack_a == 1 && attack_d == 1){
-            country_a->reduceTroop(1);
-            country_d->addTroop(1);
-        }
-
+        if(status == ATTACK && attack_a == 1 && attack_d == 1)
+            engine.execute(ATTACK_MOVE);
     }
 }
 

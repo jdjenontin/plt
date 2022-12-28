@@ -122,7 +122,9 @@ int Engine::execute(int status){
         break; 
     case 6:
     usecard_execute();
-        break;           
+        break; 
+    case 7:
+    attack.moveTroop();
     default:
         break;
     }
