@@ -91,13 +91,12 @@ namespace engine {
         attackSummary["attackerLoos"] = attackerLoos;
         attackSummary["defenderLoos"] = defenderLoos;
 
-        if(DEBUG)
-        {
+        #ifdef DEBUG
             cout << "## Summary" << endl;
             for (auto it = attackSummary.begin(); it != attackSummary.end(); it++) {
                 cout << it->first << ": " << it->second << endl;
             }
-        }
+        #endif
 
         return attackSummary;
     }
