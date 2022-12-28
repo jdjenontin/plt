@@ -32,6 +32,7 @@ Ai::Ai() {
     status = state::PLAYING;
     type = state::BOT;
     difficulty = Difficulty::EASY;
+    name = "BOT";
 }
 
 Ai::~Ai() {

@@ -50,13 +50,12 @@ namespace engine {
     // TO-DO : Can be optimized 
     map<string,int> Attack::attackNvM(int nAttacker, int nDefender)
     {
-        if(DEBUG)
-        {
+        #ifdef DEBUG
             cout << "---------------------------" << endl;
             cout << __FUNCTION__ << endl;
             cout << "Number of att : " << nAttacker << endl;
             cout << "Number of def : " << nDefender << endl;
-        }
+        #endif
 
         map<string,int> attackSummary;
 
@@ -106,7 +105,7 @@ namespace engine {
     // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
     bool Attack::ableToAttack () {
         bool isOwner = attackCountry->getOwnerId() == player->getId();
-        bool isntOwner = defCountry->getOwnerId() == player->getId();
+        bool isntOwner = defCountry->getOwnerId() != player->getId();
 
         bool adjacent = attackCountry->isAdjacent(defCountry->getId());
         bool haveTroop = attackCountry->getNumberOfTroop() > 1;
@@ -137,17 +136,19 @@ namespace engine {
         }
     }
 
-    void Attack::execute()
+    int Attack::execute()
     {
         if(this->ableToAttack()){
             int nAtt = attackCountry->getNumberOfTroop()-1;
             int nDef = defCountry->getNumberOfTroop();
             map<string,int> attackSummary = this->attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
+            return 1;
         }
         else
         {
             cout << "Attack impossible" << endl;
+            return 0;
         }
         
     }

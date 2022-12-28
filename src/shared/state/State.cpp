@@ -21,9 +21,9 @@ namespace state
 
 const string jsonPath = "res/countries.json";
 
+
 State::State(){
-    //TO-DO : Remove
-    this->listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+
 }
 
 State::~State(){
@@ -113,6 +113,10 @@ void State::createPlayers(){
     for(int i = 0; i<nbOfPlayer; i++){
         playersList.push_back(std::shared_ptr<Player>(new Player(i)));
     }
+
+    for(int i = nbOfPlayer; i < (nbOfPlayer+nbOfBot); i++){
+        playersList.push_back(std::shared_ptr<Player>(new Ai(i)));
+    }
 }
 
 void State::distributeCountries(){
@@ -131,7 +135,7 @@ void State::distributeCountries(){
         playersList[i]->addCountry(country);
         
         i++;
-        i%=nbOfPlayer;
+        i%=(nbOfPlayer+nbOfBot);
     }
 
 }
