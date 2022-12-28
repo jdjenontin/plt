@@ -11,6 +11,7 @@ namespace state{
 
 const int totalAsia = 12;
 
+std::vector<std::string> Player::defaultNames = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
 
 Player::Player () {
     status = PLAYING;
@@ -22,6 +23,7 @@ Player::Player (int a_id) {
     status = PLAYING;
     id = a_id;
     type = HUMAN;
+    name = defaultNames[a_id];
 }
 
 Player::~Player () {
