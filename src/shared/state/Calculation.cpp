@@ -8,6 +8,9 @@
 #include "Calculation.h"
 #include "Player.h"
 
+
+//#define DEBUG 1 
+
 namespace state{
 
 Calculation::Calculation () {
@@ -44,7 +47,8 @@ std::vector<int> Calculation::shuffledTab(int numberOfElement){
  * @return true if the country is in the list, false if not
 */
 bool Calculation::isCountryInList (std::shared_ptr<Country>& a_country, std::vector<std::shared_ptr<Country>>& a_listCountry){
-    for(auto country : a_listCountry){
+    for(auto& country : a_listCountry){
+        
         if(country->getId() == a_country->getId())
         {
             return true;
@@ -63,6 +67,7 @@ bool Calculation::isCountryInList (std::shared_ptr<Country>& a_country, std::vec
 
 bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr<Country>& depCountry, std::shared_ptr<Country>& destCountry)
 {
+
     std::vector<std::shared_ptr<Country>> playerCountry = player->getCountriesList();
     std::vector<std::shared_ptr<Country>> visited;
     
@@ -77,6 +82,7 @@ bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr
         node = node_que.front();
         node_que.pop_front();
 
+
         if(!Calculation::isCountryInList(node, visited)){
             visited.push_back(node);
 
@@ -86,8 +92,8 @@ bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr
                 if(!Calculation::isCountryInList(country, visited) && country->isAdjacent(node->getId()))
                     unvisited.push_back(country);
             }
-
-            for(auto country : unvisited){
+            
+            for(auto& country : unvisited){
                 node_que.push_back(country);
             }
         }

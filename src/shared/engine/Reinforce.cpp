@@ -1,5 +1,8 @@
 #include "Reinforce.h"
 #include <deque>
+#include <iostream>
+
+#define DEBUG 1
 
 namespace engine {
 
@@ -37,7 +40,7 @@ void Reinforce::setM_country(const std::shared_ptr<state::Country>& m_country){
 /**
  * @brief Set the country to reinforce
 */
-void Reinforce::setN_country(const std::shared_ptr<state::Country>& m_country){
+void Reinforce::setN_country(const std::shared_ptr<state::Country>& n_country){
     this->n_country = n_country;
 }
 
@@ -59,9 +62,8 @@ bool Reinforce::existN_country () {
  * @brief Check if a n_country is connected to n_country and add troop if yes
 */
 int Reinforce::execute(){
-
     bool connected = state::Calculation::areConnected(player, m_country, n_country);
-        
+
     // Add a troop
     
     if(connected){
@@ -73,4 +75,13 @@ int Reinforce::execute(){
     else return 0;
     return 1;
 }
+
+const std::shared_ptr<state::Country>& Reinforce::getM_country() const{
+    return m_country;
+}
+
+const std::shared_ptr<state::Country>& Reinforce::getN_country() const{
+    return n_country;
+}
+
 }
