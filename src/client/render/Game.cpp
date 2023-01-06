@@ -33,7 +33,12 @@ vector<shared_ptr<state::Card>> v_listcard;
 // La liste de player recupere dans le state
 vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
-shared_ptr<state::Player> player;
+shared_ptr<state::Player> player = make_shared<state::Player>();
+// Le bot actuel
+shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
+shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
+shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
+shared_ptr<ai::HardAi> hardBot;
 // Le pays que le joueur choisi pendant son tour
 // Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
 shared_ptr<state::Country> country, country_a, country_d;
@@ -223,25 +228,28 @@ void Game::gameMenuEvent(){
  * @brief The event of the game scene when the client use the mouse
 */
 void Game::gameScene_event(int button){
-    if(button == LEFT){
-        if(gameScene.isCardButton(pos)){
-            init_card();
-            gameScene.close();
-            cardScene.open();
-        }
-        country = gameScene.findCountry(pos);
-        if(country)
-            country_event();
-        else
-            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
-        gameMenuEvent();
-    }
-    else if(button == RIGHT){
-        if(status == ATTACK && attack_a == 1 && attack_d == 1){
-            country_a->reduceTroop(1);
-            country_d->addTroop(1);
-        }
 
+    if (player->getType() != BOT) {
+        if(button == LEFT){
+            if(gameScene.isCardButton(pos)){
+                init_card();
+                gameScene.close();
+                cardScene.open();
+            }
+            country = gameScene.findCountry(pos);
+            if(country)
+                country_event();
+            else
+                attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+            gameMenuEvent();
+        }
+        else if(button == RIGHT){
+            if(status == ATTACK && attack_a == 1 && attack_d == 1){
+                country_a->reduceTroop(1);
+                country_d->addTroop(1);
+            }
+
+        }
     }
 }
 
@@ -357,6 +365,7 @@ void Game::createMessage(){
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
+
     engine.setPlayer(player);
     updateMessage();
     if(!initPlayer) init_player();
@@ -376,8 +385,40 @@ void Game::window_begin(){
     {
         pos = Mouse::getPosition(*window);
 
-        if(gameScene.isOpen())
-            game_process();
+        if(gameScene.isOpen()) {
+            game_process();            
+            if (player->getType() == BOT) {
+
+                bot = dynamic_pointer_cast<ai::Ai>(player);
+                std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
+                easyBot = static_pointer_cast<ai::EasyAi>(bot);
+                std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
+                std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
+                std::cout << "Procedure du bot de niveau" << easyBot->getCountriesList().at(0)->getName() << std::endl;
+                
+
+                switch(bot->difficulty) {
+                    case EASY:
+                        
+                        std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
+                        std::cout << "Case du bot Easy " << std::endl;
+                        easyBot->execute();
+                        std::cout << "Fin execute du bot" << std::endl;
+
+                    /*case NORMAL:
+                        normalBot = dynamic_pointer_cast<ai::NormalAi>(bot);
+                        normalBot->execute();
+
+                    case HARD:
+                        hardBot = dynamic_pointer_cast<ai::HardAi>(bot);
+                        hardBot->execute();*/
+                }
+                state->ChangePlaying();
+                engine.execute(DISTRIBUTE);
+                status = 0;
+                initPlayer = false;
+            }
+        }
         //Evenement du souris
         mouse_event(&mouse);
         //Evenement du clavier

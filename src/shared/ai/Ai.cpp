@@ -7,14 +7,17 @@
 using namespace engine;
 using namespace state;
 
-namespace ai{
-
 //les commandes 
+Engine aiEngine;
 Place aiPlace;
 Attack aiAttack;
 Reinforce aiReinforce; 
 DistributeCard aiDistributecard;
 UseCard aiUsecard;
+
+namespace ai{
+
+
 
 //la liste de pays de joueur
 std::vector<std::shared_ptr<Country>> aiCountries;
@@ -46,7 +49,7 @@ Ai::Ai(int id){
     difficulty = Difficulty::EASY;
 }
 
-void Ai::setState(const std::shared_ptr<state::State>& state){
+/*void Ai::setState(const std::shared_ptr<state::State>& state){
     this->state = state;
     aiAttack.setState(state);
     aiDistributecard.setState(state);
@@ -59,43 +62,16 @@ void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     aiReinforce.setPlayer(player);
     aiDistributecard.setPlayer(player);
     aiUsecard.setPlayer(player);
-}
+}*/
 
 void Ai::setDifficulty(Difficulty difficulty){
     this->difficulty = difficulty;
 }
 
-Difficulty Ai::getDifficulty() const{
+Difficulty Ai::getDifficulty(){
     return this->difficulty;
 }
 
-void Ai::execute (Difficulty difficulty){
-    
-    Dice reAttack(0,1);
-    Calculation cal;
-    int aiCanAttack = 1;
-    int willAttack = 1;
-    aiCountries = player->getCountriesList();
-    std::vector<std::shared_ptr<Country>> allCountries = state->getCountriesList();
-
-    //un exemple comment le IA fonctionne 
-    if(difficulty == Difficulty::EASY){
-        //place
-        
-    }
-
-
-    else if(difficulty == Difficulty::NORMAL){
-
-    }
-
-    else if(difficulty == Difficulty::HARD){
-        
-    }
-    else if(difficulty == Difficulty::INSANE){
-
-    }
-}
 
 void Ai::placeTroop(){
 

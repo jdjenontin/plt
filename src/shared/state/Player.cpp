@@ -180,5 +180,9 @@ void Player::print()
     cout<<endl;
 }
 
+void Player::execute (ai::Difficulty difficulty) {
+
+}
+
 }
 

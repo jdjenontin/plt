@@ -54,9 +54,11 @@ namespace engine {
 
     int Attack::execute()
     {
-        if(this->ableToAttack()){
+        std::cout << "In attack Execute" << "\n";
+        if(attackCountry->getNumberOfTroop()>2){
             int nAtt = attackCountry->getNumberOfTroop()-1;
             int nDef = defCountry->getNumberOfTroop();
+            std::cout << "nAtt" << nAtt << "nDef" << nDef << "\n";
             map<string,int> attackSummary = AttackComputer::attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
             return 1;

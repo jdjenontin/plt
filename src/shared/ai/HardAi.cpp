@@ -86,3 +86,34 @@
 // }
 
 // }
+
+#include "HardAi.h"
+#include <iostream>
+#include <algorithm>
+
+namespace ai{
+
+HardAi::HardAi(int id){
+    this->id = id;
+    status = state::PLAYING;
+    type = state::BOT;
+    difficulty = Difficulty::HARD;
+}
+
+void HardAi::execute (){
+
+}
+
+void HardAi::place (){
+
+}
+
+void HardAi::attack (){
+
+}
+
+void HardAi::reinforce (){
+
+}
+
+}
