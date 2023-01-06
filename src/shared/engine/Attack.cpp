@@ -18,15 +18,35 @@ namespace engine {
 
     }
 
+    vector<int> Attack::compTroops(){
+        vector<int> troop(2,0);
+
+        if(attackType == SOLO){
+            troop[0] = 1;
+            troop[1] = 1;
+        }
+        else if (attackType == DOUBLE) {
+            troop[0] = min(2, attackCountry->getNumberOfTroop()-1);
+            troop[1] = min(2, defCountry->getNumberOfTroop());
+        }
+        else{
+            troop[0] = attackCountry->getNumberOfTroop()-1;
+            troop[1] = defCountry->getNumberOfTroop();
+        }
+    }
+
     // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
+    // TO-DO : Can be improve
     bool Attack::ableToAttack () {
         bool isOwner = attackCountry->getOwnerId() == player->getId();
-        bool isntOwner = defCountry->getOwnerId() != player->getId();
+        bool isntOwnerOfDef = defCountry->getOwnerId() != player->getId();
 
         bool adjacent = attackCountry->isAdjacent(defCountry->getId());
-        bool haveTroop = attackCountry->getNumberOfTroop() > 1;
 
-        return adjacent & haveTroop & isOwner & isntOwner;
+        bool haveTroop = attackCountry->getNumberOfTroop() > 1;
+        
+
+        return adjacent & haveTroop & isOwner & isntOwnerOfDef;
     }
 
     void Attack::updateState(map<string,int> attackSummary )
@@ -55,8 +75,9 @@ namespace engine {
     int Attack::execute()
     {
         if(this->ableToAttack()){
-            int nAtt = attackCountry->getNumberOfTroop()-1;
-            int nDef = defCountry->getNumberOfTroop();
+            vector<int> troops = this->compTroops();
+            int nAtt = troops[0];
+            int nDef = troops[1];
             map<string,int> attackSummary = AttackComputer::attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
             return 1;
@@ -93,6 +114,10 @@ namespace engine {
 
     const std::map<std::string,int>& Attack::getAttSummary() const{
         return attSummary;
+    }
+
+    void setAttackType(engine::AttackType attackType){
+        attackType = attackType;
     }
     
 }
