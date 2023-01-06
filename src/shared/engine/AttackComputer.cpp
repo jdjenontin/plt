@@ -9,6 +9,8 @@
 using namespace std;
 using namespace state;
 
+# define DEBUG 1
+
 namespace engine{
 
     void printVec(vector<int> dices){

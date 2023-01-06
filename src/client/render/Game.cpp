@@ -389,13 +389,15 @@ void Game::window_begin(){
             game_process();            
             if (player->getType() == BOT) {
 
+                
                 bot = dynamic_pointer_cast<ai::Ai>(player);
                 std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
                 easyBot = static_pointer_cast<ai::EasyAi>(bot);
                 std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
                 std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
                 std::cout << "Procedure du bot de niveau" << easyBot->getCountriesList().at(0)->getName() << std::endl;
-                
+
+                bot->setState(state);
 
                 switch(bot->difficulty) {
                     case EASY:

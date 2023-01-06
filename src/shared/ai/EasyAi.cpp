@@ -49,7 +49,7 @@ void EasyAi::execute (){
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::cout << "Execute bot Easy" << std::endl;
     place();
-    //attack();
+    attack();
     //reinforce();
 }
 
@@ -106,12 +106,14 @@ void EasyAi::attack() {
 
 
         std::cout << "The AI will attack " << aiDefCountry->getName() << " with " << aiAttackCountry->getName() << "\n";
+        cout << aiDefCountry->getId() << endl;
 
         aiAttack.setAttackCountry(aiAttackCountry);
         std::cout << "Set Attack Country" << "\n";
         aiAttack.setDefCountry(aiDefCountry);
         std::cout << "Set def country" << "\n";
         aiDice.updateDice(0, 3);
+        aiAttack.setState(state);
 
         aiAttack.execute();
 

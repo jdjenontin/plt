@@ -116,7 +116,6 @@ void State::createPlayers(){
 
     for(int i = nbOfPlayer; i < (nbOfPlayer+nbOfBot); i++){
         playersList.push_back(std::shared_ptr<Player>(new Ai(i)));
-        botsList.push_back(std::shared_ptr<ai::Ai>(new Ai(i)));
     }
 }
 
