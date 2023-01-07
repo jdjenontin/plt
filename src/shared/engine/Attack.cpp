@@ -31,23 +31,27 @@ namespace engine {
 
     void Attack::updateState(map<string,int> attackSummary )
     {
-        cout << "In updateState" << endl;
+        cout << "Begin updateState" << endl;
         attackCountry->reduceTroop(attackSummary["attackerLoos"]);
         defCountry->reduceTroop(attackSummary["defenderLoos"]);
 
         if(attackSummary["win"])
         {
-            cout << "In updateState" << "1" << endl;
+            cout << "In updateState " << "1" << endl;
             
             int defPlayerId = defCountry->getOwnerId();
             cout << "playerId" << defPlayerId << endl;
             cout << state->getPlayersList().size() <<endl;
             shared_ptr<state::Player> defPlayer = state->getPlayersList()[defPlayerId];
-            cout << "In updateState" << "2" << endl;
+            cout << "In updateState " << "2" << endl;
             defPlayer->print();
+            
             defPlayer->deleteCountry(defCountry);
+            
             player->addCountry(defCountry);
+            cout << defCountry << endl;
             this->moveTroop();
+            cout << defCountry << endl;
         }
         cout << "In updateState end" << endl;
     }

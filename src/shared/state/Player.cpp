@@ -31,11 +31,16 @@ Player::~Player () {
 }
 
 void Player::addCountry (shared_ptr<state::Country>& a_country) {
+    cout << "In add country" << endl;
+    cout << "In add country for player id:" << id << endl;
     a_country->setOwnerId(id);
+    cout << "set owner Id" << endl;
     countriesList.push_back(a_country);
+    cout << "Pushed back" << endl;
 }
 
 void Player::deleteCountry (shared_ptr<state::Country>& a_country) {
+    cout << "In delete country" << endl;
     int i = 0;
     while(countriesList[i] -> getId() != a_country -> getId()){
         i++;

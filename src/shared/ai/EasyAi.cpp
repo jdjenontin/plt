@@ -42,14 +42,14 @@ EasyAi::EasyAi(int id){
     difficulty = Difficulty::EASY;
 }
 
-void EasyAi::execute (){
+void EasyAi::execute (const std::shared_ptr<state::Player>& currentPlayer){
     Dice reAttack(0,1);
     int numConqueredCountries = 0;
 
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::cout << "Execute bot Easy" << std::endl;
     place();
-    attack();
+    attack(currentPlayer);
     //reinforce();
 }
 
@@ -69,7 +69,7 @@ void EasyAi::place() {
     }  
 }
 
-void EasyAi::attack() {
+void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
 
     std::cout << "Attack du bot" << std::endl;
     canAttack = false;
@@ -113,8 +113,9 @@ void EasyAi::attack() {
         aiAttack.setDefCountry(aiDefCountry);
         std::cout << "Set def country" << "\n";
         aiDice.updateDice(0, 3);
-        aiAttack.setState(state);
-
+        
+        aiAttack.setPlayer(currentPlayer);
+        
         aiAttack.execute();
 
         std::cout << "Attacking" << std::endl;

@@ -404,7 +404,7 @@ void Game::window_begin(){
                         
                         std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
                         std::cout << "Case du bot Easy " << std::endl;
-                        easyBot->execute();
+                        easyBot->execute(player);
                         std::cout << "Fin execute du bot" << std::endl;
 
                     /*case NORMAL:
