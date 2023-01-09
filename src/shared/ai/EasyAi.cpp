@@ -3,13 +3,10 @@
 #include <chrono>
 #include <engine.h>
 #include <vector>
-#include <thread>
 
 
 using namespace engine;
 using namespace state;
-using namespace std::this_thread;
-using namespace std::chrono;
 using namespace std;
 
 extern vector<shared_ptr<state::Country>> v_listcountry;
@@ -35,21 +32,23 @@ EasyAi::~EasyAi() {
     
 }
 
-EasyAi::EasyAi(int id){
+EasyAi::EasyAi(int id, shared_ptr<Player> player) : EasyAi(){
+    EasyAi();
     this->id = id;
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::EASY;
+    // status = state::PLAYING;
+    // type = state::BOT;
+    // difficulty = Difficulty::EASY;
+    player = player;
 }
 
-void EasyAi::execute (const std::shared_ptr<state::Player>& currentPlayer){
+void EasyAi::execute (){
     Dice reAttack(0,1);
     int numConqueredCountries = 0;
 
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::cout << "Execute bot Easy" << std::endl;
     place();
-    attack(currentPlayer);
+    attack();
     //reinforce();
 }
 
@@ -69,7 +68,7 @@ void EasyAi::place() {
     }  
 }
 
-void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
+void EasyAi::attack() {
 
     std::cout << "Attack du bot" << std::endl;
     canAttack = false;
@@ -114,7 +113,7 @@ void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
         std::cout << "Set def country" << "\n";
         aiDice.updateDice(0, 3);
         
-        aiAttack.setPlayer(currentPlayer);
+        aiAttack.setPlayer(player);
         
         aiAttack.execute();
 

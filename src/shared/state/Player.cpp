@@ -19,11 +19,14 @@ Player::Player () {
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
-Player::Player (int a_id) {
-    status = PLAYING;
+Player::Player (int a_id) : Player() {
     id = a_id;
-    type = HUMAN;
     name = defaultNames[a_id];
+}
+
+// TO-DO : think aout name implication
+Player::Player(int a_id, TypePlayer a_type) :Player(a_id){
+    type = a_type;
 }
 
 Player::~Player () {

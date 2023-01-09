@@ -110,12 +110,12 @@ void State::buildCards(){
 }
 
 void State::createPlayers(){
-    for(int i = 0; i<nbOfPlayer; i++){
-        playersList.push_back(std::shared_ptr<Player>(new Player(i)));
-    }
-
-    for(int i = nbOfPlayer; i < (nbOfPlayer+nbOfBot); i++){
-        playersList.push_back(std::shared_ptr<Player>(new Ai(i)));
+    for(int i = 0; i<nbOfPlayer+nbOfBot; i++){
+        if(i < nbOfPlayer)
+            playersList.push_back(std::shared_ptr<Player>(new Player(i)));
+        else{
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::BOT)));
+        }
     }
 }
 
