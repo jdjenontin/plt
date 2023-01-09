@@ -128,7 +128,6 @@ void State::distributeCountries(){
 
     std::shuffle(cp_countriesList.begin(), cp_countriesList.end(), rng);
 
-    
     int i = 0;
 
     for(auto& country : cp_countriesList){

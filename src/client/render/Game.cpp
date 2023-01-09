@@ -58,7 +58,7 @@ Game::Game(){
 }
 
 Game::~Game(){
-
+    
 }
 
 void Game::reinforce_event(){
