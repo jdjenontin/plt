@@ -13,39 +13,35 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestCountry)
 {
 
-  Country country;
-  Country arg("Argentine", 12);
-
+  std::shared_ptr<Country> country(new Country());
+  std::shared_ptr<Country> blabla(new Country("random", 43, 100, 200));
+  std::shared_ptr<Country> ala(new Country("Alaska", 0));
+  std::shared_ptr<Country> alb(new Country("Alberta", 2));
 
   // Test getters setters
   {
-    // BOOST_CHECK_EQUAL(country.getNumberOfTroop(),0);
-    // country.setNumberOfTroop(5);
-    // BOOST_CHECK_EQUAL(country.getNumberOfTroop(),5);
-    // BOOST_CHECK_EQUAL(country.getColor().toInteger(), 255);
-    // sf::Color rouge = sf::Color::Red;
-    // arg.setColor(rouge);
-    // sf::Color couleur = arg.getColor();
-    // BOOST_CHECK_EQUAL(couleur.toInteger(), rouge.toInteger());
-    
+    country->setNumberOfTroop(5);
+    country->setOwnerId(18);
+    BOOST_CHECK_EQUAL(ala->getId(),0);
+    BOOST_CHECK_EQUAL(ala->getName(),"Alaska");
+    BOOST_CHECK_EQUAL(country->getNumberOfTroop(),5);
+    BOOST_CHECK_EQUAL(country->getOwnerId(), 18);
   }
 
   //Test other methods 
   {
-    country.addTroop(2);
-    BOOST_CHECK_EQUAL(country.getNumberOfTroop(), 7);
-    country.reduceTroop(4);
-    BOOST_CHECK_EQUAL(country.getNumberOfTroop(), 3);
-    BOOST_CHECK_EQUAL(country.getName(), "");
-    BOOST_CHECK_EQUAL(arg.getName(), "Argentine");
-    BOOST_CHECK_EQUAL(arg.getId(), 12);
-    BOOST_CHECK(arg.isAdjacent(10));
-    BOOST_CHECK(!arg.isAdjacent(9));
+    country->addTroop(2);
+    BOOST_CHECK_EQUAL(country->getNumberOfTroop(), 7);
+    country->reduceTroop(4);
+    BOOST_CHECK_EQUAL(country->getNumberOfTroop(), 3);
+    BOOST_CHECK(ala->isAdjacent(1));
+    BOOST_CHECK(!ala->isAdjacent(9));
+    ala->setNumberOfTroop(50);
+    alb->setNumberOfTroop(2);
+    BOOST_CHECK(country->troopComparaison(alb,ala));
+    BOOST_CHECK(country->idComparaison(ala,alb));
+    country->print();
   }
-
-  
-
-
 
 }
 

@@ -13,10 +13,11 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestDice)
 {
     Dice dice(1, 1);
+    Dice dé = Dice();
     //Methods tests
     {
-        std::uniform_int_distribution<int> dist{1,1};
-        BOOST_CHECK_EQUAL(dice.distrib, dist);
-        BOOST_CHECK_EQUAL(dice.thrown(), 1);
+      BOOST_CHECK_EQUAL(dice.thrown(), 1);
+      dice.updateDice(3,1);
+      BOOST_CHECK_EQUAL(dice.thrown(), 0);
     }
 }

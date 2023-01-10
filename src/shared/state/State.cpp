@@ -72,7 +72,7 @@ const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
     return cardsList;
 }
 
-const std::vector<std::shared_ptr<Player>> & State::getPlayersList() const{
+const std::vector<std::shared_ptr<Player>>& State::getPlayersList() const{
     return playersList;
 }
 

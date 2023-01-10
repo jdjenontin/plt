@@ -6,4 +6,4 @@ chmod ugo+rwx build/run_test.sh
 
 
 # Generation du coverage 
-#make -C build code-coverage
+make -C build code-coverage
