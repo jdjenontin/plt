@@ -33,6 +33,10 @@ namespace engine {
             troop[0] = attackCountry->getNumberOfTroop()-1;
             troop[1] = defCountry->getNumberOfTroop();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
         return troop;
     }
 
