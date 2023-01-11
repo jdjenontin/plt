@@ -9,6 +9,8 @@
 using namespace std;
 using namespace state;
 
+# define DEBUG 1
+
 namespace engine{
 
     void printVec(vector<int> dices){
@@ -20,6 +22,7 @@ namespace engine{
     Dice dice(1,6);
 
     int AttackComputer::attackSimple(int nAttacker, int nDefender) {
+
         if (nAttacker > 3 || nDefender > 2){
             cerr << __FUNCTION__ <<" n'est valide que pour nAttacker > 3 et nDefender > 2)" << endl;
             exit(1);
@@ -68,6 +71,7 @@ namespace engine{
     // TO-DO : Can be optimized 
     map<string,int> AttackComputer::attackNvM(int nAttacker, int nDefender)
     {
+        std::cout << "In attackNvM" << "\n";
         #ifdef DEBUG
             cout << "---------------------------" << endl;
             cout << __FUNCTION__ << endl;

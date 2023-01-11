@@ -127,9 +127,9 @@ void MenuScene::initList(){
     }
     for(int i = 0; i < blist_size; i++){
         if((i+plist_size)%2 == 0)
-            addMessage(X_MENU-300, Y_MENU-20+150*((i+plist_size)/2+1), 30, "Bot", color.colorList[i+plist_size]);
+            addMessage(X_MENU-300, Y_MENU-20+150*((i+plist_size)/2+1), 30, "EasyBot", color.colorList[i+plist_size]);
         else
-            addMessage(X_MENU+250, Y_MENU-20+150*((i+plist_size)/2+1), 30, "Bot", color.colorList[i+plist_size]);
+            addMessage(X_MENU+250, Y_MENU-20+150*((i+plist_size)/2+1), 30, "EasyBot", color.colorList[i+plist_size]);
     }
 }
 

@@ -19,11 +19,14 @@ Player::Player () {
 }
 //Tacitement le nombre de troup est 35 pour les 3 joueurs 
 
-Player::Player (int a_id) {
-    status = PLAYING;
+Player::Player (int a_id) : Player() {
     id = a_id;
-    type = HUMAN;
     name = defaultNames[a_id];
+}
+
+// TO-DO : think aout name implication
+Player::Player(int a_id, TypePlayer a_type) :Player(a_id){
+    type = a_type;
 }
 
 Player::~Player () {
@@ -31,11 +34,16 @@ Player::~Player () {
 }
 
 void Player::addCountry (shared_ptr<state::Country>& a_country) {
+    cout << "In add country" << endl;
+    cout << "In add country for player id:" << id << endl;
     a_country->setOwnerId(id);
+    cout << "set owner Id" << endl;
     countriesList.push_back(a_country);
+    cout << "Pushed back" << endl;
 }
 
 void Player::deleteCountry (shared_ptr<state::Country>& a_country) {
+    cout << "In delete country" << endl;
     int i = 0;
     while(countriesList[i] -> getId() != a_country -> getId()){
         i++;
@@ -179,6 +187,7 @@ void Player::print()
 
     cout<<endl;
 }
+
 
 }
 

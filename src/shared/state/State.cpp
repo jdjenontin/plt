@@ -11,10 +11,10 @@
 #include "State.h"
 #include "Dice.h"
 #include "Calculation.h"
+#include <algorithm>
 
 
 using namespace std;
-using namespace ai;
 
 namespace state
 {
@@ -111,12 +111,12 @@ void State::buildCards(){
 }
 
 void State::createPlayers(){
-    for(int i = 0; i<nbOfPlayer; i++){
-        playersList.push_back(std::shared_ptr<Player>(new Player(i)));
-    }
-
-    for(int i = nbOfPlayer; i < (nbOfPlayer+nbOfBot); i++){
-        playersList.push_back(std::shared_ptr<Player>(new Ai(i)));
+    for(int i = 0; i<nbOfPlayer+nbOfBot; i++){
+        if(i < nbOfPlayer)
+            playersList.push_back(std::shared_ptr<Player>(new Player(i)));
+        else{
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::BOT)));
+        }
     }
 }
 
@@ -144,7 +144,7 @@ void State::distibuteTroops(){
     
     // TO-DO : Make it a const
 
-    // Depending on the number of player, the initaial troop for each player vary
+    // Depending on the number of player, the initial troop for each player vary
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
     int initialTroop = initialTroopMap[nbOfPlayer + nbOfBot];

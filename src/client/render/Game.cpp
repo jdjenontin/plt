@@ -29,6 +29,9 @@ using namespace render;
 using namespace engine;
 using namespace ai;
 
+
+// TO-DO : Clean all this make them attributes
+
 // La liste de pays recupere dans le state
 vector<shared_ptr<state::Country>> v_listcountry;
 // La liste de carte recupere dans le state
@@ -36,7 +39,12 @@ vector<shared_ptr<state::Card>> v_listcard;
 // La liste de player recupere dans le state
 vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
-shared_ptr<state::Player> player;
+shared_ptr<state::Player> player = make_shared<state::Player>();
+
+//shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
+shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
+shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
+shared_ptr<ai::HardAi> hardBot;
 // Le pays que le joueur choisi pendant son tour
 // Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
 shared_ptr<state::Country> country, country_a, country_d;
@@ -228,11 +236,20 @@ void Game::gameMenuEvent(){
  * @brief The event of the game scene when the client use the mouse
 */
 void Game::gameScene_event(int button){
-    if(button == LEFT){
-        if(gameScene.isCardButton(pos)){
-            init_card();
-            gameScene.close();
-            cardScene.open();
+
+    if (player->getType() != BOT) {
+        if(button == LEFT){
+            if(gameScene.isCardButton(pos)){
+                init_card();
+                gameScene.close();
+                cardScene.open();
+            }
+            country = gameScene.findCountry(pos);
+            if(country)
+                country_event();
+            else
+                attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+            gameMenuEvent();
         }
         country = gameScene.findCountry(pos);
         if(country)
@@ -246,7 +263,6 @@ void Game::gameScene_event(int button){
             country_a->reduceTroop(1);
             country_d->addTroop(1);
         }
-
     }
 }
 
@@ -388,6 +404,7 @@ void Game::createMessage(){
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
+
     engine.setPlayer(player);
     updateMessage();
     if(!initPlayer) init_player();
@@ -407,8 +424,24 @@ void Game::window_begin(){
     {
         pos = Mouse::getPosition(*window);
 
-        if(gameScene.isOpen())
-            game_process();
+        if(gameScene.isOpen()) {
+            game_process();            
+            if (player->getType() == BOT) {
+
+                
+                // TO-DO : Think about the implementation of dificulty level
+
+                std::cout << "Case du bot Easy " << std::endl;
+                easyBot->setState(state);
+                easyBot->execute(player);
+                std::cout << "Fin execute du bot" << std::endl;
+
+                state->ChangePlaying();
+                engine.execute(DISTRIBUTE);
+                status = 0;
+                initPlayer = false;
+            }
+        }
         //Evenement du souris
         mouse_event(&mouse);
         //Evenement du clavier

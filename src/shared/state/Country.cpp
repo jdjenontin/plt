@@ -1,6 +1,8 @@
 #include "Country.h"
 #include <iostream>
 
+using namespace std;
+
 namespace state{
 
 std::vector<std::vector<bool>> Country::matriceAdj = FileOps::csvParser("res/adjacentMat.txt");
@@ -46,6 +48,7 @@ int Country::getOwnerId() const{
     return ownerId;
 }
 void Country::setOwnerId(int a_ownerId){
+    cout << "In function set owner Id:" << a_ownerId << endl;
     ownerId = a_ownerId;
 }
 
