@@ -26,6 +26,8 @@ using namespace render;
 using namespace engine;
 using namespace ai;
 
+
+// TO-DO : Clean all this
 // La liste de pays recupere dans le state
 vector<shared_ptr<state::Country>> v_listcountry;
 // La liste de carte recupere dans le state
@@ -35,7 +37,7 @@ vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
 shared_ptr<state::Player> player = make_shared<state::Player>();
 // Le bot actuel
-shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
+//shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
 shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
 shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
 shared_ptr<ai::HardAi> hardBot;
@@ -390,35 +392,35 @@ void Game::window_begin(){
             if (player->getType() == BOT) {
 
                 
-                bot = dynamic_pointer_cast<ai::Ai>(player);
-                std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
-                easyBot = static_pointer_cast<ai::EasyAi>(bot);
-                std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
-                std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
-                std::cout << "Procedure du bot de niveau" << easyBot->getCountriesList().at(0)->getName() << std::endl;
+                // bot = dynamic_pointer_cast<ai::Ai>(player);
+                // std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
+                // easyBot = static_pointer_cast<ai::EasyAi>(bot);
+                // std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
+                // std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
+                // std::cout << "Procedure du bot de niveau" << easyBot->getCountriesList().at(0)->getName() << std::endl;
 
-                bot->setState(state);
+                // bot->setState(state);
 
-                switch(bot->difficulty) {
-                    case EASY:
+                // switch(bot->difficulty) {
+                //     case EASY:
                         
-                        std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
-                        std::cout << "Case du bot Easy " << std::endl;
-                        easyBot->execute(player);
-                        std::cout << "Fin execute du bot" << std::endl;
+                //         std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
+                //         std::cout << "Case du bot Easy " << std::endl;
+                //         easyBot->execute(player);
+                //         std::cout << "Fin execute du bot" << std::endl;
 
-                    /*case NORMAL:
-                        normalBot = dynamic_pointer_cast<ai::NormalAi>(bot);
-                        normalBot->execute();
+                //     /*case NORMAL:
+                //         normalBot = dynamic_pointer_cast<ai::NormalAi>(bot);
+                //         normalBot->execute();
 
-                    case HARD:
-                        hardBot = dynamic_pointer_cast<ai::HardAi>(bot);
-                        hardBot->execute();*/
-                }
-                state->ChangePlaying();
-                engine.execute(DISTRIBUTE);
-                status = 0;
-                initPlayer = false;
+                //     case HARD:
+                //         hardBot = dynamic_pointer_cast<ai::HardAi>(bot);
+                //         hardBot->execute();*/
+                // }
+                // state->ChangePlaying();
+                // engine.execute(DISTRIBUTE);
+                // status = 0;
+                // initPlayer = false;
             }
         }
         //Evenement du souris

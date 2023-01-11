@@ -11,6 +11,7 @@
 #include "State.h"
 #include "Dice.h"
 #include "Calculation.h"
+#include <algorithm>
 
 
 using namespace std;

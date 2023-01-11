@@ -3,6 +3,9 @@
 #include <algorithm>
 
 
+using namespace std;
+using namespace state;
+
 namespace ai{
 
 
@@ -20,25 +23,18 @@ namespace ai{
     }*/
 
 NormalAi::NormalAi () {
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::NORMAL;
-    name = "BOT";
 }
 
-NormalAi::NormalAi(int id){
-    this->id = id;
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::NORMAL;
+NormalAi::NormalAi(shared_ptr<State> a_state) : Ai(a_state){
+    
 }
 
 NormalAi::~NormalAi() {
     
 }
 
-void NormalAi::execute (){
-
+void NormalAi::execute (shared_ptr<Player> a_player){
+    return;
 }
 
 void NormalAi::place (){

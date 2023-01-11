@@ -1,11 +1,14 @@
 #include "Ai.h"
 #include <iostream>
 #include <chrono>
-#include <engine.h>
+#include "engine.h"
 #include <vector>
 
 using namespace engine;
 using namespace state;
+
+
+// TO-DO : Chnage those to attributes
 
 //les commandes 
 Engine aiEngine;
@@ -18,27 +21,18 @@ UseCard aiUsecard;
 namespace ai{
 
 
-
-//la liste de pays de joueur
 std::vector<std::shared_ptr<Country>> aiCountries;
 
 Ai::Ai() {
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::EASY;
-    name = "BOT";
 }
 
 Ai::~Ai() {
     
 }
 
-Ai::Ai(int id){
-    this->id = id;
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::EASY;
 
+Ai::Ai(std::shared_ptr<State> a_state){
+    state = a_state;
 }
 
 void Ai::setState(const std::shared_ptr<state::State>& state){
@@ -47,7 +41,6 @@ void Ai::setState(const std::shared_ptr<state::State>& state){
     aiDistributecard.setState(state);
 }
 
-/*
 void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     this->player = player;
     aiPlace.setPlayer(player);
@@ -55,7 +48,7 @@ void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     aiReinforce.setPlayer(player);
     aiDistributecard.setPlayer(player);
     aiUsecard.setPlayer(player);
-}*/
+}
 
 void Ai::setDifficulty(Difficulty difficulty){
     this->difficulty = difficulty;
@@ -63,11 +56,6 @@ void Ai::setDifficulty(Difficulty difficulty){
 
 Difficulty Ai::getDifficulty(){
     return this->difficulty;
-}
-
-
-void Ai::placeTroop(){
-
 }
 
 }
