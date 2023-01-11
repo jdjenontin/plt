@@ -33,6 +33,8 @@ namespace engine {
             troop[0] = attackCountry->getNumberOfTroop()-1;
             troop[1] = defCountry->getNumberOfTroop();
         }
+
+        return troop;
     }
 
     // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
