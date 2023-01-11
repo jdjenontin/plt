@@ -57,8 +57,8 @@ void State::ChangePlaying () {
     }
 
     if(playersList[orderPlayer]->getCountriesList().size() == 0){
+        playersList[orderPlayer]->setStatus(LOSE);
         orderPlayer++;
-        playersList[orderPlayer]->setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())
             orderPlayer = 0;
     }

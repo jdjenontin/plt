@@ -41,16 +41,21 @@ BOOST_AUTO_TEST_CASE(TestState)
     BOOST_CHECK_EQUAL(PlayerOrder, 0);
     state->ChangePlaying();
     PlayerOrder = state->getOrderPlayer();
-    BOOST_CHECK_EQUAL(PlayerOrder, 1); 
+    BOOST_CHECK_EQUAL(PlayerOrder, 1);
     state->ChangePlaying();
     PlayerOrder = state->getOrderPlayer();
-    BOOST_CHECK_EQUAL(PlayerOrder, 2); 
-    state->ChangePlaying();
-    PlayerOrder = state->getOrderPlayer();
-    BOOST_CHECK_EQUAL(PlayerOrder, 0); 
+    BOOST_CHECK_EQUAL(PlayerOrder, 0);
 
     vector<std::shared_ptr<Country>> Player2Countries = pList[1]->getCountriesList();
-    /*à continuer (enlever tous les pays pour le "tuer")*/
+    int size = Player2Countries.size();
+    std::cout << size << std::endl;
+    for (int i = 0; i<size; i++) {
+      state->getPlayersList().at(1)->deleteCountry(Player2Countries.at(i));
+    }
+    std::cout << state->getPlayersList().at(1)->getCountriesList().size() << std::endl;
+    state->ChangePlaying();
+    PlayerOrder = state->getOrderPlayer();
+    BOOST_CHECK_EQUAL(PlayerOrder, 0);
   }
 }
 
