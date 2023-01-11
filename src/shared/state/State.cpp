@@ -57,8 +57,8 @@ void State::ChangePlaying () {
     }
 
     if(playersList[orderPlayer]->getCountriesList().size() == 0){
+        playersList[orderPlayer]->setStatus(LOSE);
         orderPlayer++;
-        playersList[orderPlayer]->setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())
             orderPlayer = 0;
     }
@@ -72,7 +72,7 @@ const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
     return cardsList;
 }
 
-const std::vector<std::shared_ptr<Player>> & State::getPlayersList() const{
+const std::vector<std::shared_ptr<Player>>& State::getPlayersList() const{
     return playersList;
 }
 
