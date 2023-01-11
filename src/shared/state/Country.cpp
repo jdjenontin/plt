@@ -12,12 +12,47 @@ Country::Country (std::string a_name , int a_id) {
     id = a_id;
 }
 
+Country::Country (std::string a_name , int a_id, int cont) {
+    name = a_name;
+    id = a_id;
+
+    switch(cont) {
+        case 0:
+            continent = AMERIQUE_NORD;
+            break;
+        
+        case 1:
+            continent = AMERIQUE_SUD;
+            break;
+
+        case 2:
+            continent = AFRIQUE;
+            break;
+        
+        case 3:
+            continent = EUROPE;
+            break;
+
+        case 4:
+            continent = ASIE;
+            break;
+
+        case 5:
+            continent = OCEANIE;
+            break;
+
+    }
+ 
+}
+
 Country::Country (std::string a_name , int a_id, int a_posX, int a_posY)
 {
     Country(a_name, a_id);
     posX = a_posX;
     posY = a_posY;
 }
+
+
 
 Country::Country()
 {
@@ -99,6 +134,14 @@ void Country::print()
     std::cout << "----"<< name << " : " << id << "----"<<std::endl;
     std::cout << "Number of troop: " << numberOfTroop << std::endl;
     std::cout << "Owner          : " << ownerId << std::endl;
+}
+
+void Country::setContinent(Continent cont){
+    continent = cont;
+}
+
+Continent Country::getContinent() const{
+    return continent;
 }
 
 }

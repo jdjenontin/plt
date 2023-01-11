@@ -26,9 +26,9 @@ int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
     std::shared_ptr<State> state(new State());
-
+    
     Reinforce reinforce;
-
+    
     Game game;
 
     game.setState(state);

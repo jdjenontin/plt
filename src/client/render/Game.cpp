@@ -392,28 +392,36 @@ void Game::window_begin(){
                 
                 bot = dynamic_pointer_cast<ai::Ai>(player);
                 std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
-                easyBot = static_pointer_cast<ai::EasyAi>(bot);
+                
                 std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
                 std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
-                std::cout << "Procedure du bot de niveau" << easyBot->getCountriesList().at(0)->getName() << std::endl;
 
                 bot->setState(state);
+                bot->setDifficulty(NORMAL);
+                easyBot = static_pointer_cast<ai::EasyAi>(bot);
+                normalBot = static_pointer_cast<ai::NormalAi>(bot);
+                cout << bot->getDifficulty() << endl;
+                std::cout << "Adresse bot Normal " << normalBot << std::endl;
 
-                switch(bot->difficulty) {
+                switch(bot->getDifficulty()) {
                     case EASY:
-                        
-                        std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
+                        easyBot->setPlayer(player);
                         std::cout << "Case du bot Easy " << std::endl;
-                        easyBot->execute(player);
+                        easyBot->execute();
                         std::cout << "Fin execute du bot" << std::endl;
+                        break;
 
-                    /*case NORMAL:
-                        normalBot = dynamic_pointer_cast<ai::NormalAi>(bot);
+                    case NORMAL:
+                        normalBot->setPlayer(player);
+                        std::cout << "Case du bot Normal " << std::endl;
                         normalBot->execute();
+                        std::cout << "Fin execute du bot Normal" << std::endl;
+                        break;
 
-                    case HARD:
+                    /*case HARD:
                         hardBot = dynamic_pointer_cast<ai::HardAi>(bot);
-                        hardBot->execute();*/
+                        hardBot->execute();
+                        break;*/
                 }
                 state->ChangePlaying();
                 engine.execute(DISTRIBUTE);

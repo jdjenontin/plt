@@ -86,10 +86,13 @@ void State::buildCountries(){
 
     for (const auto& key : root.getMemberNames()) {
         countriesList.push_back(std::shared_ptr<Country>(new Country(key, 
-                                                                    root[key]["id"].asInt())));
+                                                                    root[key]["id"].asInt(), 
+                                                                    root[key]["continent"].asInt())));
+        
     }
 
     std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
+
 }
 
 void State::buildCards(){

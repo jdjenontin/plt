@@ -42,14 +42,14 @@ EasyAi::EasyAi(int id){
     difficulty = Difficulty::EASY;
 }
 
-void EasyAi::execute (const std::shared_ptr<state::Player>& currentPlayer){
+void EasyAi::execute (){
     Dice reAttack(0,1);
     int numConqueredCountries = 0;
 
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::cout << "Execute bot Easy" << std::endl;
     place();
-    attack(currentPlayer);
+    attack();
     //reinforce();
 }
 
@@ -69,10 +69,9 @@ void EasyAi::place() {
     }  
 }
 
-void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
+void EasyAi::attack() {
 
     std::cout << "Attack du bot" << std::endl;
-    canAttack = false;
     std::vector<int> count;
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::vector<std::shared_ptr<Country>> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
@@ -87,7 +86,7 @@ void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
     for(int j=0; j<aiAttackCountries.size(); j++){
         for(int i=0; i<42;i++) {
             if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries)) {
-                std::cout << "The AI can attack " << v_listcountry.at(i)->getName() << ". \n";
+                std::cout << "The Random AI can attack " << v_listcountry.at(i)->getName() << ". \n";
                 aiAttackableCountries.push_back(v_listcountry.at(i));
                 count.push_back(j);
             }
@@ -114,7 +113,7 @@ void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
         std::cout << "Set def country" << "\n";
         aiDice.updateDice(0, 3);
         
-        aiAttack.setPlayer(currentPlayer);
+        aiAttack.setPlayer(player);
         
         aiAttack.execute();
 
@@ -126,20 +125,25 @@ void EasyAi::attack(const std::shared_ptr<state::Player>& currentPlayer) {
 
 void EasyAi::reinforce() {
 
-    std::cout << "Reinforce du bot" << std::endl;
+    std::cout << "Reinforce du bot 1" << std::endl;
     aiDice.updateDice(0,countriesList.size()-1);
     std::shared_ptr<state::Country> depatureCountry  = countriesList[aiDice.thrown()];
+    std::shared_ptr<state::Country> arrivalCountry  = countriesList[aiDice.thrown()];
 
     aiReinforce.setM_country(depatureCountry);
-    aiReinforce.setN_country(countriesList[aiDice.thrown()]);
-
+    aiReinforce.setN_country(arrivalCountry);
+    aiReinforce.setPlayer(player);
+    std::cout << "Reinforce du bot 2" << std::endl;
     aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
-
+    std::cout << "Reinforce du bot 3" << std::endl;
+    std::cout << "Attack and def country " << depatureCountry->getName() << arrivalCountry->getName() << std::endl;
     for(int i = 0; i < aiDice.thrown(); i++)
     {
+        std::cout << "Reinforce du bot execute" << std::endl;
         aiReinforce.execute();
         std::cout << "Reinforcing" << std::endl;
     }
+    std::cout << "Reinforce du bot 4" << std::endl;
 }
 
 }

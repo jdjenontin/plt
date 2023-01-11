@@ -56,7 +56,7 @@ void Ai::setState(const std::shared_ptr<state::State>& state){
     aiDistributecard.setState(state);
 }
 
-/*
+
 void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     this->player = player;
     aiPlace.setPlayer(player);
@@ -64,7 +64,7 @@ void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     aiReinforce.setPlayer(player);
     aiDistributecard.setPlayer(player);
     aiUsecard.setPlayer(player);
-}*/
+}
 
 void Ai::setDifficulty(Difficulty difficulty){
     this->difficulty = difficulty;
