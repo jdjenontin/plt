@@ -12,11 +12,10 @@ using namespace std;
 // TO-DO Delete externs 
 
 extern vector<shared_ptr<state::Country>> v_listcountry;
-extern Engine aiEngine; // Why ?
+
 extern Place aiPlace;
 extern Attack aiAttack;
 extern Reinforce aiReinforce; 
-extern DistributeCard aiDistributecard; // Why ?
 extern UseCard aiUsecard;
 
 Dice aiDice(1,6);
@@ -36,31 +35,22 @@ EasyAi::EasyAi(shared_ptr<State> a_state) : Ai(a_state){
 }
 
 
-// TO-DO : Delete 
-void EasyAi::execute (){
-    Dice reAttack(0,1); // Why ?
-    int numConqueredCountries = 0; // Why ?
-
-    vector<shared_ptr<Country>> aiAttackCountries; // Why ?
-    cout << "Execute bot Easy" << endl;
-    place();
-    attack();
-    //reinforce();
-}
-
 void EasyAi::execute(shared_ptr<Player> a_player)
 {
+    #ifdef DEBUG
+        cout << "Executing bot " << __func__ << endl;
+    #endif
     player = a_player;
     place();
     attack();
-    //reinforce();
+    reinforce();
 }
 
 void EasyAi::place() {
 
     countriesList = player->getCountriesList();
     #ifdef DEBUG
-        cout << "Place du bot" << endl;
+        cout << "Place du bot " << __func__ << endl;
     #endif
 
     aiDice.updateDice(0,player->getCountriesList().size()-1);
@@ -80,8 +70,6 @@ void EasyAi::attack() {
     countriesList = player->getCountriesList();
     
     cout << "Attack du bot" << endl;
-
-    canAttack = false; // Why ?
 
     vector<int> count;
     vector<shared_ptr<Country>> aiAttackCountries;
@@ -128,13 +116,18 @@ void EasyAi::attack() {
 }
 
 void EasyAi::reinforce() {
+    #ifdef DEBUG
+        cout << "Reinforce du bot " << __func__ << endl;
+    #endif
+
     countriesList = player->getCountriesList();
-    cout << "Reinforce du bot" << endl;
+
     aiDice.updateDice(0,countriesList.size()-1);
     shared_ptr<state::Country> depatureCountry  = countriesList[aiDice.thrown()];
 
     aiReinforce.setM_country(depatureCountry);
     aiReinforce.setN_country(countriesList[aiDice.thrown()]);
+    aiReinforce.setPlayer(player);
 
     aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
 
