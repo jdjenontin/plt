@@ -33,10 +33,6 @@ namespace engine {
             troop[0] = attackCountry->getNumberOfTroop()-1;
             troop[1] = defCountry->getNumberOfTroop();
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> development
         return troop;
     }
 
@@ -79,9 +75,9 @@ namespace engine {
 
     int Attack::execute()
     {
-    #ifdef DEBUG
-        std::cout << "function : " << __func__ << std::endl;
-    #endif
+        #ifdef DEBUG
+            std::cout << "function : " << __func__ << std::endl;
+        #endif
         if(this->ableToAttack()){
             vector<int> troops = this->compTroops();
             int nAtt = troops[0];
@@ -124,7 +120,7 @@ namespace engine {
         return attSummary;
     }
 
-    void setAttackType(engine::AttackType attackType){
+    void Attack::setAttackType(engine::AttackType attackType){
         attackType = attackType;
     }
     
