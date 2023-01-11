@@ -33,6 +33,7 @@ State::~State(){
 void State::init()
 {
     this->buildCountries();
+    this->buildCards();
     this->createPlayers();
     this->distributeCountries();
     this->distibuteTroops();

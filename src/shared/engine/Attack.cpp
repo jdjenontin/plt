@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-//#define DEBUG 1
+#define DEBUG 1
 
 using namespace state;
 using namespace std;
@@ -33,6 +33,7 @@ namespace engine {
             troop[0] = attackCountry->getNumberOfTroop()-1;
             troop[1] = defCountry->getNumberOfTroop();
         }
+        return troop;
     }
 
     // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
@@ -74,6 +75,9 @@ namespace engine {
 
     int Attack::execute()
     {
+    #ifdef DEBUG
+        std::cout << "function : " << __func__ << std::endl;
+    #endif
         if(this->ableToAttack()){
             vector<int> troops = this->compTroops();
             int nAtt = troops[0];

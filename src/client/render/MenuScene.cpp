@@ -168,18 +168,14 @@ void MenuScene::deletebotplayer (){
 }
 
 void MenuScene::display () {
-    std::cout<<__FUNCTION__ << std::endl;
     window->clear(sf::Color::White);
     window->draw(s_back);
     window->draw(s_logo);
     for(auto m : listMenu)
         display_menu(m);
     
-    if(option_isOpen){
-        std::cout<<__FUNCTION__ << "YVT" << std::endl;
+    if(option_isOpen)
         initList();
-    }
-        
 }
 
 void MenuScene::display_menu (Menu menu) {
