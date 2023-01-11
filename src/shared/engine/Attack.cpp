@@ -22,14 +22,23 @@ namespace engine {
         vector<int> troop(2,0);
 
         if(attackType == SOLO){
+            #ifdef DEBUG
+                std::cout << "SOLO : " << __func__ << std::endl;
+            #endif
             troop[0] = 1;
             troop[1] = 1;
         }
         else if (attackType == DOUBLE) {
+            #ifdef DEBUG
+                std::cout << "DOUBLE : " << __func__ << std::endl;
+            #endif
             troop[0] = min(2, attackCountry->getNumberOfTroop()-1);
             troop[1] = min(2, defCountry->getNumberOfTroop());
         }
         else{
+            #ifdef DEBUG
+                std::cout << "MULTI : " << __func__ << std::endl;
+            #endif
             troop[0] = attackCountry->getNumberOfTroop()-1;
             troop[1] = defCountry->getNumberOfTroop();
         }
@@ -37,7 +46,7 @@ namespace engine {
     }
 
     // TO-DO : Verify if the ownership condition is necessary here/is checked in the render
-    // TO-DO : Can be improve
+    // TO-DO : Can be improved
     bool Attack::ableToAttack () {
         bool isOwner = attackCountry->getOwnerId() == player->getId();
         bool isntOwnerOfDef = defCountry->getOwnerId() != player->getId();
@@ -120,8 +129,8 @@ namespace engine {
         return attSummary;
     }
 
-    void Attack::setAttackType(engine::AttackType attackType){
-        attackType = attackType;
+    void Attack::setAttackType(engine::AttackType a_attackType){
+        attackType = a_attackType;
     }
     
 }
