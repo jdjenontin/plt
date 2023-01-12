@@ -15,6 +15,8 @@ using namespace std;
 using namespace std;
 using namespace state;
 
+extern vector<shared_ptr<state::Country>> v_listcountry; // TO-DO Delete 
+
 namespace ai{
 
 
@@ -47,7 +49,7 @@ void NormalAi::execute (){
     std::cout << "Execute du bot Normal " << std::endl;
 
     std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
-    std::vector<int> continentsPresence(this->presenceOnContinents());
+    std::vector<int> continentsPresence(player->presenceOnContinents());
     std::vector<int> newContinentsPresence = continentsPresence;
     int nbUnequal = 0;
     std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
@@ -131,7 +133,7 @@ void NormalAi::place (){
     std::cout << "Place du bot Heuristic" << std::endl;
     int minNbTroops = 7;
     int countriesWithMaxNbTroops = 0;
-    int bonus_troop = this->continentBonusTroop();
+    int bonus_troop = player->continentBonusTroop();
 
     for(int i = 0; i < bonus_troop; i++){
         for (auto country : countriesList){
@@ -146,6 +148,12 @@ void NormalAi::place (){
         bonus_troop--;
         std::cout << "Heuristic Ai place troops" << std::endl;
     }  
+}
+
+void NormalAi::execute(std::shared_ptr<state::Player> a_player)
+{
+    player = a_player;
+    this->execute();
 }
 
 void NormalAi::attack (){
@@ -239,7 +247,7 @@ void NormalAi::attack (){
         }
 
         std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
-        std::vector<int> continentsPresence(this->presenceOnContinents());
+        std::vector<int> continentsPresence(player->presenceOnContinents());
         std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
         int nbUnequal = 0;
         int testContinentsPresence = 0;
