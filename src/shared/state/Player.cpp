@@ -61,13 +61,6 @@ void Player::deleteCard (shared_ptr<Card>& card) {
     cardsList.erase(cardsList.begin() + i);
 }
 
-// void Player::setColor(const sf::Color& m_color){
-//     color = m_color;
-// }
-
-// const sf::Color& Player::getColor() const{
-//     return color;
-// }
 
 const int & Player::getOwnTroop() const {
     return ownTroop;

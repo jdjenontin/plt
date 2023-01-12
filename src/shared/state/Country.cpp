@@ -15,34 +15,7 @@ Country::Country (std::string a_name , int a_id) {
 Country::Country (std::string a_name , int a_id, int cont) {
     name = a_name;
     id = a_id;
-
-    switch(cont) {
-        case 0:
-            continent = AMERIQUE_NORD;
-            break;
-        
-        case 1:
-            continent = AMERIQUE_SUD;
-            break;
-
-        case 2:
-            continent = AFRIQUE;
-            break;
-        
-        case 3:
-            continent = EUROPE;
-            break;
-
-        case 4:
-            continent = ASIE;
-            break;
-
-        case 5:
-            continent = OCEANIE;
-            break;
-
-    }
- 
+    continent = (Continent) cont;
 }
 
 Country::Country (std::string a_name , int a_id, int a_posX, int a_posY)
@@ -98,16 +71,6 @@ void Country::addTroop (int a_nbTroop) {
 void Country::reduceTroop (int a_nbTroop) {
     numberOfTroop -= a_nbTroop;
 }
-
-// void Country::setColor(const sf::Color& m_color){
-//     color = m_color;
-// }
-
-
-// // TO-DO : Delete
-// const sf::Color& Country::getColor() const{
-//     return color;
-// }
 
 
 /**
