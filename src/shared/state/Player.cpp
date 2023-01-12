@@ -34,16 +34,11 @@ Player::~Player () {
 }
 
 void Player::addCountry (shared_ptr<state::Country>& a_country) {
-    cout << "In add country" << endl;
-    cout << "In add country for player id:" << id << endl;
     a_country->setOwnerId(id);
-    cout << "set owner Id" << endl;
     countriesList.push_back(a_country);
-    cout << "Pushed back" << endl;
 }
 
 void Player::deleteCountry (shared_ptr<state::Country>& a_country) {
-    cout << "In delete country" << endl;
     int i = 0;
     while(countriesList[i] -> getId() != a_country -> getId()){
         i++;
@@ -64,13 +59,6 @@ void Player::deleteCard (shared_ptr<Card>& card) {
     cardsList.erase(cardsList.begin() + i);
 }
 
-// void Player::setColor(const sf::Color& m_color){
-//     color = m_color;
-// }
-
-// const sf::Color& Player::getColor() const{
-//     return color;
-// }
 
 const int & Player::getOwnTroop() const {
     return ownTroop;

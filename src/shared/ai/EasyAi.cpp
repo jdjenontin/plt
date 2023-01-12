@@ -64,8 +64,6 @@ void EasyAi::place() {
 void EasyAi::attack() {
 
     countriesList = player->getCountriesList();
-    
-    cout << "Attack du bot" << endl;
 
     vector<int> count;
     vector<shared_ptr<Country>> aiAttackCountries;
@@ -84,7 +82,6 @@ void EasyAi::attack() {
     for(int j=0; j<aiAttackCountries.size(); j++){
         for(int i=0; i<42;i++) {
             if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries)) {
-                cout << "The AI can attack " << v_listcountry.at(i)->getName() << ". \n";
                 aiAttackableCountries.push_back(v_listcountry.at(i));
                 count.push_back(j);
             }
@@ -130,7 +127,6 @@ void EasyAi::reinforce() {
     for(int i = 0; i < aiDice.thrown(); i++)
     {
         aiReinforce.execute();
-        cout << "Reinforcing" << endl;
     }
 }
 

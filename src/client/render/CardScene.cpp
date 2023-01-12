@@ -66,7 +66,6 @@ void CardScene::display(){
     window->draw(gameb.circle);
     window->draw(changeb.circle);
     window->draw(change.text);
-    std::cout << cardsList.size() << std::endl;
 
     for(auto c : cardsList){
         display_card(c);
