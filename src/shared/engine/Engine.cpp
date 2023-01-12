@@ -4,6 +4,17 @@
 
 #define DEBUG 1
 
+#define PLACE 0
+#define ATTACK_A 1
+#define ATTACK_D 2
+#define REINFORCE_M 3
+#define REINFORCE_N 4
+#define DISTRIBUTE 5
+#define USECARD 6
+#define SOLO_ATTACK 7
+#define DOUBLE_ATTACK 8
+#define MULTI_ATTACK 9
+
 namespace engine {
 
 int bonus_troop;
@@ -22,6 +33,9 @@ void Engine::usecard_execute(){
 }
 
 void Engine::distribute_execute(){
+#ifdef DEBUG
+    std::cout << "function :" << __func__ << std::endl;
+#endif
     distributecard.execute();
 }
 
@@ -44,12 +58,14 @@ int Engine::reinforceM_execute(){
 }
 
 int Engine::attackD_execute(){
+#ifdef DEBUG
+    std::cout << "function : " << __func__ << std::endl;
+#endif 
     attack.setDefCountry(country);
     if(attack.isAdjacent()){
-        attack.execute();
+        //attack.execute();
     }
     else return 0;
-
     return 1;
 }
 
@@ -102,27 +118,36 @@ int Engine::execute(int status){
 #endif
     switch (status)
     {
-    case 0:
+    case PLACE:
     place_execute();
         break;
-    case 1:
+    case ATTACK_A:
     return attackA_execute();
         break;
-    case 2:
+    case ATTACK_D:
     return attackD_execute();
         break;
-    case 3:
+    case REINFORCE_M:
     return reinforceM_execute();
         break;
-    case 4:
+    case REINFORCE_N:
     return reinforceN_execute();
         break;
-    case 5:
+    case DISTRIBUTE:
     distribute_execute();
         break; 
-    case 6:
+    case USECARD:
     usecard_execute();
-        break;           
+        break;
+    case SOLO_ATTACK:
+    attack.setAttackType(AttackType::SOLO);
+    return attack.execute();
+    case DOUBLE_ATTACK:
+    attack.setAttackType(AttackType::DOUBLE);
+    return attack.execute();
+    case MULTI_ATTACK:
+    attack.setAttackType(AttackType::MULTIPLE);
+    return attack.execute();           
     default:
         break;
     }

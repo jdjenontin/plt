@@ -12,7 +12,7 @@ using namespace std;
  * @param lCountry : List of pointers on countries
  * @param troopMin : minimal troop number
 */
-boost::test_tools::predicate_result validate_country_troop(vector<Country*> lCountry, int troopMin)
+boost::test_tools::predicate_result validate_country_troop(vector<std::shared_ptr<Country>> lCountry, int troopMin)
 {
 
   for (auto country : lCountry) {
@@ -24,64 +24,39 @@ boost::test_tools::predicate_result validate_country_troop(vector<Country*> lCou
 
 BOOST_AUTO_TEST_CASE(TestState)
 {
-  { // Constructor's and getPlayerList test
-    State state(3);
-    vector<Player*> pList = state.getPlayersList();
-    BOOST_CHECK_EQUAL(pList.size(), 3); 
-  }
-  { // Test init()
-    State state(3);
-    vector<Player*> pList = state.getPlayersList();
-    state.init();
+  {
+    std::shared_ptr<State> state(new State());
+    state->init();
+    state->IncrementTurn();
+    state->buildCards();
+    BOOST_CHECK_EQUAL(state->getTurn(),1);
+    vector<std::shared_ptr<Player>> pList = state->getPlayersList();
+    vector<std::shared_ptr<Card>> CardsList = state->getCardsList();
+    vector<std::shared_ptr<Country>> CountryList = state->getCountriesList();
+    int PlayerOrder = state->getOrderPlayer();
+    BOOST_CHECK_EQUAL(pList.size(), state->nbOfPlayer); 
+    BOOST_CHECK_EQUAL(CardsList.size(), 42); 
+    BOOST_CHECK_EQUAL(CountryList.size(), 42); 
 
-    // Second player's countries
-    vector<Country*> p1Countries = pList[1]->getCountriesList();
+    BOOST_CHECK_EQUAL(PlayerOrder, 0);
+    state->ChangePlaying();
+    PlayerOrder = state->getOrderPlayer();
+    BOOST_CHECK_EQUAL(PlayerOrder, 1);
+    state->ChangePlaying();
+    PlayerOrder = state->getOrderPlayer();
+    BOOST_CHECK_EQUAL(PlayerOrder, 0);
 
-    // Check if the player 2 have 14 countries
-    BOOST_CHECK_EQUAL(p1Countries.size(), 14);
-
-    // Check if each country have minimun 2 troops
-    BOOST_CHECK(validate_country_troop(pList[1]->getCountriesList(), 2));
-
-    // Check the total troop own by player 2
-    int totalTroops(0);
-
-    for (auto country : p1Countries){
-      totalTroops += country -> getNumberOfTroop();
+    vector<std::shared_ptr<Country>> Player2Countries = pList[1]->getCountriesList();
+    int size = Player2Countries.size();
+    std::cout << size << std::endl;
+    for (int i = 0; i<size; i++) {
+      state->getPlayersList().at(1)->deleteCountry(Player2Countries.at(i));
     }
-    BOOST_CHECK_EQUAL(totalTroops, 35);
-    
+    std::cout << state->getPlayersList().at(1)->getCountriesList().size() << std::endl;
+    state->ChangePlaying();
+    PlayerOrder = state->getOrderPlayer();
+    BOOST_CHECK_EQUAL(PlayerOrder, 0);
   }
-  {
-    State state(5);
-    vector<Player*> pList = state.getPlayersList();
-    state.init();
-
-    // Player1 total countries
-    vector<Country*> p5Countries = pList[4]->getCountriesList();
-    BOOST_CHECK_EQUAL(p5Countries.size(), 8);
-  } 
-
-  {
-    State state(5);
-    vector<Country*> lCountries = state.getCountriesList();
-    vector<Card> lCards = state.getCardsList();
-    //BOOST_CHECK_EQUAL(lCountries.size(), 16);
-    //BOOST_CHECK_EQUAL(lCards.size(), 16);
-
-  }
-  {
-    // State state(3);
-    // vector<Player*> pList = state.getPlayersList();
-    // vector<Country*> lCountries = pList[1]->getCountriesList();
-    // Country* a_country = lCountries[0];
-    // //a_country->setColor(pList[1]->getColor());
-
-    // Player* owner = state.belongsto(a_country);
-
-    // BOOST_CHECK_EQUAL(owner, pList[1]);
-  }
-
 }
 
 /* vim: set sw=2 sts=2 et : */

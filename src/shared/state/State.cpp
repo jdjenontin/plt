@@ -11,10 +11,10 @@
 #include "State.h"
 #include "Dice.h"
 #include "Calculation.h"
+#include <algorithm>
 
 
 using namespace std;
-using namespace ai;
 
 namespace state
 {
@@ -33,6 +33,7 @@ State::~State(){
 void State::init()
 {
     this->buildCountries();
+    this->buildCards();
     this->createPlayers();
     this->distributeCountries();
     this->distibuteTroops();
@@ -57,8 +58,8 @@ void State::ChangePlaying () {
     }
 
     if(playersList[orderPlayer]->getCountriesList().size() == 0){
+        playersList[orderPlayer]->setStatus(LOSE);
         orderPlayer++;
-        playersList[orderPlayer]->setStatus(state::LOSE);
         if(orderPlayer == (int)playersList.size())
             orderPlayer = 0;
     }
@@ -72,7 +73,7 @@ const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
     return cardsList;
 }
 
-const std::vector<std::shared_ptr<Player>> & State::getPlayersList() const{
+const std::vector<std::shared_ptr<Player>>& State::getPlayersList() const{
     return playersList;
 }
 
@@ -113,12 +114,12 @@ void State::buildCards(){
 }
 
 void State::createPlayers(){
-    for(int i = 0; i<nbOfPlayer; i++){
-        playersList.push_back(std::shared_ptr<Player>(new Player(i)));
-    }
-
-    for(int i = nbOfPlayer; i < (nbOfPlayer+nbOfBot); i++){
-        playersList.push_back(std::shared_ptr<Player>(new Ai(i)));
+    for(int i = 0; i<nbOfPlayer+nbOfBot; i++){
+        if(i < nbOfPlayer)
+            playersList.push_back(std::shared_ptr<Player>(new Player(i)));
+        else{
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::BOT)));
+        }
     }
 }
 
@@ -131,7 +132,6 @@ void State::distributeCountries(){
 
     std::shuffle(cp_countriesList.begin(), cp_countriesList.end(), rng);
 
-    
     int i = 0;
 
     for(auto& country : cp_countriesList){

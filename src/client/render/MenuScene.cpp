@@ -118,10 +118,8 @@ void MenuScene::init_option(){
 void MenuScene::initList(){
     for(int i = 0; i < plist_size; i++){
         if(i%2 == 0){
-            std::cout << "TEst 0" << listname[i] << std::endl;
             addMessage(X_MENU-300, Y_MENU-20+150*(i/2+1), 30, listname[i], color.colorList[i]);}
         else{
-            std::cout << "TEst 1" << listname[i]  << std::endl;
             addMessage(X_MENU+250, Y_MENU-20+150*(i/2+1), 30, listname[i], color.colorList[i]);
         }    
     }
@@ -168,18 +166,14 @@ void MenuScene::deletebotplayer (){
 }
 
 void MenuScene::display () {
-    std::cout<<__FUNCTION__ << std::endl;
     window->clear(sf::Color::White);
     window->draw(s_back);
     window->draw(s_logo);
     for(auto m : listMenu)
         display_menu(m);
     
-    if(option_isOpen){
-        std::cout<<__FUNCTION__ << "YVT" << std::endl;
+    if(option_isOpen)
         initList();
-    }
-        
 }
 
 void MenuScene::display_menu (Menu menu) {

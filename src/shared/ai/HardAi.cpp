@@ -1,50 +1,55 @@
-// #include <iostream>
-// #include <algorithm>
+#include <iostream>
+#include <algorithm>
 
-// #include "HardAi.h"
+#include "HardAi.h"
 
-// #define DEBUG 1;
+#define DEBUG 1;
 
-// using namespace std;
-// using namespace state;
+using namespace std;
+using namespace state;
 
-// namespace ai{
+namespace ai{
 
-// vector<state::Country*> playerlistcountries;
+vector<state::Country*> playerlistcountries;
 
-// vector<int> ameriqueN(9, 0), ameriqueS(4, 0), afrique(6, 0), europe(7, 0), asie(12, 0), ocenanie(4, 0);
+vector<int> ameriqueN(9, 0), ameriqueS(4, 0), afrique(6, 0), europe(7, 0), asie(12, 0), ocenanie(4, 0);
 
-// vector<int> p1, p2;
+vector<int> p1, p2;
 
-// int bonus;
+int bonus;
 
-// HardAi::HardAi(){
+HardAi::HardAi(){
 
-// }
+}
 
-// HardAi::~HardAi(){
+HardAi::HardAi(shared_ptr<State> a_state) : Ai(a_state){
 
-// }
+}
 
-// void HardAi::place(){
+HardAi::~HardAi(){
+
+}
+
+void HardAi::place(){
     
     
-// #ifdef DEBUG
-//     cout << "------------------------------------------" << endl;
-// #endif
-// }
+#ifdef DEBUG
+    cout << "------------------------------------------" << endl;
+#endif
+}
 
-// void HardAi::attack(){
+void HardAi::attack(){
 
-// }
+}
 
-// void HardAi::reinforce(){
+void HardAi::reinforce(){
 
-// }
+}
 
-// void HardAi::usecard(){
 
-// }
+void execute(shared_ptr<Player> a_player){
+    return;
+}
 
 // void HardAi::execute() {
 //     listCountries = state->getCountriesList();
@@ -84,36 +89,5 @@
 //     usecard();
 
 // }
-
-// }
-
-#include "HardAi.h"
-#include <iostream>
-#include <algorithm>
-
-namespace ai{
-
-HardAi::HardAi(int id){
-    this->id = id;
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::HARD;
-}
-
-void HardAi::execute (){
-
-}
-
-void HardAi::place (){
-
-}
-
-void HardAi::attack (){
-
-}
-
-void HardAi::reinforce (){
-
-}
 
 }

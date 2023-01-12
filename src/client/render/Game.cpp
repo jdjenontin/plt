@@ -15,6 +15,9 @@
 #define ATTACK_D 2
 #define REINFORCE_M 3
 #define REINFORCE_N 4
+#define SOLO_ATTACK 7
+#define DOUBLE_ATTACK 8
+#define MULTI_ATTACK 9
 
 // Activer ou desactiver les commentaire
 #define DEBUG 1
@@ -26,6 +29,9 @@ using namespace render;
 using namespace engine;
 using namespace ai;
 
+
+// TO-DO : Clean all this make them attributes
+
 // La liste de pays recupere dans le state
 vector<shared_ptr<state::Country>> v_listcountry;
 // La liste de carte recupere dans le state
@@ -34,8 +40,8 @@ vector<shared_ptr<state::Card>> v_listcard;
 vector<shared_ptr<state::Player>> pList;
 // Le joueur actuel
 shared_ptr<state::Player> player = make_shared<state::Player>();
-// Le bot actuel
-shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
+
+//shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
 shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
 shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
 shared_ptr<ai::HardAi> hardBot;
@@ -53,8 +59,11 @@ bool initPlayer = false;
 // Les quatre chiffre pour indiquer si le pays est choisi
 int attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
 
+// Un boolean pour indiquer si le player a fait au moins une fois attack dans son tour, si c'est fait, il va obtenir une carte
+bool attacked = false;
+
 // Des messages pour etre affiche dans le gameMenu
-Message *m1, *m2, *m3, *m4, *m5, *m6, *m7;
+Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8;
 
 namespace render{
 
@@ -63,7 +72,7 @@ Game::Game(){
 }
 
 Game::~Game(){
-
+    
 }
 
 void Game::reinforce_event(){
@@ -82,7 +91,6 @@ void Game::attack_event(){
         attack_d = engine.execute(ATTACK_D);
         country_d = country;
     }
-        
 }
 
 
@@ -243,12 +251,17 @@ void Game::gameScene_event(int button){
                 attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
             gameMenuEvent();
         }
-        else if(button == RIGHT){
-            if(status == ATTACK && attack_a == 1 && attack_d == 1){
-                country_a->reduceTroop(1);
-                country_d->addTroop(1);
-            }
-
+        country = gameScene.findCountry(pos);
+        if(country)
+            country_event();
+        else
+            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+        gameMenuEvent();
+    }
+    else if(button == RIGHT){
+        if(status == ATTACK && attack_a == 1 && attack_d == 1 && country_a->getNumberOfTroop() > 1){
+            country_a->reduceTroop(1);
+            country_d->addTroop(1);
         }
     }
 }
@@ -277,7 +290,27 @@ void Game::cardScene_event(int button){
  * @brief The event when the client use the keyboard
 */
 void Game::key_event(){
-
+    if(Keyboard::isKeyPressed(Keyboard::R)){
+        if(attack_a == 1 && attack_d == 1){
+            attacked = true;
+            int s = engine.execute(SOLO_ATTACK);
+            attack_a = 0, attack_d = 0;
+        }
+    }
+    if(Keyboard::isKeyPressed(Keyboard::S)){
+        if(attack_a == 1 && attack_d == 1){
+            attacked = true;
+            int s = engine.execute(DOUBLE_ATTACK);
+            attack_a = 0, attack_d = 0;
+        }
+    }
+    if(Keyboard::isKeyPressed(Keyboard::T)){
+        if(attack_a == 1 && attack_d == 1){
+            attacked = true;
+            int s = engine.execute(MULTI_ATTACK);
+            attack_a = 0, attack_d = 0;
+        }
+    }
 }
 
 /**
@@ -333,6 +366,10 @@ void Game::updateMessage(){
         break;
     case ATTACK:
     m6->setstrMessage("Attack");
+    if(attack_a == 1 && attack_d == 1){
+        m8->setintMessage(AttackComputer::victoryProba(country_a->getNumberOfTroop()-1, country_d->getNumberOfTroop())*100);
+        m8->addMessage("%");
+    }
         break;
     case REINFORCE:
     m6->setstrMessage("Reinforce");
@@ -349,6 +386,7 @@ void Game::createMessage(){
     m5 = new Message(1650, 1020, "End Turn");
     m6 = new Message(1570, 510, "You are doing : ");
     m7 = new Message(1570, 570, "You have ");
+    m8 = new Message(1570, 630, "Your win rate is : ");
 
     m1->setSize(30);
     m2->setSize(30);
@@ -357,7 +395,8 @@ void Game::createMessage(){
     m5->setSize(35);
     m6->setSize(30);
     m7->setSize(30);
-    gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7});
+    m8->setSize(30);
+    gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7, m8});
 }
 
 /**
@@ -378,8 +417,8 @@ void Game::window_begin(){
     Event mouse;
     engine.init(state);
     createMessage();
-    Message x(1150, 25, "X : "), 
-            y(1150, 50, "Y : ");
+    // Message x(1150, 25, "X : "), 
+    //         y(1150, 50, "Y : ");
 
     while(window->isOpen())
     {
@@ -390,39 +429,13 @@ void Game::window_begin(){
             if (player->getType() == BOT) {
 
                 
-                bot = dynamic_pointer_cast<ai::Ai>(player);
-                std::cout << bot << "\t" << player  << "\t" << easyBot << std::endl;
-                
-                std::cout << "Procedure du bot de niveau" << player->getCountriesList().at(0)->getName() << std::endl;
-                std::cout << "Procedure du bot de niveau" << bot->getCountriesList().at(0)->getName() << std::endl;
+                // TO-DO : Think about the implementation of dificulty level
 
-                bot->setState(state);
-                bot->setDifficulty(NORMAL);
-                easyBot = static_pointer_cast<ai::EasyAi>(bot);
-                normalBot = static_pointer_cast<ai::NormalAi>(bot);
-                cout << bot->getDifficulty() << endl;
-                std::cout << "Adresse bot Normal " << normalBot << std::endl;
+                std::cout << "Case du bot Easy " << std::endl;
+                easyBot->setState(state);
+                easyBot->execute(player);
+                std::cout << "Fin execute du bot" << std::endl;
 
-                switch(bot->getDifficulty()) {
-                    case EASY:
-                        easyBot->setPlayer(player);
-                        std::cout << "Case du bot Easy " << std::endl;
-                        easyBot->execute();
-                        std::cout << "Fin execute du bot" << std::endl;
-                        break;
-
-                    case NORMAL:
-                        normalBot->setPlayer(player);
-                        std::cout << "Case du bot Normal " << std::endl;
-                        normalBot->execute();
-                        std::cout << "Fin execute du bot Normal" << std::endl;
-                        break;
-
-                    /*case HARD:
-                        hardBot = dynamic_pointer_cast<ai::HardAi>(bot);
-                        hardBot->execute();
-                        break;*/
-                }
                 state->ChangePlaying();
                 engine.execute(DISTRIBUTE);
                 status = 0;
@@ -441,10 +454,10 @@ void Game::window_begin(){
         else if(menuScene.isOpen())
             menuScene.display();
 
-        x.setintMessage(pos.x);
-        y.setintMessage(pos.y);
-        window->draw(x.text);
-        window->draw(y.text);
+        // x.setintMessage(pos.x);
+        // y.setintMessage(pos.y);
+        // window->draw(x.text);
+        // window->draw(y.text);
 
         window->display();
     }

@@ -12,13 +12,8 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-extern vector<shared_ptr<state::Country>> v_listcountry;
-extern Engine aiEngine;
-extern Place aiPlace;
-extern Attack aiAttack;
-extern Reinforce aiReinforce; 
-extern DistributeCard aiDistributecard;
-extern UseCard aiUsecard;
+using namespace std;
+using namespace state;
 
 namespace ai{
 
@@ -37,17 +32,10 @@ namespace ai{
     }*/
 
 NormalAi::NormalAi () {
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::NORMAL;
-    name = "BOT";
 }
 
-NormalAi::NormalAi(int id){
-    this->id = id;
-    status = state::PLAYING;
-    type = state::BOT;
-    difficulty = Difficulty::NORMAL;
+NormalAi::NormalAi(shared_ptr<State> a_state) : Ai(a_state){
+    
 }
 
 NormalAi::~NormalAi() {
