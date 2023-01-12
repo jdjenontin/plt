@@ -13,10 +13,6 @@ using namespace std;
 
 extern vector<shared_ptr<state::Country>> v_listcountry;
 
-extern Place aiPlace;
-extern Attack aiAttack;
-extern Reinforce aiReinforce; 
-extern UseCard aiUsecard;
 
 Dice aiDice(1,6);
 

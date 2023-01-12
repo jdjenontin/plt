@@ -10,13 +10,6 @@ using namespace state;
 
 // TO-DO : Chnage those to attributes
 
-//les commandes 
-Engine aiEngine;
-Place aiPlace;
-Attack aiAttack;
-Reinforce aiReinforce; 
-DistributeCard aiDistributecard;
-UseCard aiUsecard;
 
 namespace ai{
 
@@ -39,7 +32,7 @@ Ai::Ai(std::shared_ptr<State> a_state){
 void Ai::setState(const std::shared_ptr<state::State>& state){
     this->state = state;
     aiAttack.setState(state);
-    aiDistributecard.setState(state);
+    //aiDistributecard.setState(state); //Important ??
 }
 
 void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
@@ -47,8 +40,8 @@ void Ai::setPlayer(const std::shared_ptr<state::Player>& player){
     aiPlace.setPlayer(player);
     aiAttack.setPlayer(player);
     aiReinforce.setPlayer(player);
-    aiDistributecard.setPlayer(player);
-    aiUsecard.setPlayer(player);
+    //aiDistributecard.setPlayer(player); //Important ?
+    aiUseCard.setPlayer(player);
 }
 
 void Ai::setDifficulty(Difficulty difficulty){
