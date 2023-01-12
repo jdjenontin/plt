@@ -123,14 +123,11 @@ void EasyAi::reinforce() {
     aiReinforce.setPlayer(player);
 
     aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
-    std::cout << "Reinforce du bot 3" << std::endl;
-    std::cout << "Attack and def country " << depatureCountry->getName() << arrivalCountry->getName() << std::endl;
+
     for(int i = 0; i < aiDice.thrown(); i++)
     {
-        std::cout << "Reinforce du bot execute" << std::endl;
         aiReinforce.execute();
     }
-    std::cout << "Reinforce du bot 4" << std::endl;
 }
 
 }
