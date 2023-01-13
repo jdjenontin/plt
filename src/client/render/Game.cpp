@@ -439,6 +439,7 @@ void Game::window_begin(){
                 // std::cout << "Fin execute du bot" << std::endl;
 
                 normalBot->setState(state);
+                //normalBot->setPlayer(player);
                 normalBot->execute(player);
 
                 state->ChangePlaying();

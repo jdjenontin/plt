@@ -132,7 +132,7 @@ void NormalAi::execute (){
 void NormalAi::place (){
     std::cout << "Place du bot Heuristic" << std::endl;
     int minNbTroops = 7;
-    int countriesWithMaxNbTroops = 0;
+
     int bonus_troop = player->continentBonusTroop();
 
     for(int i = 0; i < bonus_troop; i++){
@@ -153,6 +153,7 @@ void NormalAi::place (){
 void NormalAi::execute(std::shared_ptr<state::Player> a_player)
 {
     player = a_player;
+    countriesList = player->getCountriesList();
     this->execute();
 }
 
