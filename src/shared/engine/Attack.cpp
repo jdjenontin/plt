@@ -50,11 +50,8 @@ namespace engine {
     bool Attack::ableToAttack () {
         bool isOwner = attackCountry->getOwnerId() == player->getId();
         bool isntOwnerOfDef = defCountry->getOwnerId() != player->getId();
-
         bool adjacent = attackCountry->isAdjacent(defCountry->getId());
-
         bool haveTroop = attackCountry->getNumberOfTroop() > 1;
-        
 
         return adjacent & haveTroop & isOwner & isntOwnerOfDef;
     }
