@@ -9,7 +9,7 @@
 using namespace std;
 using namespace state;
 
-# define DEBUG 1
+// #define DEBUG 1
 
 namespace engine{
 
@@ -27,7 +27,6 @@ namespace engine{
             cerr << __FUNCTION__ <<" n'est valide que pour nAttacker > 3 et nDefender > 2)" << endl;
             exit(1);
         }
-
         vector <int> attDices(nAttacker, 0);
         vector <int> defDices(nDefender, 0);
         #ifdef DEBUG
@@ -71,7 +70,6 @@ namespace engine{
     // TO-DO : Can be optimized 
     map<string,int> AttackComputer::attackNvM(int nAttacker, int nDefender)
     {
-        std::cout << "In attackNvM" << "\n";
         #ifdef DEBUG
             cout << "---------------------------" << endl;
             cout << __FUNCTION__ << endl;

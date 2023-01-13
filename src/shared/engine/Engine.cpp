@@ -62,10 +62,8 @@ int Engine::attackD_execute(){
     std::cout << "function : " << __func__ << std::endl;
 #endif 
     attack.setDefCountry(country);
-    if(attack.isAdjacent()){
-        //attack.execute();
-    }
-    else return 0;
+    if(!attack.isAdjacent())
+        return 0;
     return 1;
 }
 

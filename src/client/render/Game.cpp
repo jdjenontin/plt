@@ -8,13 +8,13 @@
 #define PLACE 0
 #define ATTACK 1
 #define REINFORCE 2
-#define DISTRIBUTE 5
-#define USECARD 6
 
 #define ATTACK_A 1
 #define ATTACK_D 2
 #define REINFORCE_M 3
 #define REINFORCE_N 4
+#define DISTRIBUTE 5
+#define USECARD 6
 #define SOLO_ATTACK 7
 #define DOUBLE_ATTACK 8
 #define MULTI_ATTACK 9
@@ -236,20 +236,11 @@ void Game::gameMenuEvent(){
  * @brief The event of the game scene when the client use the mouse
 */
 void Game::gameScene_event(int button){
-
-    if (player->getType() != BOT) {
-        if(button == LEFT){
-            if(gameScene.isCardButton(pos)){
-                init_card();
-                gameScene.close();
-                cardScene.open();
-            }
-            country = gameScene.findCountry(pos);
-            if(country)
-                country_event();
-            else
-                attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
-            gameMenuEvent();
+    if(button == LEFT){
+        if(gameScene.isCardButton(pos)){
+            init_card();
+            gameScene.close();
+            cardScene.open();
         }
         country = gameScene.findCountry(pos);
         if(country)
@@ -294,21 +285,18 @@ void Game::key_event(){
         if(attack_a == 1 && attack_d == 1){
             attacked = true;
             int s = engine.execute(SOLO_ATTACK);
-            attack_a = 0, attack_d = 0;
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::S)){
         if(attack_a == 1 && attack_d == 1){
             attacked = true;
             int s = engine.execute(DOUBLE_ATTACK);
-            attack_a = 0, attack_d = 0;
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::T)){
         if(attack_a == 1 && attack_d == 1){
             attacked = true;
             int s = engine.execute(MULTI_ATTACK);
-            attack_a = 0, attack_d = 0;
         }
     }
 }
@@ -366,7 +354,7 @@ void Game::updateMessage(){
         break;
     case ATTACK:
     m6->setstrMessage("Attack");
-    if(attack_a == 1 && attack_d == 1){
+    if(attack_a == 1 && attack_d == 1 && country_a->getNumberOfTroop() > 1){
         m8->setintMessage(AttackComputer::victoryProba(country_a->getNumberOfTroop()-1, country_d->getNumberOfTroop())*100);
         m8->addMessage("%");
     }
