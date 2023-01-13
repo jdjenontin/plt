@@ -158,7 +158,7 @@ const vector<shared_ptr<Country>>& Player::getCountriesList () const {
     return countriesList;
 }
 
-const vector<shared_ptr<Card>>& Player::getCardsList() const{
+vector<shared_ptr<Card>>& Player::getCardsList(){
     return cardsList;
 }
 

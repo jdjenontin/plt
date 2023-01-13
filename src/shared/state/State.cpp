@@ -88,7 +88,7 @@ const std::vector<std::shared_ptr<Country>>& State::getCountriesList() const{
     return countriesList;
 }
 
-const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
+std::vector<std::shared_ptr<Card>>& State::getCardsList() {
     return cardsList;
 }
 
