@@ -14,7 +14,6 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 
 BOOST_AUTO_TEST_CASE(TestAttack) //Fait aussi test_command
 {
-  std::shared_ptr<Command> commande(new Command());
   std::shared_ptr<state::Player> joueur(new Player(1));
   std::shared_ptr<state::State> etat(new State());
   std::shared_ptr<Attack> attaque(new Attack());
@@ -27,8 +26,8 @@ BOOST_AUTO_TEST_CASE(TestAttack) //Fait aussi test_command
   PaysDefenseur->setOwnerId(2);
   //Methods tests
   {
-    commande->setPlayer(joueur);
-    commande->setState(etat);
+    attaque->setPlayer(joueur);
+    attaque->setState(etat);
     attaque->setAttackCountry(PaysAttaquant);
     attaque->setDefCountry(PaysDefenseur);
     attaque->setAttackType(SOLO);
