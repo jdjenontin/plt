@@ -87,7 +87,7 @@ void Game::attack_event(){
         attack_a = engine.execute(ATTACK_A);
         country_a = country;
     }
-    else{
+    else if(attack_a == 1){
         attack_d = engine.execute(ATTACK_D);
         country_d = country;
     }
