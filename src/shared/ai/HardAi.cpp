@@ -31,11 +31,7 @@ HardAi::~HardAi(){
 }
 
 void HardAi::place(){
-    
-    
-#ifdef DEBUG
-    cout << "------------------------------------------" << endl;
-#endif
+
 }
 
 void HardAi::attack(){
@@ -48,9 +44,11 @@ void HardAi::reinforce(){
 
 
 void HardAi::execute(shared_ptr<Player> a_player){
-#ifdef DEBUG
-    std::cout << "Hard AI" << __func__ << std::endl;
-#endif 
+    countriesList = player->getCountriesList();
+    #ifdef DEBUG
+        std::cout << "Hard AI" << __func__ << std::endl;
+    #endif 
+
 }
 
 }
