@@ -13,7 +13,6 @@
 #include "Calculation.h"
 #include <algorithm>
 
-
 using namespace std;
 
 namespace state
@@ -23,7 +22,7 @@ const string jsonPath = "res/countries.json";
 
 
 State::State(){
-
+    nbOfBot.assign(3, 0);
 }
 
 State::~State(){
@@ -63,6 +62,26 @@ void State::ChangePlaying () {
         if(orderPlayer == (int)playersList.size())
             orderPlayer = 0;
     }
+}
+
+void State::addPlayer(){
+    if(nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2] < 5)
+        nbOfPlayer++;
+}
+
+void State::deletePlayer(){
+    if(nbOfPlayer > 1)
+        nbOfPlayer--;
+}
+
+void State::addBot(int difficulty){
+    if(nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2] < 5)
+        nbOfBot[difficulty]++;
+}
+
+void State::deleteBot(int difficulty){
+    if(nbOfBot[difficulty] > 0)
+        nbOfBot[difficulty]--;
 }
 
 const std::vector<std::shared_ptr<Country>>& State::getCountriesList() const{
@@ -111,12 +130,16 @@ void State::buildCards(){
 }
 
 void State::createPlayers(){
-    for(int i = 0; i<nbOfPlayer+nbOfBot; i++){
+    int n = nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2];
+    for(int i = 0; i<n; i++){
         if(i < nbOfPlayer)
             playersList.push_back(std::shared_ptr<Player>(new Player(i)));
-        else{
-            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::BOT)));
-        }
+        else if(i < nbOfPlayer+nbOfBot[0])
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::EASYBOT)));
+        else if(i < nbOfPlayer+nbOfBot[0]+nbOfBot[1])
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::NORMALBOT)));
+        else if(i < nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2])
+            playersList.push_back(std::shared_ptr<Player>(new Player(i, state::HARDBOT)));
     }
 }
 
@@ -130,12 +153,11 @@ void State::distributeCountries(){
     std::shuffle(cp_countriesList.begin(), cp_countriesList.end(), rng);
 
     int i = 0;
-
+    int n = nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2];
     for(auto& country : cp_countriesList){
         playersList[i]->addCountry(country);
-        
         i++;
-        i%=(nbOfPlayer+nbOfBot);
+        i%=n;
     }
 
 }
@@ -145,11 +167,12 @@ void State::distibuteTroops(){
     // TO-DO : Make it a const
 
     // Depending on the number of player, the initial troop for each player vary
+    int n = nbOfPlayer+nbOfBot[0]+nbOfBot[1]+nbOfBot[2];
     map<int, int> initialTroopMap {{2,45}, {3,35}, {4,30}, {5,25}};
 
-    int initialTroop = initialTroopMap[nbOfPlayer + nbOfBot];
+    int initialTroop = initialTroopMap[n];
 
-    for (int i = 0; i != nbOfPlayer + nbOfBot; i++){
+    for (int i = 0; i != n; i++){
         std::vector<std::shared_ptr<Country>> playerCountries = playersList[i]->getCountriesList();
 
         int minTroopPerTeritory = (int) initialTroop/playerCountries.size();

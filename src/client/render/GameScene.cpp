@@ -173,7 +173,7 @@ void GameScene::display()
         if(pList[j]->getCountriesList().size() == 0)
            m.setColor(sf::Color::Red);
 
-        Button b(1680, 205 + (60 * j), 25, color.colorList[j], &cir);
+        Button b(1780, 205 + (60 * j), 25, color.colorList[j], &cir);
 
         window->draw(m.text);
         window->draw(b.circle);

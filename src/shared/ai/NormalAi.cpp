@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
+#define DEBUG 1
 
 using namespace std;
 using namespace state;
@@ -34,7 +35,10 @@ NormalAi::~NormalAi() {
 }
 
 void NormalAi::execute (shared_ptr<Player> a_player){
-    return;
+#ifdef DEBUG
+    std::cout << "Normal AI" << __func__ << std::endl;
+#endif 
+
 }
 
 void NormalAi::place (){
