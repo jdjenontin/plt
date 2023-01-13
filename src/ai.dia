@@ -2288,13 +2288,13 @@
         <dia:point val="77.3159,27.6207"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="77.2659,27.5707;119.061,34.4707"/>
+        <dia:rectangle val="77.2659,27.5707;121.371,34.4707"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="77.3159,27.6207"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="41.695"/>
+        <dia:real val="44.005000000000003"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="6.7999999999999998"/>
@@ -2425,7 +2425,7 @@
                 <dia:string>#state#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr&lt;state::State&gt;&amp;#</dia:string>
+                <dia:string>#const std::shared_ptr&lt;state::State&gt;&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2442,7 +2442,7 @@
                 <dia:string>#a_country#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr&lt;state::Country&gt;#</dia:string>
+                <dia:string>#const std::shared_ptr&lt;state::Country&gt;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2529,7 +2529,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#int#</dia:string>
+            <dia:string>#double#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -2552,10 +2552,10 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#a_country#</dia:string>
+                <dia:string>#a_state#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr&lt;state::Country&gt;&amp;#</dia:string>
+                <dia:string>#const std::shared_ptr&lt;state::State&gt;&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2569,10 +2569,10 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#a_state#</dia:string>
+                <dia:string>#a_country#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr&lt;state::State&gt;&amp;#</dia:string>
+                <dia:string>#const std::shared_ptr&lt;state::Country&gt;&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3082,17 +3082,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O16">
       <dia:attribute name="obj_pos">
-        <dia:point val="98.1634,27.5703"/>
+        <dia:point val="99.3184,27.5703"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="88.9441,7.25028;98.2134,27.6203"/>
+        <dia:rectangle val="88.9441,7.25028;99.3684,27.6203"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="98.1634,27.5703"/>
-        <dia:point val="98.1634,17.8353"/>
+        <dia:point val="99.3184,27.5703"/>
+        <dia:point val="99.3184,17.8353"/>
         <dia:point val="89.3941,17.8353"/>
         <dia:point val="89.3941,7.70028"/>
       </dia:attribute>

@@ -105,8 +105,18 @@ void State::buildCountries(){
     Json::Value root = FileOps::jsonParser(jsonPath);
 
     for (const auto& key : root.getMemberNames()) {
+        Continent cont = (Continent )root[key]["Continent"].asInt();
+        
+        vector<int> adj;
+        Json::Value adjJson = root[key]["Ajacent"];
+
+        for (unsigned int i = 0; i < adjJson.size(); i++) {
+            adj.push_back(adjJson[i].asInt());
+        }
         countriesList.push_back(std::shared_ptr<Country>(new Country(key, 
-                                                                    root[key]["id"].asInt())));
+                                                                    root[key]["id"].asInt(),
+                                                                    cont,
+                                                                    adj)));
     }
 
     std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
