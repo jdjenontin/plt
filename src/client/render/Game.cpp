@@ -44,7 +44,7 @@ shared_ptr<state::Player> player = make_shared<state::Player>();
 //shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
 shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
 shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
-shared_ptr<ai::HardAi> hardBot;
+shared_ptr<ai::HardAi> hardBot = make_shared<ai::HardAi>();
 // Le pays que le joueur choisi pendant son tour
 // Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
 shared_ptr<state::Country> country, country_a, country_d;
@@ -60,7 +60,10 @@ bool initPlayer = false;
 int attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
 
 // Un boolean pour indiquer si le player a fait au moins une fois attack dans son tour, si c'est fait, il va obtenir une carte
-bool attacked = false;
+bool attacked = false; 
+
+// Difficultes
+int difficulty = 0;
 
 // Des messages pour etre affiche dans le gameMenu
 Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8;
@@ -191,29 +194,25 @@ void Game::menuScene_event(int button){
         else if(menuScene.getNameMenu(pos) == "Back")
             menuScene.init_main();
         else if(menuScene.getNameMenu(pos) == "AddHuman"){
-            if(state->nbOfPlayer + state->nbOfBot < 5){
-                state->nbOfPlayer++;
-                menuScene.addplayer();
-            }
+            state->addPlayer();
+            menuScene.addplayer();
         }
         else if(menuScene.getNameMenu(pos) == "DeleteHuman"){
-            if(state->nbOfPlayer > 1){
-                state->nbOfPlayer--;
-                menuScene.deleteplayer();
-            } 
+            state->deletePlayer();
+            menuScene.deleteplayer();
         }
         else if(menuScene.getNameMenu(pos) == "AddBot"){
-            if(state->nbOfPlayer + state->nbOfBot < 5){
-                state->nbOfBot++;
-                menuScene.addbotplayer();
-            }
+            state->addBot(difficulty);
+            menuScene.addbotplayer(difficulty);
         }
         else if(menuScene.getNameMenu(pos) == "DeleteBot"){
-            if(state->nbOfBot > 0){
-                state->nbOfBot--;
-                menuScene.deletebotplayer();
-            }
+            state->deleteBot(difficulty);
+            menuScene.deletebotplayer(difficulty);
         }
+        else if(menuScene.getNameMenu(pos) == "Difficulty:")
+            difficulty++;
+            if(difficulty > 2) difficulty = 0;
+            menuScene.changeDifficulty(difficulty);
     }
     else if(button == RIGHT){
 
@@ -387,12 +386,32 @@ void Game::createMessage(){
     gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7, m8});
 }
 
+void Game::aiProcess(){
+    if(player->getType() == EASYBOT){
+        easyBot->setState(state);
+        easyBot->execute(player);
+    }
+    else if(player->getType() == NORMALBOT){
+        normalBot->setState(state);
+        normalBot->execute(player);
+    }
+    else if(player->getType() == HARDBOT){
+        hardBot->setState(state);
+        hardBot->execute(player);
+    }
+    state->ChangePlaying();
+    engine.execute(DISTRIBUTE);
+    status = 0;
+    initPlayer = false;
+}
+
 /**
  * @brief The process for the game scene
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
 
+    if(player->getType() != HUMAN) aiProcess();
     engine.setPlayer(player);
     updateMessage();
     if(!initPlayer) init_player();
@@ -405,31 +424,13 @@ void Game::window_begin(){
     Event mouse;
     engine.init(state);
     createMessage();
-    // Message x(1150, 25, "X : "), 
-    //         y(1150, 50, "Y : ");
 
     while(window->isOpen())
     {
         pos = Mouse::getPosition(*window);
 
-        if(gameScene.isOpen()) {
+        if(gameScene.isOpen())
             game_process();            
-            if (player->getType() == BOT) {
-
-                
-                // TO-DO : Think about the implementation of dificulty level
-
-                std::cout << "Case du bot Easy " << std::endl;
-                easyBot->setState(state);
-                easyBot->execute(player);
-                std::cout << "Fin execute du bot" << std::endl;
-
-                state->ChangePlaying();
-                engine.execute(DISTRIBUTE);
-                status = 0;
-                initPlayer = false;
-            }
-        }
         //Evenement du souris
         mouse_event(&mouse);
         //Evenement du clavier
@@ -441,11 +442,6 @@ void Game::window_begin(){
             cardScene.display();
         else if(menuScene.isOpen())
             menuScene.display();
-
-        // x.setintMessage(pos.x);
-        // y.setintMessage(pos.y);
-        // window->draw(x.text);
-        // window->draw(y.text);
 
         window->display();
     }

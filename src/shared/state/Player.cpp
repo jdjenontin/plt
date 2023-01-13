@@ -27,6 +27,9 @@ Player::Player (int a_id) : Player() {
 // TO-DO : think aout name implication
 Player::Player(int a_id, TypePlayer a_type) :Player(a_id){
     type = a_type;
+    if(type == EASYBOT) name = "EasyBot";
+    else if(type == NORMALBOT) name = "NormalBot";
+    else if(type == HARDBOT) name = "HardBot";
 }
 
 Player::~Player () {
