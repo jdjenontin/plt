@@ -26,13 +26,19 @@ int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
     std::shared_ptr<State> state(new State());
-
-    Reinforce reinforce;
-
     Game game;
+    if(argc == 1){
+        game.setState(state);
+        game.begin();
+    }
+    else if(argc == 2){
+        if(argv[1] == "hello")
+            cout << "Bonjour le monde !" << endl;
+        else if(argv[1] == "state"){}
+            // To do
+    }
+    else perror("Invaild argument");
 
-    game.setState(state);
-    game.begin();
 
     return 0;
 }

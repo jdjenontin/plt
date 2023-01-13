@@ -11,7 +11,8 @@ namespace render
 {
 
 sf::Texture cir;
-sf::RectangleShape rec1, rec2, rec3;
+vector<sf::RectangleShape> rec_list;
+
 Message cardm(17, 70, "Card");
 
 Button cardb(20, 20, 25, sf::Color::Magenta, &cir);
@@ -33,6 +34,7 @@ GameScene::~GameScene () {
 
 void GameScene::initMenu(){
     static sf::Texture t1, t2;
+    sf::RectangleShape rec1, rec2, rec3;
     t1.loadFromFile("res/phase.png");
     t2.loadFromFile("res/end.png");
     sf::Vector2f size1(500, 1080), size2(370, 80);
@@ -46,6 +48,9 @@ void GameScene::initMenu(){
     rec3.setSize(size2);
     rec3.setPosition(1550, 1000);
     rec3.setTexture(&t2);
+    rec_list.push_back(rec1);
+    rec_list.push_back(rec2);
+    rec_list.push_back(rec3);
 }
 
 void GameScene::init (std::vector<std::shared_ptr<state::Player>>& pList)
@@ -132,10 +137,29 @@ bool GameScene::isCardButton (sf::Vector2i pos){
     else return false;
 }
 
+void GameScene::displayCircle(std::shared_ptr<state::Country> country, int type){
+    static sf::Texture t1, t2;
+    sf::Vector2f size(30, 30);
+    sf::RectangleShape rec;
+    t1.loadFromFile("res/button_blue.png");
+    t2.loadFromFile("res/button_red.png");
+    if(type == 0){
+        rec.setPosition(country->getPosX(), country->getPosY());
+        rec.setTexture(&t1);
+        rec.setSize(size);
+        rec_list.push_back(rec);
+    }
+    else if(type == 1){
+        rec.setPosition(country->getPosX(), country->getPosY());
+        rec.setTexture(&t2);
+        rec.setSize(size);
+        rec_list.push_back(rec);
+    }
+}
+
 void GameScene::displayMenu(){
-    window->draw(rec1);
-    window->draw(rec2);
-    window->draw(rec3);
+    for(auto r : rec_list)
+        window->draw(r);
 
     // afficher des messages 
     for (auto m : listMessage)

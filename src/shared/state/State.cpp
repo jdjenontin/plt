@@ -119,7 +119,7 @@ void State::buildCards(){
     TypeCard cardTypes[] = {Cavalry, Artillery, Infantry};
 
     for (const auto& key : root.getMemberNames()) {
-        int typeId = root[key]["card"].asInt();
+        int typeId = root[key]["Card"].asInt();
         cardsList.push_back(std::shared_ptr<Card>(new Card(key,
                                                             cardTypes[typeId])));
     }

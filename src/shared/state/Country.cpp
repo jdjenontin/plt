@@ -63,16 +63,13 @@ void Country::reduceTroop (int a_nbTroop) {
     numberOfTroop -= a_nbTroop;
 }
 
-// void Country::setColor(const sf::Color& m_color){
-//     color = m_color;
-// }
+int Country::getPosX() const{
+    return this->posX;
+}
 
-
-// // TO-DO : Delete
-// const sf::Color& Country::getColor() const{
-//     return color;
-// }
-
+int Country::getPosY() const{
+    return this->posY;
+}
 
 /**
  * @brief Compare 2 countries using their number of troop

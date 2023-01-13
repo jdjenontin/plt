@@ -89,10 +89,12 @@ void Game::attack_event(){
     if(player->existCountry(*country)){
         attack_a = engine.execute(ATTACK_A);
         country_a = country;
+        gameScene.displayCircle(country_a, 0);
     }
     else if(attack_a == 1){
         attack_d = engine.execute(ATTACK_D);
         country_d = country;
+        gameScene.displayCircle(country_d, 1);
     }
 }
 
@@ -298,6 +300,8 @@ void Game::key_event(){
             int s = engine.execute(MULTI_ATTACK);
         }
     }
+    if(Keyboard::isKeyPressed(Keyboard::P))
+        engine.execute(DISTRIBUTE);
 }
 
 /**
