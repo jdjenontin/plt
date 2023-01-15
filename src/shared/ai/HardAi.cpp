@@ -34,7 +34,7 @@ HardAi::~HardAi(){
 */
 void HardAi::place(){
     #ifdef DEBUG
-        std::cout << "Hard AI " << __func__ << std::endl;
+        std::cout << "Hard AI :" << __func__ << std::endl;
     #endif
     std::shared_ptr<state::State> temp = state;
 
