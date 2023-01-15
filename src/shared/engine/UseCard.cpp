@@ -56,8 +56,6 @@ int UseCard::getM_bonusTroop() const{
     return m_bonusTroop;
 }
 
-
-
 // TO-DO : Optimize !
 
 /**

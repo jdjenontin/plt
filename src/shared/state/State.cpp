@@ -70,7 +70,7 @@ void State::addPlayer(){
 }
 
 void State::deletePlayer(){
-    if(nbOfPlayer > 1)
+    if(nbOfPlayer > 0)
         nbOfPlayer--;
 }
 

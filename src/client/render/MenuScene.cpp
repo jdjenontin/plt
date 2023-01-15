@@ -189,7 +189,8 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
 }
 
 void MenuScene::addplayer (){
-    plist_size++;
+    if(plist_size+blist_size[EASY]+blist_size[NORMAL]+blist_size[HARD] < 5)
+        plist_size++;
 }
 
 void MenuScene::addbotplayer (int difficulty){
@@ -198,7 +199,8 @@ void MenuScene::addbotplayer (int difficulty){
 }
 
 void MenuScene::deleteplayer (){
-    plist_size--;
+    if(plist_size > 0)
+        plist_size--;
 }
 
 void MenuScene::deletebotplayer (int difficulty){

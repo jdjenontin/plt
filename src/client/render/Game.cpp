@@ -57,7 +57,7 @@ int status = 0;
 bool initPlayer = false;
 
 // Les quatre chiffre pour indiquer si le pays est choisi
-int attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+int attack_a = 0, attack_d = 0, attack_win = 0, reinforce_m = 0, reinforce_n = 0;
 
 // Un boolean pour indiquer si le player a fait au moins une fois attack dans son tour, si c'est fait, il va obtenir une carte
 bool attacked = false; 
@@ -86,6 +86,8 @@ void Game::reinforce_event(){
 }
 
 void Game::attack_event(){
+    attacked = false;
+
     if(player->existCountry(*country)){
         attack_a = engine.execute(ATTACK_A);
         country_a = country;
@@ -211,10 +213,11 @@ void Game::menuScene_event(int button){
             state->deleteBot(difficulty);
             menuScene.deletebotplayer(difficulty);
         }
-        else if(menuScene.getNameMenu(pos) == "Difficulty:")
+        else if(menuScene.getNameMenu(pos) == "Difficulty:"){
             difficulty++;
             if(difficulty > 2) difficulty = 0;
             menuScene.changeDifficulty(difficulty);
+        }
     }
     else if(button == RIGHT){
 
@@ -246,12 +249,14 @@ void Game::gameScene_event(int button){
         country = gameScene.findCountry(pos);
         if(country)
             country_event();
-        else
-            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+        else{
+            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0, attack_win = 0;
+            gameScene.displayCircle(country_a, -1);
+        }
         gameMenuEvent();
     }
     else if(button == RIGHT){
-        if(status == ATTACK && attack_a == 1 && attack_d == 1 && country_a->getNumberOfTroop() > 1){
+        if(status == ATTACK && attack_a == 1 && attack_d == 1 && attack_win == 1 && country_a->getNumberOfTroop() > 1){
             country_a->reduceTroop(1);
             country_d->addTroop(1);
         }
@@ -283,21 +288,21 @@ void Game::cardScene_event(int button){
 */
 void Game::key_event(){
     if(Keyboard::isKeyPressed(Keyboard::R)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(SOLO_ATTACK);
+            attack_win = engine.execute(SOLO_ATTACK);
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::S)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(DOUBLE_ATTACK);
+            attack_win = engine.execute(DOUBLE_ATTACK);
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::T)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(MULTI_ATTACK);
+            attack_win = engine.execute(MULTI_ATTACK);
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::P))
@@ -357,7 +362,7 @@ void Game::updateMessage(){
         break;
     case ATTACK:
     m6->setstrMessage("Attack");
-    if(attack_a == 1 && attack_d == 1 && country_a->getNumberOfTroop() > 1){
+    if(attack_a == 1 && attack_d == 1 && attacked == false && country_a->getNumberOfTroop() > 1){
         m8->setintMessage(AttackComputer::victoryProba(country_a->getNumberOfTroop()-1, country_d->getNumberOfTroop())*100);
         m8->addMessage("%");
     }
@@ -414,11 +419,13 @@ void Game::aiProcess(){
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
+    engine.setPlayer(player);
 
     if(player->getType() != HUMAN) aiProcess();
-    engine.setPlayer(player);
-    updateMessage();
-    if(!initPlayer) init_player();
+    else{
+        updateMessage();
+        if(!initPlayer) init_player();
+    }
 }
 
 /**
@@ -434,7 +441,8 @@ void Game::window_begin(){
         pos = Mouse::getPosition(*window);
 
         if(gameScene.isOpen())
-            game_process();            
+            game_process();          
+
         //Evenement du souris
         mouse_event(&mouse);
         //Evenement du clavier
