@@ -10,7 +10,7 @@
 #define NORMAL 1
 #define HARD 2
 
-#define DEBUG 1
+// #define DEBUG 1
 
 namespace render {
 
@@ -23,7 +23,7 @@ sf::Texture* c = new sf::Texture();
 sf::Texture back, logo;
 sf::Sprite s_back, s_logo;
 
-std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+std::vector<std::string> listname = {"Tom", "Bob", "Jerry", "Peter", "James"};
 
 MenuScene::MenuScene () {
     sf::Vector2f pos_logo(680, 140);
@@ -189,7 +189,8 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
 }
 
 void MenuScene::addplayer (){
-    plist_size++;
+    if(plist_size+blist_size[EASY]+blist_size[NORMAL]+blist_size[HARD] < 5)
+        plist_size++;
 }
 
 void MenuScene::addbotplayer (int difficulty){
@@ -198,7 +199,8 @@ void MenuScene::addbotplayer (int difficulty){
 }
 
 void MenuScene::deleteplayer (){
-    plist_size--;
+    if(plist_size > 0)
+        plist_size--;
 }
 
 void MenuScene::deletebotplayer (int difficulty){

@@ -41,6 +41,7 @@ UseCard::~UseCard(){
 */
 bool UseCard::canUseCard(){
     std::vector<std::shared_ptr<state::Card>> cardsList = player->getCardsList();
+
     m_number_artillery = std::count_if(cardsList.begin(), cardsList.end(), cardType(state::Artillery));
     m_number_cavalry = std::count_if(cardsList.begin(), cardsList.end(), cardType(state::Cavalry));
     m_number_infantry = std::count_if(cardsList.begin(), cardsList.end(), cardType(state::Infantry));
@@ -55,8 +56,6 @@ int UseCard::getM_bonusTroop() const{
     return m_bonusTroop;
 }
 
-
-
 // TO-DO : Optimize !
 
 /**
@@ -67,6 +66,7 @@ void UseCard::execute(){
     std::vector<std::shared_ptr<state::Card>>::iterator it_artillery = std::find_if(cardsList.begin(), cardsList.end(), cardType(state::Artillery));
     std::vector<std::shared_ptr<state::Card>>::iterator it_cavalry = std::find_if(cardsList.begin(), cardsList.end(), cardType(state::Cavalry));
     std::vector<std::shared_ptr<state::Card>>::iterator it_infantry = std::find_if(cardsList.begin(), cardsList.end(), cardType(state::Infantry));
+    m_bonusTroop = 0;
     bool can_use = this->canUseCard();
 
     if(can_use){

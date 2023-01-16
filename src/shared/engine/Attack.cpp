@@ -95,12 +95,14 @@ namespace engine {
             int nDef = troops[1];
             map<string,int> attackSummary = AttackComputer::attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
-            return 1;
+            if(attackSummary["win"])
+                return 1; 
+            else return 0;
         }
         else
         {
             cout << "Attack impossible" << endl;
-            return 0;
+            return -1;
         }
         
     }

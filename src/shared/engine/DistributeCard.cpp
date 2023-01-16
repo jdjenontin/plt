@@ -13,9 +13,10 @@ DistributeCard::~DistributeCard(){
 
 void DistributeCard::execute(){
     std::vector<std::shared_ptr<state::Card>> cardsList = state->getCardsList();
-    if(cardsList.size()!=0){
-        player->addCard(cardsList.back());
-        cardsList.pop_back();
+    static int i = 0;
+    if(i<cardsList.size()){
+        player->addCard(cardsList[i]);
+        i++;
     }
 }
 

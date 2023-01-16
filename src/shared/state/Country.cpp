@@ -73,9 +73,15 @@ void Country::reduceTroop (int a_nbTroop) {
 state::Continent Country::getContinent() const{
     return continent;
 }
+int Country::getPosX() const{
+    return this->posX;
+}
 
 const std::vector<int>& Country::getAdjacentCountries() const {
     return adjacentCountries;
+}
+int Country::getPosY() const{
+    return this->posY;
 }
 
 /**

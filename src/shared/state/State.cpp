@@ -70,7 +70,7 @@ void State::addPlayer(){
 }
 
 void State::deletePlayer(){
-    if(nbOfPlayer > 1)
+    if(nbOfPlayer > 0)
         nbOfPlayer--;
 }
 
@@ -88,7 +88,7 @@ const std::vector<std::shared_ptr<Country>>& State::getCountriesList() const{
     return countriesList;
 }
 
-const std::vector<std::shared_ptr<Card>>& State::getCardsList() const{
+std::vector<std::shared_ptr<Card>>& State::getCardsList() {
     return cardsList;
 }
 
@@ -129,7 +129,7 @@ void State::buildCards(){
     TypeCard cardTypes[] = {Cavalry, Artillery, Infantry};
 
     for (const auto& key : root.getMemberNames()) {
-        int typeId = root[key]["card"].asInt();
+        int typeId = root[key]["Card"].asInt();
         cardsList.push_back(std::shared_ptr<Card>(new Card(key,
                                                             cardTypes[typeId])));
     }
