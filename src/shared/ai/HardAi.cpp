@@ -10,14 +10,6 @@ using namespace state;
 
 namespace ai{
 
-vector<state::Country*> playerlistcountries;
-
-vector<int> ameriqueN(9, 0), ameriqueS(4, 0), afrique(6, 0), europe(7, 0), asie(12, 0), ocenanie(4, 0);
-
-vector<int> p1, p2;
-
-int bonus;
-
 HardAi::HardAi(){
 
 }
