@@ -56,10 +56,9 @@ void HardAi::attack(){
     std::vector<std::shared_ptr<Country>> attackCandidates;
     index = countriesList.size()/2;
 
+    // 
     attackCandidates.assign(countriesList.begin()+index,countriesList.end());
     
-
-
 
 }
 
