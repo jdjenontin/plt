@@ -63,7 +63,7 @@ void HardAi::attack(){
 }
 
 void HardAi::reinforce(){
-
+    
 }
 
 void HardAi::execute(shared_ptr<Player> a_player){
