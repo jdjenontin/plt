@@ -10,7 +10,7 @@
 #define NORMAL 1
 #define HARD 2
 
-#define DEBUG 1
+// #define DEBUG 1
 
 namespace render {
 
@@ -23,7 +23,7 @@ sf::Texture* c = new sf::Texture();
 sf::Texture back, logo;
 sf::Sprite s_back, s_logo;
 
-std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+std::vector<std::string> listname = {"Tom", "Bob", "Jerry", "Peter", "James"};
 
 MenuScene::MenuScene () {
     sf::Vector2f pos_logo(680, 140);

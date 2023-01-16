@@ -5,7 +5,7 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace std;
 

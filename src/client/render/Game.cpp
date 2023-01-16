@@ -20,7 +20,7 @@
 #define MULTI_ATTACK 9
 
 // Activer ou desactiver les commentaire
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace std;
 using namespace state;
@@ -80,8 +80,14 @@ Game::~Game(){
 
 void Game::reinforce_event(){
     if(player->existCountry(*country)){
-        if(reinforce_m == 0)   reinforce_m = engine.execute(REINFORCE_M);
-        else    reinforce_n = engine.execute(REINFORCE_N);
+        if(reinforce_m == 0){
+            reinforce_m = engine.execute(REINFORCE_M);
+            gameScene.displayCircle(country, 0);
+        }   
+        else{
+            reinforce_n = engine.execute(REINFORCE_N);
+            gameScene.displayCircle(country, 1);
+        }
     }
 }
 
@@ -103,7 +109,7 @@ void Game::attack_event(){
 
 void Game::place_event(){
     if(bonus_troop > 0 && player->existCountry(*country)){
-        int s = engine.execute(PLACE);
+        engine.execute(PLACE);
         bonus_troop--;
     }
 }
@@ -229,6 +235,7 @@ void Game::gameMenuEvent(){
         change_status();
     }
     else if(abs(pos.x - 1735) < 185 && abs(pos.y - 1040) < 40){
+        reinforce_m = 0, reinforce_n = 0;
         state->ChangePlaying();
         engine.execute(DISTRIBUTE);
         status = 0;
@@ -250,7 +257,7 @@ void Game::gameScene_event(int button){
         if(country)
             country_event();
         else{
-            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0, attack_win = 0;
+            attack_a = 0, attack_d = 0, attack_win = 0;
             gameScene.displayCircle(country_a, -1);
         }
         gameMenuEvent();
@@ -273,7 +280,7 @@ void Game::cardScene_event(int button){
             gameScene.open();
         }
         if(cardScene.isChangeButton(pos) && status == 0){
-            int s = engine.execute(USECARD);
+            engine.execute(USECARD);
             cardScene.init();
             bonus_troop += engine.getBonus_troop();
         }
