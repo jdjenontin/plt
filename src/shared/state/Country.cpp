@@ -120,8 +120,4 @@ void Country::setContinent(Continent cont){
     continent = cont;
 }
 
-Continent Country::getContinent() const{
-    return continent;
-}
-
 }
