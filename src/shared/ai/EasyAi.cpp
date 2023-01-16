@@ -50,14 +50,18 @@ void EasyAi::place() {
     #endif
 
     aiDice.updateDice(0,player->getCountriesList().size()-1);
-    shared_ptr<state::Country> country = countriesList.at(aiDice.thrown());
+    int d1 = aiDice.thrown();
+    if(d1 == -1) return;
+    shared_ptr<state::Country> country = countriesList[d1];
 
     int bonus_troop = player->continentBonusTroop();
 
     for(int i = 0; i < bonus_troop; i++){
         country->addTroop(1);
         bonus_troop--;
-        country = countriesList.at(aiDice.thrown());
+        int d2 = aiDice.thrown();
+        if(d2 == -1) return;
+        country = countriesList.at(d2);
     }  
 }
 
@@ -94,6 +98,7 @@ void EasyAi::attack() {
 
         //The ai will then choose a random neighbouring country to attack
         int rand = aiDice.thrown();
+        if(rand == -1) return;
         shared_ptr<state::Country> aiAttackCountry = aiAttackCountries.at(count.at(rand));
         shared_ptr<state::Country> aiDefCountry = aiAttackableCountries.at(rand); 
 
@@ -103,7 +108,13 @@ void EasyAi::attack() {
         
         aiAttack.setPlayer(player);
         
-        aiAttack.execute();
+        int win = aiAttack.execute();
+        if(win == 1){
+            while(aiAttackCountry->getNumberOfTroop() > 1){
+                aiAttackCountry->reduceTroop(1);
+                aiDefCountry->addTroop(1);
+            }
+        }
 
     }
 }
@@ -116,15 +127,17 @@ void EasyAi::reinforce() {
     countriesList = player->getCountriesList();
 
     aiDice.updateDice(0,countriesList.size()-1);
-    shared_ptr<state::Country> depatureCountry  = countriesList[aiDice.thrown()];
+    int d1 = aiDice.thrown();
+    if(d1 == -1) return;
+    shared_ptr<state::Country> depatureCountry  = countriesList[d1];
 
     aiReinforce.setM_country(depatureCountry);
-    aiReinforce.setN_country(countriesList[aiDice.thrown()]);
+    int d2 = aiDice.thrown();
+    if(d2 == -1) return;
+    aiReinforce.setN_country(countriesList[d2]);
     aiReinforce.setPlayer(player);
 
-    aiDice.updateDice(0, depatureCountry->getNumberOfTroop() - 1);
-
-    for(int i = 0; i < aiDice.thrown(); i++)
+    for(int i = 0; i < depatureCountry->getNumberOfTroop()/2; i++)
     {
         aiReinforce.execute();
     }

@@ -36,7 +36,7 @@ int Dice::thrown () {
     else
     {
         std::cerr << "Dice error : You tried to throw dice between " << m_left << " and " << m_right << std::endl;
-        return 0;
+        return -1;
     }
         
 }
