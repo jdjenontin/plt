@@ -46,84 +46,9 @@ NormalAi::~NormalAi() {
 
 //La stratégie du bot est de conquérir un maximux de pays sur un même continent puis une fois cela fait il attack un autre continent
 void NormalAi::execute (){
-    std::cout << "Execute du bot Normal " << std::endl;
 
-    std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
-    std::vector<int> continentsPresence(player->presenceOnContinents());
-    std::vector<int> newContinentsPresence = continentsPresence;
-    int nbUnequal = 0;
-    std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
-    int testContinentsPresence = 0;
-
-    for(int i = 0; i<continentsPresence.size(); i++){
-        if (continentsPresence.at(i) != totalNbOfCountries.at(i)){
-            nbUnequal++;
-        }
-    }
-
-    if (nbUnequal == 0) {
-        cout << "Heuristic Ai won" << endl;
-        cout <<"NbCOuntries in Oceania:" << continentsPresence.at(5);
-    }
-
-    else if (nbUnequal == totalNbOfCountries.size()) {
-        int idContinentToAttack = (distance(continentsPresence.begin(), max_element(continentsPresence.begin(), continentsPresence.end())));
-        continentToAttack = (state::Continent) idContinentToAttack;
-        cout <<"Continent a attacker: " << continentToAttack << endl;
-        cout <<"NbCOuntries in Oceania:" << continentsPresence.at(5);
-    }
-    
-    else{
-
-        int index = 0;
-        for (index; index<continentsPresence.size(); index++){
-            if(continentsPresence.at(index) == totalNbOfCountries.at(index)) break;
-        }
-
-        switch(index) {
-            case 0:
-                if(continentsPresence.at(1) != totalNbOfCountries.at(1)) continentToAttack = AMERIQUE_SUD;
-                else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                
-                break;
-
-            case 1:
-                if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-
-                break;
-
-            case 2:
-                if(continentsPresence.at(1) != totalNbOfCountries.at(1)) continentToAttack = AMERIQUE_SUD;
-                else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                break;
-
-            case 3:
-                if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-                else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                break;
-
-            case 4:
-                if(continentsPresence.at(5) != totalNbOfCountries.at(5)) continentToAttack = OCEANIE;
-                else if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-                
-                break;
-
-            case 5:
-                if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                break;
-        }
-
-        cout <<"Continent a attacker: " << continentToAttack << endl;
-        cout <<"index:" << index << endl;
-        cout <<"NbCOuntries in Oceania:" << continentsPresence.at(5) << endl;
-    }
-
+    std::vector<state::Continent> allContinents = {AMERIQUE_NORD, AMERIQUE_SUD, AFRIQUE, EUROPE, ASIE, OCEANIE};
+    swapContinentToAttack(allContinents);
     place();
     attack();
     //reinforce();
@@ -166,39 +91,9 @@ void NormalAi::attack (){
     std::vector<int> troopsAttackCountries;
     std::vector<int> troopsDefCountries;
     std::vector<std::shared_ptr<Country>> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
-    std::vector<Country> weakestCountry;
-    int maxContinentId = 0;
-    bool conqueredMaxCont = false;
 
     while(canAttack){
-
-        //Si l'ia possède tous les pays d'un continent elle attaque le continent voisin sinon elle attaque dans ce continent
-        /*switch (maxContinentId) {
-            case 0:
-                if(maxContinentId == 9) conqueredMaxCont = true;
-                break;
-
-            case 1:
-                if(maxContinentId == 4) conqueredMaxCont = true;
-                break;
-
-            case 2:
-                if(maxContinentId == 6) conqueredMaxCont = true;
-                break;
-
-            case 3:
-                if(maxContinentId == 7) conqueredMaxCont = true;
-                break;
-
-            case 4:
-                if(maxContinentId == 12) conqueredMaxCont = true;
-                break;
-
-            case 5:
-                if(maxContinentId == 4) conqueredMaxCont = true;
-                break;
-        }*/
-            
+        
         for (int i=0; i<countriesList.size();i++) {
             if ((countriesList.at(i)->getNumberOfTroop() > 1) & countriesList.at(i)->getContinent() == continentToAttack) {
                 aiAttackCountries.push_back(countriesList.at(i));
@@ -207,21 +102,21 @@ void NormalAi::attack (){
 
         }
             
-            //We make a list of all the countries we can attack
+        //We make a list of all the countries we can attack
         for(int j=0; j<aiAttackCountries.size(); j++){
-            troopsDefCountries.push_back(0);
             for(int i=0; i<42;i++) {
-                if ((aiAttackCountries.at(j)->isAdjacent(i)) & (!Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries)) & (aiAttackCountries.at(j)->getNumberOfTroop()+1 > v_listcountry.at(i)->getNumberOfTroop()) & v_listcountry.at(i)->getContinent() == continentToAttack) {
+                if ((aiAttackCountries.at(j)->isAdjacent(i)) & (!Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries))
+                     & (aiAttackCountries.at(j)->getNumberOfTroop()+1 > v_listcountry.at(i)->getNumberOfTroop()) 
+                     & v_listcountry.at(i)->getContinent() == continentToAttack){
+
                     std::cout << "The Heuristic AI can attack " << v_listcountry.at(i)->getName() << ". \n";
                     aiAttackableCountries.push_back(v_listcountry.at(i));
                     troopsDefCountries.push_back(v_listcountry.at(i)->getNumberOfTroop());
                     count.push_back(j);
-
                 }
             }
         }
 
-        int idStrongestCountry = distance(troopsAttackCountries.begin(), max_element(troopsAttackCountries.begin(), troopsAttackCountries.end()));
         int idWeakestCountry = distance(troopsDefCountries.begin(), min_element(troopsDefCountries.begin(), troopsDefCountries.end()));
 
         if (!aiAttackableCountries.empty()) {
@@ -234,90 +129,14 @@ void NormalAi::attack (){
             cout << aiDefCountry->getId() << endl;
 
             aiAttack.setAttackCountry(aiAttackCountry);
-            std::cout << "Set Attack Country" << "\n";
+
             aiAttack.setDefCountry(aiDefCountry);
-            std::cout << "Set def country" << "\n";
             
             aiAttack.setPlayer(player);
             
             aiAttack.execute();
 
-            std::cout << "Attacking" << std::endl;
-
             std::cout << "End of Attack" << endl;
-        }
-
-        std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
-        std::vector<int> continentsPresence(player->presenceOnContinents());
-        std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
-        int nbUnequal = 0;
-        int testContinentsPresence = 0;
-
-        for(int i = 0; i<continentsPresence.size(); i++){
-            if (continentsPresence.at(i) != totalNbOfCountries.at(i)){
-                nbUnequal++;
-            }
-        }
-
-        if (nbUnequal == 0) {
-            cout << "Heuristic Ai won" << endl;
-        }
-
-        else if (nbUnequal == totalNbOfCountries.size()) {
-            int idContinentToAttack = (distance(continentsPresence.begin(), max_element(continentsPresence.begin(), continentsPresence.end())));
-            continentToAttack = (state::Continent) idContinentToAttack;
-            cout <<"Continent a attacker: " << continentToAttack << endl;
-        }
-        
-        else{
-
-            int index = 0;
-            for (index; index<continentsPresence.size(); index++){
-                if(continentsPresence.at(index) == totalNbOfCountries.at(index)) break;
-            }
-
-            switch(index) {
-                case 0:
-                    if(continentsPresence.at(1) != totalNbOfCountries.at(1)) continentToAttack = AMERIQUE_SUD;
-                    else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                    else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                    
-                    break;
-
-                case 1:
-                    if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                    else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-
-                    break;
-
-                case 2:
-                    if(continentsPresence.at(1) != totalNbOfCountries.at(1)) continentToAttack = AMERIQUE_SUD;
-                    else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                    else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                    break;
-
-                case 3:
-                    if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                    else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-                    else if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                    break;
-
-                case 4:
-                    if(continentsPresence.at(5) != totalNbOfCountries.at(5)) continentToAttack = OCEANIE;
-                    else if(continentsPresence.at(2) != totalNbOfCountries.at(2)) continentToAttack = AFRIQUE;
-                    else if(continentsPresence.at(3) != totalNbOfCountries.at(3)) continentToAttack = EUROPE;
-                    else if(continentsPresence.at(0) != totalNbOfCountries.at(0)) continentToAttack = AMERIQUE_NORD;
-                    
-                    break;
-
-                case 5:
-                    if(continentsPresence.at(4) != totalNbOfCountries.at(4)) continentToAttack = ASIE;
-                    break;
-            }
-            
-            cout <<"Continent a attacker: " << continentToAttack << endl;
-            cout <<"index:" << index << endl;
-            cout <<"NbCOuntries in Oceania:" << continentsPresence.at(5) << endl;
         }
 
         canAttack = false;
@@ -330,5 +149,56 @@ void NormalAi::attack (){
 void NormalAi::reinforce (){
 
 }
-    
+
+
+void NormalAi::swapContinentToAttack(std::vector<state::Continent> continentList){
+    int idContinentToAttack;
+    int smallest = 100;
+    int i;
+    std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
+    std::vector<int> continentsPresence(player->presenceOnContinents());
+    std::vector<int> opponentContinentsPresence;
+    std::vector<state::Continent> allContinents = {AMERIQUE_NORD, AMERIQUE_SUD, AFRIQUE, EUROPE, ASIE, OCEANIE};
+    std::vector<state::Continent> continentsToTest = continentList;
+    std::vector<state::Continent> listBorderContinents;
+
+    for(i = 0; i<continentsPresence.size(); i++){
+        opponentContinentsPresence.push_back(totalNbOfCountries.at(i) - continentsPresence.at(i));
+    }
+
+    if(continentsToTest.size() != 6) {
+        for(int i = 0; i<continentsToTest.size(); i++) {
+            Continent currentContinent = continentsToTest.at(i);
+            if (opponentContinentsPresence.at((int) currentContinent) == 0){
+                continentsToTest.erase(continentsToTest.begin()+i);
+                allContinents.erase(allContinents.begin()+ (int) currentContinent);
+            }
+
+            else{
+                continentToAttack =  currentContinent;
+                return;
+            }
+        }
+
+        return swapContinentToAttack(allContinents);
+    }
+
+    else {
+        for (i = 0; i<opponentContinentsPresence.size(); i++) {
+            if (opponentContinentsPresence.at(i) < smallest){
+                if (opponentContinentsPresence.at(i) != 0){
+                    smallest = opponentContinentsPresence.at(i);
+                    continentToAttack = (Continent) i;
+                }
+
+                else{
+                    listBorderContinents = Calculation::borderContinent((Continent) i);
+                    return swapContinentToAttack(listBorderContinents);
+                }
+                
+            }
+        }
+    }
+}
+
 };
