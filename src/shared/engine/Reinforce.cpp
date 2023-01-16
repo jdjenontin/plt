@@ -12,15 +12,6 @@ namespace engine {
  * @param a_listCountry The list to check in
  * @return true if the country is in the list, false if not
 */
-bool countryInList(state::Country* a_country, std::vector<state::Country*> a_listCountry){
-    for(auto country : a_listCountry){
-        if(country->getId() == a_country->getId())
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 Reinforce::Reinforce() {
 

@@ -12,6 +12,7 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestCalculation)
 {
     
+    std::shared_ptr<Player> player0(new Player(100, BOT));
     std::shared_ptr<Player> player1(new Player());
     std::shared_ptr<Player> player2(new Player(2));
     std::vector<std::shared_ptr<Country> > listCountry;

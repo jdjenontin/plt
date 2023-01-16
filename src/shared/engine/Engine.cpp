@@ -2,7 +2,7 @@
 
 #include "Engine.h"
 
-#define DEBUG 1
+// #define DEBUG 1
 
 #define PLACE 0
 #define ATTACK_A 1
