@@ -25,7 +25,12 @@ Country::Country (std::string a_name , int a_id, int a_posX, int a_posY)
     posY = a_posY;
 }
 
-
+Country::Country (std::string a_name, int a_id, state::Continent a_continent, std::vector<int> a_adjacentCountries)
+    : Country(a_name, a_id)
+{
+    continent = a_continent;
+    adjacentCountries = a_adjacentCountries;
+}
 
 Country::Country()
 {
@@ -71,6 +76,19 @@ void Country::reduceTroop (int a_nbTroop) {
     numberOfTroop -= a_nbTroop;
 }
 
+state::Continent Country::getContinent() const{
+    return continent;
+}
+int Country::getPosX() const{
+    return this->posX;
+}
+
+const std::vector<int>& Country::getAdjacentCountries() const {
+    return adjacentCountries;
+}
+int Country::getPosY() const{
+    return this->posY;
+}
 
 /**
  * @brief Compare 2 countries using their number of troop

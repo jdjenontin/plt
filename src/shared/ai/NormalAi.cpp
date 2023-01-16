@@ -8,9 +8,6 @@
 #include <list>
 #include <iterator>
 
-using namespace engine;
-using namespace state;
-using namespace std;
 
 using namespace std;
 using namespace state;

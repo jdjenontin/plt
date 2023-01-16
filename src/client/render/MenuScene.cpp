@@ -1,15 +1,21 @@
 #include "MenuScene.h"
 
 #include <iostream>
+#include <vector>
 
 #define X_MENU 950
 #define Y_MENU 500
 
-#define DEBUG 1
+#define EASY 0
+#define NORMAL 1
+#define HARD 2
+
+// #define DEBUG 1
 
 namespace render {
 
-int plist_size = 2, blist_size = 0;
+int plist_size = 2;
+std::vector<int> blist_size(3, 0);
 
 Colors color;
 
@@ -17,7 +23,7 @@ sf::Texture* c = new sf::Texture();
 sf::Texture back, logo;
 sf::Sprite s_back, s_logo;
 
-std::vector<std::string> listname = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+std::vector<std::string> listname = {"Tom", "Bob", "Jerry", "Peter", "James"};
 
 MenuScene::MenuScene () {
     sf::Vector2f pos_logo(680, 140);
@@ -54,11 +60,12 @@ void MenuScene::createListMain(){
 }
 
 void MenuScene::createListOption(){
-    static sf::Texture t_list, t_add, t_del, t_back;
+    static sf::Texture t_list, t_add, t_del, t_back, t_choose;
     t_list.loadFromFile("res/gamer.png");
     t_add.loadFromFile("res/add.png");
     t_del.loadFromFile("res/delete.png");
     t_back.loadFromFile("res/arrow.png");
+    t_choose.loadFromFile("res/choose.png");
 
     for(int i = 0; i < 6; i++){
         if(i%2 == 0){
@@ -86,6 +93,9 @@ void MenuScene::createListOption(){
     Menu back(X_MENU+275, Y_MENU, 50, 50, &t_back, " ");
     back.addMessage(X_MENU+310, Y_MENU-20, 30, "Back", sf::Color::White);
     listMenu.push_back(back);
+    Menu choose(X_MENU+275, Y_MENU+50, 50, 50, &t_choose, " ");
+    choose.addMessage(X_MENU+310, Y_MENU+30, 30, "Difficulty:", sf::Color::White);
+    listMenu.push_back(choose);
 }
 
 void MenuScene::addMessage(int x, int y, int size, std::string message, sf::Color color){
@@ -123,11 +133,40 @@ void MenuScene::initList(){
             addMessage(X_MENU+250, Y_MENU-20+150*(i/2+1), 30, listname[i], color.colorList[i]);
         }    
     }
-    for(int i = 0; i < blist_size; i++){
-        if((i+plist_size)%2 == 0)
-            addMessage(X_MENU-300, Y_MENU-20+150*((i+plist_size)/2+1), 30, "EasyBot", color.colorList[i+plist_size]);
+    for(int i = 0; i < blist_size[EASY]; i++){
+        int size = i+plist_size;
+        if((size)%2 == 0)
+            addMessage(X_MENU-315, Y_MENU-20+150*((size)/2+1), 30, "EasyBot", color.colorList[size]);
         else
-            addMessage(X_MENU+250, Y_MENU-20+150*((i+plist_size)/2+1), 30, "EasyBot", color.colorList[i+plist_size]);
+            addMessage(X_MENU+235, Y_MENU-20+150*((size)/2+1), 30, "EasyBot", color.colorList[size]);
+    }
+    for(int i = 0; i < blist_size[NORMAL]; i++){
+        int size = i+blist_size[EASY]+plist_size;
+        if((size)%2 == 0)
+            addMessage(X_MENU-325, Y_MENU-20+150*((size)/2+1), 30, "NormalBot", color.colorList[size]);
+        else
+            addMessage(X_MENU+225, Y_MENU-20+150*((size)/2+1), 30, "NormalBot", color.colorList[size]);
+    }
+    for(int i = 0; i < blist_size[HARD]; i++){
+        int size = i+blist_size[EASY]+blist_size[NORMAL]+plist_size;
+        if((size)%2 == 0)
+            addMessage(X_MENU-315, Y_MENU-20+150*((size)/2+1), 30, "HardBot", color.colorList[size]);
+        else
+            addMessage(X_MENU+235, Y_MENU-20+150*((size)/2+1), 30, "HardBot", color.colorList[size]);
+    }
+    switch (difficulty)
+    {
+    case EASY:
+    addMessage(X_MENU+440, Y_MENU+30, 30, "Easy", sf::Color::White);
+        break;
+    case NORMAL:
+    addMessage(X_MENU+440, Y_MENU+30, 30, "Normal", sf::Color::White);
+        break;
+    case HARD:
+    addMessage(X_MENU+440, Y_MENU+30, 30, "Hard", sf::Color::White);
+        break;
+    default:
+        break;
     }
 }
 
@@ -150,19 +189,27 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
 }
 
 void MenuScene::addplayer (){
-    plist_size++;
+    if(plist_size+blist_size[EASY]+blist_size[NORMAL]+blist_size[HARD] < 5)
+        plist_size++;
 }
 
-void MenuScene::addbotplayer (){
-    blist_size++;
+void MenuScene::addbotplayer (int difficulty){
+    if(plist_size+blist_size[EASY]+blist_size[NORMAL]+blist_size[HARD] < 5)
+        blist_size[difficulty]++;
 }
 
 void MenuScene::deleteplayer (){
-    plist_size--;
+    if(plist_size > 0)
+        plist_size--;
 }
 
-void MenuScene::deletebotplayer (){
-    blist_size--;
+void MenuScene::deletebotplayer (int difficulty){
+    if(blist_size[difficulty] != 0)
+        blist_size[difficulty]--;
+}
+
+void MenuScene::changeDifficulty(int difficulty){
+    this->difficulty = difficulty;
 }
 
 void MenuScene::display () {

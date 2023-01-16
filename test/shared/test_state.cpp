@@ -28,7 +28,6 @@ BOOST_AUTO_TEST_CASE(TestState)
     std::shared_ptr<State> state(new State());
     state->init();
     state->IncrementTurn();
-    state->buildCards();
     BOOST_CHECK_EQUAL(state->getTurn(),1);
     vector<std::shared_ptr<Player>> pList = state->getPlayersList();
     vector<std::shared_ptr<Card>> CardsList = state->getCardsList();

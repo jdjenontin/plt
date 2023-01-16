@@ -8,19 +8,19 @@
 #define PLACE 0
 #define ATTACK 1
 #define REINFORCE 2
-#define DISTRIBUTE 5
-#define USECARD 6
 
 #define ATTACK_A 1
 #define ATTACK_D 2
 #define REINFORCE_M 3
 #define REINFORCE_N 4
+#define DISTRIBUTE 5
+#define USECARD 6
 #define SOLO_ATTACK 7
 #define DOUBLE_ATTACK 8
 #define MULTI_ATTACK 9
 
 // Activer ou desactiver les commentaire
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace std;
 using namespace state;
@@ -44,7 +44,7 @@ shared_ptr<state::Player> player = make_shared<state::Player>();
 //shared_ptr<ai::Ai> bot = make_shared<ai::Ai>();
 shared_ptr<ai::EasyAi> easyBot = make_shared<ai::EasyAi>();
 shared_ptr<ai::NormalAi> normalBot = make_shared<ai::NormalAi>();
-shared_ptr<ai::HardAi> hardBot;
+shared_ptr<ai::HardAi> hardBot = make_shared<ai::HardAi>();
 // Le pays que le joueur choisi pendant son tour
 // Et le pays a et d est pour sauvegarder les deux pays que le joueurs a choisi pour qu'il puisse deplacer le troop
 shared_ptr<state::Country> country, country_a, country_d;
@@ -57,10 +57,13 @@ int status = 0;
 bool initPlayer = false;
 
 // Les quatre chiffre pour indiquer si le pays est choisi
-int attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+int attack_a = 0, attack_d = 0, attack_win = 0, reinforce_m = 0, reinforce_n = 0;
 
 // Un boolean pour indiquer si le player a fait au moins une fois attack dans son tour, si c'est fait, il va obtenir une carte
-bool attacked = false;
+bool attacked = false; 
+
+// Difficultes
+int difficulty = 0;
 
 // Des messages pour etre affiche dans le gameMenu
 Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8;
@@ -77,26 +80,36 @@ Game::~Game(){
 
 void Game::reinforce_event(){
     if(player->existCountry(*country)){
-        if(reinforce_m == 0)   reinforce_m = engine.execute(REINFORCE_M);
-        else    reinforce_n = engine.execute(REINFORCE_N);
+        if(reinforce_m == 0){
+            reinforce_m = engine.execute(REINFORCE_M);
+            gameScene.displayCircle(country, 0);
+        }   
+        else{
+            reinforce_n = engine.execute(REINFORCE_N);
+            gameScene.displayCircle(country, 1);
+        }
     }
 }
 
 void Game::attack_event(){
+    attacked = false;
+
     if(player->existCountry(*country)){
         attack_a = engine.execute(ATTACK_A);
         country_a = country;
+        gameScene.displayCircle(country_a, 0);
     }
-    else{
+    else if(attack_a == 1){
         attack_d = engine.execute(ATTACK_D);
         country_d = country;
+        gameScene.displayCircle(country_d, 1);
     }
 }
 
 
 void Game::place_event(){
     if(bonus_troop > 0 && player->existCountry(*country)){
-        int s = engine.execute(PLACE);
+        engine.execute(PLACE);
         bonus_troop--;
     }
 }
@@ -193,28 +206,25 @@ void Game::menuScene_event(int button){
         else if(menuScene.getNameMenu(pos) == "Back")
             menuScene.init_main();
         else if(menuScene.getNameMenu(pos) == "AddHuman"){
-            if(state->nbOfPlayer + state->nbOfBot < 5){
-                state->nbOfPlayer++;
-                menuScene.addplayer();
-            }
+            state->addPlayer();
+            menuScene.addplayer();
         }
         else if(menuScene.getNameMenu(pos) == "DeleteHuman"){
-            if(state->nbOfPlayer > 1){
-                state->nbOfPlayer--;
-                menuScene.deleteplayer();
-            } 
+            state->deletePlayer();
+            menuScene.deleteplayer();
         }
         else if(menuScene.getNameMenu(pos) == "AddBot"){
-            if(state->nbOfPlayer + state->nbOfBot < 5){
-                state->nbOfBot++;
-                menuScene.addbotplayer();
-            }
+            state->addBot(difficulty);
+            menuScene.addbotplayer(difficulty);
         }
         else if(menuScene.getNameMenu(pos) == "DeleteBot"){
-            if(state->nbOfBot > 0){
-                state->nbOfBot--;
-                menuScene.deletebotplayer();
-            }
+            state->deleteBot(difficulty);
+            menuScene.deletebotplayer(difficulty);
+        }
+        else if(menuScene.getNameMenu(pos) == "Difficulty:"){
+            difficulty++;
+            if(difficulty > 2) difficulty = 0;
+            menuScene.changeDifficulty(difficulty);
         }
     }
     else if(button == RIGHT){
@@ -227,6 +237,7 @@ void Game::gameMenuEvent(){
         change_status();
     }
     else if(abs(pos.x - 1735) < 185 && abs(pos.y - 1040) < 40){
+        reinforce_m = 0, reinforce_n = 0;
         state->ChangePlaying();
         engine.execute(DISTRIBUTE);
         status = 0;
@@ -238,30 +249,23 @@ void Game::gameMenuEvent(){
  * @brief The event of the game scene when the client use the mouse
 */
 void Game::gameScene_event(int button){
-
-    if (player->getType() != BOT) {
-        if(button == LEFT){
-            if(gameScene.isCardButton(pos)){
-                init_card();
-                gameScene.close();
-                cardScene.open();
-            }
-            country = gameScene.findCountry(pos);
-            if(country)
-                country_event();
-            else
-                attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
-            gameMenuEvent();
+    if(button == LEFT){
+        if(gameScene.isCardButton(pos)){
+            init_card();
+            gameScene.close();
+            cardScene.open();
         }
         country = gameScene.findCountry(pos);
         if(country)
             country_event();
-        else
-            attack_a = 0, attack_d = 0, reinforce_m = 0, reinforce_n = 0;
+        else{
+            attack_a = 0, attack_d = 0, attack_win = 0;
+            gameScene.displayCircle(country_a, -1);
+        }
         gameMenuEvent();
     }
     else if(button == RIGHT){
-        if(status == ATTACK && attack_a == 1 && attack_d == 1 && country_a->getNumberOfTroop() > 1){
+        if(status == ATTACK && attack_a == 1 && attack_d == 1 && attack_win == 1 && country_a->getNumberOfTroop() > 1){
             country_a->reduceTroop(1);
             country_d->addTroop(1);
         }
@@ -278,7 +282,7 @@ void Game::cardScene_event(int button){
             gameScene.open();
         }
         if(cardScene.isChangeButton(pos) && status == 0){
-            int s = engine.execute(USECARD);
+            engine.execute(USECARD);
             cardScene.init();
             bonus_troop += engine.getBonus_troop();
         }
@@ -293,26 +297,25 @@ void Game::cardScene_event(int button){
 */
 void Game::key_event(){
     if(Keyboard::isKeyPressed(Keyboard::R)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(SOLO_ATTACK);
-            attack_a = 0, attack_d = 0;
+            attack_win = engine.execute(SOLO_ATTACK);
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::S)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(DOUBLE_ATTACK);
-            attack_a = 0, attack_d = 0;
+            attack_win = engine.execute(DOUBLE_ATTACK);
         }
     }
     if(Keyboard::isKeyPressed(Keyboard::T)){
-        if(attack_a == 1 && attack_d == 1){
+        if(attack_a == 1 && attack_d == 1 && attacked == false){
             attacked = true;
-            int s = engine.execute(MULTI_ATTACK);
-            attack_a = 0, attack_d = 0;
+            attack_win = engine.execute(MULTI_ATTACK);
         }
     }
+    if(Keyboard::isKeyPressed(Keyboard::P))
+        engine.execute(DISTRIBUTE);
 }
 
 /**
@@ -368,7 +371,7 @@ void Game::updateMessage(){
         break;
     case ATTACK:
     m6->setstrMessage("Attack");
-    if(attack_a == 1 && attack_d == 1){
+    if(attack_a == 1 && attack_d == 1 && attacked == false && country_a->getNumberOfTroop() > 1){
         m8->setintMessage(AttackComputer::victoryProba(country_a->getNumberOfTroop()-1, country_d->getNumberOfTroop())*100);
         m8->addMessage("%");
     }
@@ -401,15 +404,37 @@ void Game::createMessage(){
     gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7, m8});
 }
 
+void Game::aiProcess(){
+    if(player->getType() == EASYBOT){
+        easyBot->setState(state);
+        easyBot->execute(player);
+    }
+    else if(player->getType() == NORMALBOT){
+        normalBot->setState(state);
+        normalBot->execute(player);
+    }
+    else if(player->getType() == HARDBOT){
+        hardBot->setState(state);
+        hardBot->execute(player);
+    }
+    state->ChangePlaying();
+    engine.execute(DISTRIBUTE);
+    status = 0;
+    initPlayer = false;
+}
+
 /**
  * @brief The process for the game scene
 */
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
-
     engine.setPlayer(player);
-    updateMessage();
-    if(!initPlayer) init_player();
+
+    if(player->getType() != HUMAN) aiProcess();
+    else{
+        updateMessage();
+        if(!initPlayer) init_player();
+    }
 }
 
 /**
@@ -419,35 +444,14 @@ void Game::window_begin(){
     Event mouse;
     engine.init(state);
     createMessage();
-    // Message x(1150, 25, "X : "), 
-    //         y(1150, 50, "Y : ");
 
     while(window->isOpen())
     {
         pos = Mouse::getPosition(*window);
 
-        if(gameScene.isOpen()) {
-            game_process();            
-            if (player->getType() == BOT) {
+        if(gameScene.isOpen())
+            game_process();          
 
-                
-                // TO-DO : Think about the implementation of dificulty level
-
-                // std::cout << "Case du bot Easy " << std::endl;
-                // easyBot->setState(state);
-                // easyBot->execute(player);
-                // std::cout << "Fin execute du bot" << std::endl;
-
-                normalBot->setState(state);
-                //normalBot->setPlayer(player);
-                normalBot->execute(player);
-
-                state->ChangePlaying();
-                engine.execute(DISTRIBUTE);
-                status = 0;
-                initPlayer = false;
-            }
-        }
         //Evenement du souris
         mouse_event(&mouse);
         //Evenement du clavier
@@ -459,11 +463,6 @@ void Game::window_begin(){
             cardScene.display();
         else if(menuScene.isOpen())
             menuScene.display();
-
-        // x.setintMessage(pos.x);
-        // y.setintMessage(pos.y);
-        // window->draw(x.text);
-        // window->draw(y.text);
 
         window->display();
     }

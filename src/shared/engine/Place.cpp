@@ -21,7 +21,6 @@ void Place::execute (){
     if(player->existCountry(*country)){;
         country->addTroop(1);
         bonus_troop--;
-        std::cout << bonus_troop << std::endl;
     }
 }
 

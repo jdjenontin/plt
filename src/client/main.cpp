@@ -5,8 +5,9 @@
 #include <vector>
 #include <sstream>
 #include <thread>
-#include <chrono>
 #include <fstream>
+#include <stdio.h>
+#include <string.h>
 
 #include <SFML/Graphics.hpp>
 #include "state.h"
@@ -26,11 +27,17 @@ int main(int argc,char* argv[])
 {
     srand((unsigned) time(NULL));
     std::shared_ptr<State> state(new State());
-    
     Game game;
 
-    game.setState(state);
-    game.begin();
+    if(argc == 1){
+        game.setState(state);
+        game.begin();
+    }
+    else if(argc == 2){
+        if(strcmp(argv[1], "hello") == 0)
+            cout << "Bonjour le monde !" << endl;
+    }
+    else perror("Invaild argument");
 
     return 0;
 }

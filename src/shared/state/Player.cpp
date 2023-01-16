@@ -11,7 +11,7 @@ namespace state{
 
 const int totalAsia = 12;
 
-std::vector<std::string> Player::defaultNames = {"Tom", "Bob", "Uriel", "Sam", "Yann"};
+std::vector<std::string> Player::defaultNames = {"Tom", "Bob", "Jerry", "Peter", "James"};
 
 Player::Player () {
     status = PLAYING;
@@ -27,6 +27,9 @@ Player::Player (int a_id) : Player() {
 // TO-DO : think aout name implication
 Player::Player(int a_id, TypePlayer a_type) :Player(a_id){
     type = a_type;
+    if(type == EASYBOT) name = "EasyBot";
+    else if(type == NORMALBOT) name = "NormalBot";
+    else if(type == HARDBOT) name = "HardBot";
 }
 
 Player::~Player () {
@@ -155,7 +158,7 @@ const vector<shared_ptr<Country>>& Player::getCountriesList () const {
     return countriesList;
 }
 
-const vector<shared_ptr<Card>>& Player::getCardsList() const{
+vector<shared_ptr<Card>>& Player::getCardsList(){
     return cardsList;
 }
 
