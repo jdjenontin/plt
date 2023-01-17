@@ -358,7 +358,6 @@ void Game::mouse_event(Event* mouse){
 }
 
 void Game::updateMessage(){
-    m1->setintMessage(state->getTurn() + 1);
     m2->setstrMessage(player->getName());
     switch (status)
     {
@@ -429,6 +428,7 @@ void Game::aiProcess(){
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
     engine.setPlayer(player);
+    m1->setintMessage(state->getTurn() + 1);
 
     if(player->getCountriesList().size() == 42){
         m9->show(DISPLAY);

@@ -34,11 +34,7 @@ int Dice::thrown () {
         return m_left + (rand()%(m_right-m_left+1));
     }
     else
-    {
-        std::cerr << "Dice error : You tried to throw dice between " << m_left << " and " << m_right << std::endl;
         return -1;
-    }
-        
 }
 
 /**
