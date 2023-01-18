@@ -120,6 +120,7 @@ void State::buildCountries(){
     }
 
     std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
+
 }
 
 void State::buildCards(){

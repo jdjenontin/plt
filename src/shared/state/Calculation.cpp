@@ -102,4 +102,36 @@ bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr
     return Calculation::isCountryInList(destCountry, visited);
 }
 
+std::vector<int> Calculation::borderContinent(int continent){
+
+    std::vector<int> listBorderCountries;
+    switch(continent) {
+        case 0: 
+            listBorderCountries.insert(listBorderCountries.end(), {1, 3, 4});
+            break;
+
+        case 1: 
+            listBorderCountries.insert(listBorderCountries.end(), {2, 0});
+            break;
+
+        case 2: 
+            listBorderCountries.insert(listBorderCountries.end(), {1, 3, 4});
+            break;
+
+        case 3: 
+            listBorderCountries.insert(listBorderCountries.end(), {2, 0, 4});
+            break;
+
+        case 4: 
+            listBorderCountries.insert(listBorderCountries.end(), {5, 2, 3, 1});
+            break;
+
+        case 5: 
+            listBorderCountries.insert(listBorderCountries.end(), {4});
+            break;
+    }
+
+    return listBorderCountries;
+}
+
 }

@@ -126,20 +126,22 @@ void Game::change_status(){
  * @brief The event of the country when the client choose the country using the mouse
 */
 void Game::country_event(){
-#ifdef DEBUG
-    cout << "dans la fonction :" << __func__ << "avec status :" << status << endl;
-#endif
+    #ifdef DEBUG
+        cout << "dans la fonction :" << __func__ << "avec status :" << status << endl;
+    #endif
+
     engine.setCountry(country);
+
     switch (status)
     {
     case PLACE:
-    place_event();
+        place_event();
         break;
     case ATTACK:
-    attack_event();
+        attack_event();
         break;
     case REINFORCE:
-    reinforce_event();
+        reinforce_event();
         break;           
     default:
         break;
