@@ -85,43 +85,53 @@ void HardAi::attack(){
 
     attack.setState(state);
     attack.setPlayer(player);
-    std::vector<std::vector<int>> route = routeCal.execute();
-    if(route.empty()) {
-        cout << "routeList nulle" << endl;
-        return;
-    }
-    for(int i = 0; i < route[0].size(); i++){
+    while(1){
+        std::vector<std::vector<int>> route = routeCal.execute();
+        if(route.empty()) {
+            break;
+        }
+        for(int i = 0; i < route[0].size(); i++){
 #ifdef DEBUG
         std::cout << totalCountriesList[route[0][i]]->getName() << totalCountriesList[route[1][i]]->getName() << std::endl;
         std::cout << totalCountriesList[route[0][i]]->getNumberOfTroop() << totalCountriesList[route[1][i]]->getNumberOfTroop() << std::endl;
 #endif
-        std::shared_ptr<state::Country> att = totalCountriesList[route[0][i]];
-        std::shared_ptr<state::Country> def = totalCountriesList[route[1][i]];
-        attack.setAttackCountry(att);
-        attack.setDefCountry(def);
-        attack.execute();
-        int attTroop = att->getNumberOfTroop();
-        int moveTroop = route[6][i];
-        if(moveTroop == 0) continue;
-        else{
-            int n = (attTroop > moveTroop) ? moveTroop : (attTroop-1);
-            att->reduceTroop(n);
-            def->addTroop(n);
+            std::shared_ptr<state::Country> att = totalCountriesList[route[0][i]];
+            std::shared_ptr<state::Country> def = totalCountriesList[route[1][i]];
+            attack.setAttackCountry(att);
+            attack.setDefCountry(def);
+            attack.execute();
+            int attTroop = att->getNumberOfTroop();
+            int moveTroop = route[6][i];
+            if(moveTroop == 0) continue;
+            else{
+                int n = (attTroop > moveTroop) ? moveTroop : (attTroop-1);
+                att->reduceTroop(n);
+                def->addTroop(n);
+            }
         }
     }
+    
 }
 
 void HardAi::reinforce(){
     std::shared_ptr<state::Country> country = extractCountryToReinforce();
+    Reinforce reinforce;
+
+    reinforce.setState(state);
+    reinforce.setPlayer(player);
+    reinforce.setM_country(country);
 
     int nTroop = country->getNumberOfTroop();
     if(nTroop < 2) return;
     this->sortCountryByBSR();
 
-    while(nTroop > 1){
-        countriesList[0]->addTroop(1);
-        country->reduceTroop(1);
-        nTroop--;
+    for(auto c : countriesList){
+        reinforce.setN_country(c);
+        while(nTroop > 1){
+            if(reinforce.execute() == 0) break;
+            nTroop--;
+        }
+        if(nTroop == 1) break;
     }
 }
 
@@ -131,6 +141,7 @@ void HardAi::execute(shared_ptr<Player> a_player){
 #endif
     player = a_player;
     countriesList = player->getCountriesList();
+    if(countriesList.empty()) return;
     place();
     attack();
     reinforce();
