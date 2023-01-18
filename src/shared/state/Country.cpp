@@ -110,4 +110,13 @@ void Country::print()
     std::cout << "Owner          : " << ownerId << std::endl;
 }
 
+Json::Value Country::serialize(){
+    Json::Value country;
+    country["id"] = id;
+    country["ownerId"] = ownerId;
+    country["troop"] = numberOfTroop;
+
+    return country;
+}
+
 }

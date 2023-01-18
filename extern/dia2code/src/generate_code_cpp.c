@@ -809,7 +809,8 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
        && (strstr(name,"std::ostringstream") == name)) {
            print ("#include <sstream>\n");
            si->sstream = 1;
-       }       
+       }
+       
     }
 }
 

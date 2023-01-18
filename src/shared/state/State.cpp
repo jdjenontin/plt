@@ -203,16 +203,14 @@ void State::distibuteTroops(){
     }
 }
 
-// TO-Do : Use ownerId instead !
-// Player* State::belongsto (Country* country){
-//     for(unsigned i = 0; i < playersList.size(); i++){
-//         sf::Color c1 = playersList[i].getColor();   
-//         sf::Color c2 = country->getColor();
-//         if(c1.toInteger() == c2.toInteger())
-//             return &playersList[i];
-//     }
+Json::Value State::serialize(){
+    Json::Value countries;
 
-//     return {};
-// }
+    for (auto& country : countriesList)
+    {
+        countries[country->getName()] = country->serialize();
+    }
+    return countries;
+}
 
 } // namespace state
