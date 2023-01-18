@@ -31,15 +31,13 @@ NormalAi::~NormalAi() {
 //La stratégie du bot est de conquérir un maximux de pays sur un même continent puis une fois cela fait il attack un autre continent
 void NormalAi::execute (){
     
-    std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
+    /*std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
     std::vector<int> continentsPresence(player->presenceOnContinents());
-    std::vector<int> opponentContinentsPresence;
+    std::vector<int> opponentContinentsPresence;*/
     std::vector<int> allContinents(6, 1);
 
-    cout << "Execute IA Heu" << endl;
-
     swapContinentToAttack(allContinents);
-    int minimumPresence = 100;
+    /*int minimumPresence = 100;
 
     int i;
 
@@ -50,10 +48,7 @@ void NormalAi::execute (){
             minimumPresence = opponentContinentsPresence.at(i);
             continentToReinforce = (Continent) i;
         }
-    }
-
-    cout << "Continent a renforcer: " << continentToReinforce << endl; 
-    cout << "Continent a attacker: " << continentToAttack << endl; 
+    }*/
 
     place();
     attack();
@@ -61,23 +56,39 @@ void NormalAi::execute (){
 }
 
 void NormalAi::place (){
-    //std::cout << "Place du bot Heuristic" << std::endl;
-    int minNbTroops = 10;
+    
+    std::vector<int> continentsPresence(player->presenceOnContinents());
+    std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
+
 
     int bonus_troop = player->continentBonusTroop();
 
     for(int i = 0; i < bonus_troop; i++){
         for (auto country : countriesList){
-            if ((country->getContinent() == continentToAttack) & (country->getNumberOfTroop()) < minNbTroops){
-                //std::cout << "Placing troop in " << country->getName() << std::endl;
-                country->addTroop(1);
-                break;
+            vector<shared_ptr<Country>> countriesAdjacent = Computation::adjacentCountries(state, country);
+            if (((country->getContinent() == continentToAttack) | std::find(borderCountriesId.begin(), borderCountriesId.end(), country->getId()) != borderCountriesId.end()) 
+                & (country->getNumberOfTroop()) < minNbTroops[country->getContinent()]){
+                
+                for(auto adjCountry : countriesAdjacent){
+                    if(!Calculation::isCountryInList(adjCountry, countriesList)){
+                        country->addTroop(1);
+                        break;
+                    }
+                }
+                
             }
-
         }
-
         bonus_troop--;
-    }  
+    }
+
+    for(int i = 0; i<6; i++){
+        if(continentsPresence[i] == totalNbOfCountries[i]){
+            minNbTroops[i]+= 5;
+        }
+        else{
+            minNbTroops[i] = 10;
+        }
+    }
 }
 
 void NormalAi::execute(std::shared_ptr<state::Player> a_player)
@@ -95,11 +106,6 @@ void NormalAi::attack (){
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
     std::vector<int> troopsAttackCountries;
     std::vector<int> troopsDefCountries;
-    std::vector<int> borderCountriesId({v_listcountry.at(0)->getId(), v_listcountry.at(4)->getId(), v_listcountry.at(8)->getId(), v_listcountry.at(9)->getId(),
-                                                            v_listcountry.at(11)->getId(), v_listcountry.at(13)->getId(), v_listcountry.at(14)->getId(), v_listcountry.at(15)->getId(),
-                                                            v_listcountry.at(19)->getId(), v_listcountry.at(23)->getId(), v_listcountry.at(24)->getId(), v_listcountry.at(25)->getId(),
-                                                            v_listcountry.at(26)->getId(), v_listcountry.at(27)->getId(), v_listcountry.at(28)->getId(), v_listcountry.at(33)->getId(),
-                                                            v_listcountry.at(37)->getId(), v_listcountry.at(38)->getId()});
 
     std::vector<std::shared_ptr<Country>> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
@@ -114,8 +120,6 @@ void NormalAi::attack (){
 
         }
         
-        
-        cout << "aiAttackCountries: " << aiAttackCountries.size() << endl;
         //We make a list of all the countries we can attack
         for(int j=0; j<aiAttackCountries.size(); j++){
             for(int i=0; i<42;i++) {
@@ -130,34 +134,16 @@ void NormalAi::attack (){
             }
         }
 
-        cout << "aiAttackCountries: " << aiAttackCountries.size() << endl;
-        cout << "aiAttackableCountries: " << aiAttackableCountries.size() << endl;
-
-        /*for (int i=0; i<aiAttackCountries.size(); i++){
-            cout << "Pays " << i << ": " << aiAttackCountries.at(i)->getName() << endl;
-        }*/
-
-        cout << "Liste de tous les pays: " << v_listcountry.size() << endl;
-
         int idWeakestCountry = distance(troopsDefCountries.begin(), min_element(troopsDefCountries.begin(), troopsDefCountries.end()));
-
             
         if (!aiAttackableCountries.empty()){
             std::shared_ptr<state::Country> aiAttackCountry = aiAttackCountries.at(count.at(idWeakestCountry));
             std::shared_ptr<state::Country> aiDefCountry = aiAttackableCountries.at(idWeakestCountry); 
 
-            std::cout << "The Heuristic AI will attack " << aiDefCountry->getName() << " with " << aiAttackCountry->getName() << "\n";
-            //cout << aiDefCountry->getId() << endl;
-
             aiAttack.setAttackCountry(aiAttackCountry);
-
             aiAttack.setDefCountry(aiDefCountry);
-            
             aiAttack.setPlayer(player);
-            
             aiAttack.execute();
-
-            std::cout << "End of Attack" << endl;
 
         }
 
@@ -170,6 +156,27 @@ void NormalAi::attack (){
 
 void NormalAi::reinforce (){
 
+    std::vector<std::shared_ptr<state::Country>> countriesAdjacent;
+    std::shared_ptr<state::Country> testCountryOne;
+    int i;
+
+    for(i = 0; i<countriesList.size(); i++){
+        testCountryOne = countriesList[i];
+        if (((testCountryOne->getContinent() == continentToAttack) | std::find(borderCountriesId.begin(), borderCountriesId.end(), testCountryOne->getId()) != borderCountriesId.end())
+            & testCountryOne->getNumberOfTroop() < 20){
+            countriesAdjacent = Computation::adjacentCountries(state, testCountryOne);
+            break;
+        }
+    }
+
+    for(auto testCountryTwo: countriesAdjacent){
+        int numTroopsCountry  = testCountryTwo->getNumberOfTroop();
+        int troopsToAdd = (int) (numTroopsCountry/2);
+        if((Calculation::isCountryInList(testCountryTwo, countriesList)) & (numTroopsCountry > 1)){
+            testCountryOne->addTroop(troopsToAdd);
+            testCountryTwo->reduceTroop(troopsToAdd);
+        }
+    }
 }
 
 
