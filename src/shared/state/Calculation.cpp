@@ -102,32 +102,32 @@ bool Calculation::areConnected (std::shared_ptr<Player>& player, std::shared_ptr
     return Calculation::isCountryInList(destCountry, visited);
 }
 
-std::vector<state::Continent> Calculation::borderContinent(Continent continent){
+std::vector<int> Calculation::borderContinent(int continent){
 
-    std::vector<state::Continent> listBorderCountries;
+    std::vector<int> listBorderCountries;
     switch(continent) {
-        case AMERIQUE_NORD: 
-            listBorderCountries.insert(listBorderCountries.end(), {AMERIQUE_SUD, EUROPE, ASIE});
+        case 0: 
+            listBorderCountries.insert(listBorderCountries.end(), {1, 3, 4});
             break;
 
-        case AMERIQUE_SUD: 
-            listBorderCountries.insert(listBorderCountries.end(), {AFRIQUE, AMERIQUE_NORD});
+        case 1: 
+            listBorderCountries.insert(listBorderCountries.end(), {2, 0});
             break;
 
-        case AFRIQUE: 
-            listBorderCountries.insert(listBorderCountries.end(), {AMERIQUE_SUD, EUROPE, ASIE});
+        case 2: 
+            listBorderCountries.insert(listBorderCountries.end(), {1, 3, 4});
             break;
 
-        case EUROPE: 
-            listBorderCountries.insert(listBorderCountries.end(), {AFRIQUE, AMERIQUE_NORD, ASIE});
+        case 3: 
+            listBorderCountries.insert(listBorderCountries.end(), {2, 0, 4});
             break;
 
-        case ASIE: 
-            listBorderCountries.insert(listBorderCountries.end(), {OCEANIE, AFRIQUE, EUROPE, AMERIQUE_NORD});
+        case 4: 
+            listBorderCountries.insert(listBorderCountries.end(), {5, 2, 3, 1});
             break;
 
-        case OCEANIE: 
-            listBorderCountries.insert(listBorderCountries.end(), {ASIE});
+        case 5: 
+            listBorderCountries.insert(listBorderCountries.end(), {4});
             break;
     }
 
