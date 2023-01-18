@@ -20,7 +20,7 @@ std::vector<int> blist_size(3, 0);
 Colors color;
 
 sf::Texture* c = new sf::Texture();
-sf::Texture back, logo;
+sf::Texture back, logo, rule1, rule2;
 sf::Sprite s_back, s_logo;
 
 std::vector<std::string> listname = {"Tom", "Bob", "Jerry", "Peter", "James"};
@@ -36,6 +36,8 @@ MenuScene::MenuScene () {
     s_logo.setPosition(pos_logo);
     c->loadFromFile("res/button.png");
     c->setSmooth(true);
+    rule1.loadFromFile("res/HowToPlay1.png");
+    rule2.loadFromFile("res/HowToPlay2.png");
 }
 
 MenuScene::~MenuScene () {
@@ -112,6 +114,7 @@ void MenuScene::clearList(){
 void MenuScene::init_main () {
     option_isOpen = false;
     main_isOpen = true;
+    rule_isOpen = false;
     clearList();
 
     createListMain();
@@ -120,9 +123,24 @@ void MenuScene::init_main () {
 void MenuScene::init_option(){
     option_isOpen = true;
     main_isOpen = false;
+    rule_isOpen = false;
     clearList();
 
     createListOption();
+}
+
+void MenuScene::init_rule(){
+    static sf::Texture t_back;
+    t_back.loadFromFile("res/arrow.png");
+
+    option_isOpen = false;
+    main_isOpen = false;
+    rule_isOpen = true;
+    clearList();
+
+    Menu back(1730, 30, 50, 50, &t_back, " ");
+    back.addMessage(1765, 10, 30, "Back", sf::Color::White);
+    listMenu.push_back(back);
 }
 
 void MenuScene::initList(){
@@ -185,6 +203,12 @@ std::string MenuScene::getNameMenu (sf::Vector2i pos) {
             }
         }
     }
+    else if(rule_isOpen)
+        for(auto m : listMenu){
+            if(abs(pos.x - m.getPostion().x) < 25 && abs(pos.y - m.getPostion().y) < 25){
+                return m.getName();
+            }
+        }
     return "";
 }
 
@@ -221,6 +245,14 @@ void MenuScene::display () {
     
     if(option_isOpen)
         initList();
+
+    if(rule_isOpen){
+        sf::Sprite r1(rule1), r2(rule2);
+        r1.setPosition(200, 100);
+        window->draw(r1);
+        r2.setPosition(1000, 100);
+        window->draw(r2);
+    }
 }
 
 void MenuScene::display_menu (Menu menu) {

@@ -144,6 +144,7 @@ int AttackRouteCalculation::updateRoute(std::vector<std::vector<int>> route){
         route[6].push_back(numTroop-1);
         extendRoute(c2, c, numTroop, route);
     } 
+    return 1;
 }
 
 void AttackRouteCalculation::clearRouteList(){

@@ -1,13 +1,10 @@
 #include <iostream>
 #include <random>
 #include <chrono>
-#include <algorithm>
-#include <vector>
-#include <sstream>
-#include <thread>
 #include <fstream>
 #include <stdio.h>
 #include <string.h>
+#include <cstdlib>
 
 #include <SFML/Graphics.hpp>
 #include "state.h"

@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <iostream>
+#include <cstdlib>
 
 #define LEFT 0
 #define RIGHT 1
@@ -201,6 +202,10 @@ void Game::menuScene_event(int button){
             menuScene.init_option();
         else if(menuScene.getNameMenu(pos) == "Quit")
             window->close();
+        else if(menuScene.getNameMenu(pos) == "Rule")
+            menuScene.init_rule();
+        else if(menuScene.getNameMenu(pos) == "About")
+            system("xdg-open https://github.com/jdjenontin/plt/blob/master/README.md");
         else if(menuScene.getNameMenu(pos) == "Back")
             menuScene.init_main();
         else if(menuScene.getNameMenu(pos) == "AddHuman"){
