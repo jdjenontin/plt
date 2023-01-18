@@ -8,8 +8,25 @@ using namespace std;
 
 const int PORT = 8000;
 
+class RequestData {
+    public:
+    RequestData() : data() {}
 
-static enum MDH_Result 
+    void appendData(const char *data, size_t size) {
+        this->data.append(data, size);
+    }
+
+    std::string getData() {
+        return data;
+    }
+
+    private:
+    std::string data;
+};
+
+
+
+enum MHD_Result 
 post_iterator(void *cls,
                 enum MHD_ValueKind kind,
                 const char *key,
@@ -53,7 +70,7 @@ namespace server {
 
             pp = MHD_create_post_processor(connection, 1024, &post_iterator, *ptr);
 
-            cout << "PP " << pp << endl;
+            cout << "PP " << pp << endl;    
 
             MHD_post_process(pp, upload_data, *upload_data_size);
 
