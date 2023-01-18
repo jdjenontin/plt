@@ -7,6 +7,7 @@
 namespace render{
 
 sf::Texture* circle = new sf::Texture();
+sf::Texture backg, cardback;
 
 Button gameb(20, 20, 25, sf::Color::Magenta, circle),
        changeb(1820, 20, 25, sf::Color::Blue, circle); 
@@ -16,6 +17,9 @@ Message change(1730, 30, "change");
 CardScene::CardScene(){
     circle->loadFromFile("res/button.png");
     circle->setSmooth(true);
+
+    backg.loadFromFile("res/cardbackground.jpg");
+    cardback.loadFromFile("res/card.jpg");
 }
 
 CardScene::~CardScene(){
@@ -61,7 +65,9 @@ void CardScene::setPlayer (std::shared_ptr<state::Player>& player){
 }
 
 void CardScene::display(){
+    sf::Sprite background(backg);
     window->clear(sf::Color::Cyan);
+    window->draw(background);
 
     window->draw(gameb.circle);
     window->draw(changeb.circle);
@@ -74,6 +80,7 @@ void CardScene::display(){
 
 void CardScene::display_card (Card card){
     sf::RectangleShape rec = card.getRectangle();
+    rec.setTexture(&cardback);
 
     window->draw(rec);
     window->draw(card.getCountry()->text);

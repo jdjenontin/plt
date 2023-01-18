@@ -66,7 +66,7 @@ bool attacked = false;
 int difficulty = 0;
 
 // Des messages pour etre affiche dans le gameMenu
-Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8;
+Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8, *m9;
 
 namespace render{
 
@@ -360,7 +360,6 @@ void Game::mouse_event(Event* mouse){
 }
 
 void Game::updateMessage(){
-    m1->setintMessage(state->getTurn() + 1);
     m2->setstrMessage(player->getName());
     switch (status)
     {
@@ -392,6 +391,7 @@ void Game::createMessage(){
     m6 = new Message(1570, 510, "You are doing : ");
     m7 = new Message(1570, 570, "You have ");
     m8 = new Message(1570, 630, "Your win rate is : ");
+    m9 = new Message(1570, 690, "Player ", NO_DISPLAY);
 
     m1->setSize(30);
     m2->setSize(30);
@@ -401,7 +401,8 @@ void Game::createMessage(){
     m6->setSize(30);
     m7->setSize(30);
     m8->setSize(30);
-    gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7, m8});
+    m9->setSize(35);
+    gameScene.addListMessage({m1, m2, m3, m4, m5, m6, m7, m8, m9});
 }
 
 void Game::aiProcess(){
@@ -429,11 +430,19 @@ void Game::aiProcess(){
 void Game::game_process(){
     player = pList[state->getOrderPlayer()];
     engine.setPlayer(player);
+    m1->setintMessage(state->getTurn() + 1);
 
-    if(player->getType() != HUMAN) aiProcess();
+    if(player->getCountriesList().size() == 42){
+        m9->show(DISPLAY);
+        m9->setstrMessage(player->getName());
+        m9->addMessage(" win !");
+    }
     else{
-        updateMessage();
-        if(!initPlayer) init_player();
+        if(player->getType() != HUMAN) aiProcess();
+        else{
+            updateMessage();
+            if(!initPlayer) init_player();
+        }
     }
 }
 
