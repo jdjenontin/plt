@@ -58,7 +58,7 @@ std::vector<std::vector<int>> AttackRouteCalculation::createRoute (std::shared_p
         route[2].push_back(route[2].back() - defCountry->getNumberOfTroop() - 1);
         route[3].push_back(bonusTroops(route[1]));
         route[4].push_back(route[4].back() + condition);
-        route[5].push_back(route[3].back() - 2*route[4].back());
+        route[5].push_back(route[3].back() - route[4].back());
         route[6].push_back(route[2].back());
     }
     
@@ -105,7 +105,7 @@ bool AttackRouteCalculation::isCountryInRoute (std::shared_ptr<state::Country> c
     std::cout << "AttackRouteCalculation : " << __func__ << std::endl;
 #endif
     for(auto c : route[1]){
-        if(country->getId() == totalCountriesList[c]->getId())
+        if(country->getId() == c)
             return true;
     }
     return false;
@@ -162,7 +162,6 @@ int AttackRouteCalculation::updateRouteList (){
 #endif
     int status = -1;
     clearRouteList();
-    cout << oldRouteList.size() << endl;
     for(auto route : oldRouteList){
         int n = updateRoute(route);
         status = max(status, n);
@@ -224,23 +223,27 @@ int AttackRouteCalculation::bonusTroops (std::vector<int> conquerCountries){
     return numberBonusTroop;
 }
 
+void AttackRouteCalculation::clearRoute (){
+    totalRouteList.clear();
+    oldRouteList.clear();
+    newRouteList.clear();
+}
+
 std::vector<std::vector<int>> AttackRouteCalculation::execute (){
 #ifdef DEBUG
     std::cout << "AttackRouteCalculation : " << __func__ << std::endl;
 #endif
+    this->clearRoute();
     int init = initRouteList();
     if(init == -1) return {};
 
-    for(int i = 0; i < 10; i++) {
+    while(1) {
         int update = updateRouteList();
         if(update == -1) break;
     }
     clearRouteList();
     cout << "routelist size" << totalRouteList.size() << endl;
-    if(totalRouteList.empty()){
-        cout << "routeList nulle" << endl;
-        return {};
-    }
+    if(totalRouteList.empty()) return {};
 
     auto attackRouteCmp = [](std::vector<std::vector<int>>& a, std::vector<std::vector<int>>& b) {
         return a[5].back() > b[5].back();
