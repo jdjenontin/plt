@@ -85,7 +85,7 @@ void HardAi::attack(){
 
     attack.setState(state);
     attack.setPlayer(player);
-    while(1){
+    for(int i = 0; i < 30; i++){
         std::vector<std::vector<int>> route = routeCal.execute();
         if(route.empty()) {
             break;

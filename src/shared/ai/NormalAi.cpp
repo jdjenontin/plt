@@ -30,26 +30,9 @@ NormalAi::~NormalAi() {
 
 //La stratégie du bot est de conquérir un maximux de pays sur un même continent puis une fois cela fait il attack un autre continent
 void NormalAi::execute (){
-    
-    /*std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
-    std::vector<int> continentsPresence(player->presenceOnContinents());
-    std::vector<int> opponentContinentsPresence;*/
     std::vector<int> allContinents(6, 1);
 
     swapContinentToAttack(allContinents);
-    /*int minimumPresence = 100;
-
-    int i;
-
-    for(i = 0; i<continentsPresence.size(); i++){
-        opponentContinentsPresence.push_back(totalNbOfCountries.at(i) - continentsPresence.at(i));
-
-        if ((opponentContinentsPresence.at(i) < minimumPresence) & (opponentContinentsPresence.at(i) != 0)){
-            minimumPresence = opponentContinentsPresence.at(i);
-            continentToReinforce = (Continent) i;
-        }
-    }*/
-
     place();
     attack();
     reinforce();
@@ -99,8 +82,6 @@ void NormalAi::execute(std::shared_ptr<state::Player> a_player)
 }
 
 void NormalAi::attack (){
-
-    std::cout << "Attack du bot Normal " << std::endl;
     bool canAttack = true;
     std::vector<int> count;
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
