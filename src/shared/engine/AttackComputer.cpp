@@ -126,7 +126,7 @@ namespace engine{
 
     // TO-DO :: Improve test less than 20 and compute localy if not 
     double AttackComputer::victoryProba (int nAttacker, int nDefender){
-        if(nAttacker > 20) return 1;
+        if(nAttacker > 20 || nDefender > 20) return 1;
         else if((nAttacker>0) & (nDefender > 0)){
             return probaTable[nAttacker-1][nDefender-1];
         }

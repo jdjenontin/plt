@@ -214,4 +214,12 @@ std::shared_ptr<Card> State::drawACard(){
     
 }
 
+void State::clear(){
+    countriesList.clear();
+    playersList.clear();
+    cardsList.clear();
+    turn = 0, orderPlayer = 0, nbOfPlayer = 2;
+    nbOfBot.assign(3, 0);
+}
+
 } // namespace state

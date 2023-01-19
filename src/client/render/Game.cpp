@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 
 #define LEFT 0
 #define RIGHT 1
@@ -65,6 +67,9 @@ bool attacked = false;
 
 // Difficultes
 int difficulty = 0;
+
+// Delay
+int delay = 0;
 
 // Des messages pour etre affiche dans le gameMenu
 Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8, *m9;
@@ -321,6 +326,16 @@ void Game::key_event(){
     }
     if(Keyboard::isKeyPressed(Keyboard::P))
         engine.execute(DISTRIBUTE);
+    if(Keyboard::isKeyPressed(Keyboard::M))
+        delay += 1000;
+    if(Keyboard::isKeyPressed(Keyboard::N))
+        delay = (delay > 0) ? (delay - 1000) : 0;
+    if(Keyboard::isKeyPressed(Keyboard::Q)){
+        state->clear();
+        menuScene.clear();
+        gameScene.close();
+        menuScene.open();
+    } 
 }
 
 /**
@@ -433,6 +448,7 @@ void Game::aiProcess(){
  * @brief The process for the game scene
 */
 void Game::game_process(){
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     player = pList[state->getOrderPlayer()];
     engine.setPlayer(player);
     m1->setintMessage(state->getTurn() + 1);

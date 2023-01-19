@@ -236,6 +236,11 @@ void MenuScene::changeDifficulty(int difficulty){
     this->difficulty = difficulty;
 }
 
+void MenuScene::clear(){
+    plist_size = 2;
+    blist_size.assign(3, 0);
+}
+
 void MenuScene::display () {
     window->clear(sf::Color::White);
     window->draw(s_back);

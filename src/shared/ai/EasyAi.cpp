@@ -4,6 +4,7 @@
 #include <engine.h>
 #include <vector>
 
+// #define DEBUG 1
 
 using namespace engine;
 using namespace state;
