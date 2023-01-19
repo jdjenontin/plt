@@ -11,13 +11,16 @@ list(REMOVE_ITEM server_sources "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 # Build the "server" library, add required include and link against dependencies
 add_library(${lib_server_target} STATIC ${server_sources} ${jsoncpp_sources})
 add_dependencies(${lib_server_target} generate-headers)
+
+find_library(CPPREST_LIBRARY cpprest)
+find_path(CPPREST_INCLUDE_DIR cpprest/http_client.h)
+
 target_include_directories(${lib_server_target} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${SFML_INCLUDE_DIR}
+  ${CPPREST_INCLUDE_DIR}
   ${jsoncpp_include_dir}
   )
 target_link_libraries(${lib_server_target} PUBLIC
-  ${SFML_LIBRARIES}
   ${MHD_LIBRARY}
   $<TARGET_NAME:shared_static>
   )
@@ -25,7 +28,7 @@ target_link_libraries(${lib_server_target} PUBLIC
 # Compile "server" executable
 set(server_target server)
 add_executable(${server_target} main.cpp)
-target_link_libraries(${server_target} ${lib_server_target})
+target_link_libraries(${server_target} ${lib_server_target} ${CPPREST_LIBRARY} ssl crypto)
 if(BUILD_CODE_COVERAGE)
   add_dependencies(code-coverage ${server_target})
 endif()

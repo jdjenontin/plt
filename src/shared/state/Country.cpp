@@ -129,3 +129,4 @@ Json::Value Country::serialize(){
 void Country::setContinent(Continent cont){
     continent = cont;
 }
+}

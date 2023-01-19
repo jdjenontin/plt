@@ -697,6 +697,7 @@ struct stdlib_includes {
    int sfmlGraphics;
    int jsoncpp;
    int sstream;
+   int cpprest;
 };
 
 void print_include_stdlib(struct stdlib_includes* si,char* name) {
@@ -809,6 +810,11 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
        && (strstr(name,"std::ostringstream") == name)) {
            print ("#include <sstream>\n");
            si->sstream = 1;
+       }
+       if (!si->sstream
+       && (strstr(name,"http::experimental::listener") == name)) {
+           print ("#include <cpprest/http_listener.h>\n");
+           si->cpprest = 1;
        }
        
     }
