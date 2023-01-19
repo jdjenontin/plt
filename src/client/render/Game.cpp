@@ -356,9 +356,9 @@ void Game::mouse_event(Event* mouse){
         if (mouse->type == Event::Closed)
             window->close();
         if (mouse->type == Event::MouseButtonPressed){
-            if (mouse->key.code == Mouse::Left)
+            if ((int) mouse->key.code == (int) Mouse::Left)
                 leftMouse_event();
-            if (mouse->key.code == Mouse::Right)
+            if ((int) mouse->key.code == (int) Mouse::Right)
                 rightMouse_event();
         }
     }

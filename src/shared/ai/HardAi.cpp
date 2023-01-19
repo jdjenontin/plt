@@ -90,7 +90,7 @@ void HardAi::attack(){
         if(route.empty()) {
             break;
         }
-        for(int i = 0; i < route[0].size(); i++){
+        for(unsigned int i = 0; i < route[0].size(); i++){
 #ifdef DEBUG
         std::cout << totalCountriesList[route[0][i]]->getName() << totalCountriesList[route[1][i]]->getName() << std::endl;
         std::cout << totalCountriesList[route[0][i]]->getNumberOfTroop() << totalCountriesList[route[1][i]]->getNumberOfTroop() << std::endl;
