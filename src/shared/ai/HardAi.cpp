@@ -3,7 +3,7 @@
 
 #include "HardAi.h"
 
-// #define DEBUG 1;
+#define DEBUG 1;
 
 using namespace std;
 using namespace state;
@@ -85,7 +85,8 @@ void HardAi::attack(){
 
     attack.setState(state);
     attack.setPlayer(player);
-    for(int i = 0; i < 30; i++){
+    while(1)
+    {
         std::vector<std::vector<int>> route = routeCal.execute();
         if(route.empty()) {
             break;

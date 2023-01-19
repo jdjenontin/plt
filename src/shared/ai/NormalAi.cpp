@@ -8,6 +8,7 @@
 #include <list>
 #include <iterator>
 
+#define DEBUG 1 
 
 using namespace std;
 using namespace state;
@@ -30,6 +31,9 @@ NormalAi::~NormalAi() {
 
 //La stratégie du bot est de conquérir un maximux de pays sur un même continent puis une fois cela fait il attack un autre continent
 void NormalAi::execute (){
+#ifdef DEBUG
+    std::cout << "Normal AI " << __func__ << std::endl;
+#endif
     
     std::vector<int> allContinents(6, 1);
 
