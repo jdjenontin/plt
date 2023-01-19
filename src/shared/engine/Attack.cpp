@@ -64,7 +64,7 @@ namespace engine {
         attackCountry->reduceTroop(attackSummary["attackerLoos"]);
         defCountry->reduceTroop(attackSummary["defenderLoos"]);
 
-        if(attackSummary["win"])
+        if(defCountry->getNumberOfTroop() == 0)
         {
             int defPlayerId = defCountry->getOwnerId();
             shared_ptr<state::Player> defPlayer = state->getPlayersList()[defPlayerId];

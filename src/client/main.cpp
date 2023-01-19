@@ -27,18 +27,20 @@ using namespace ai;
 
 int netTest() {
     sf::Http http;
-    http.setHost("localhost:8000");
-    //http.setPort(8000);
+    http.setHost("http://localhost", 8000);
 
     sf::Http::Request request;
-    request.setMethod(sf::Http::Request::Get);
+    request.setMethod(sf::Http::Request::Post);
     request.setUri("/");
+    request.setHttpVersion(1, 1);
+    //request.setField("Content-Type", "application/json");
+    request.setBody("{\"name\":\"John\",\"age\":30,\"city\":\"New York\"}");
 
     sf::Http::Response response = http.sendRequest(request);
-
     if (response.getStatus() == sf::Http::Response::Ok) {
-        std::cout << response.getBody() << std::endl;
-    } else {
+        std::cout << "Response body: " << response.getBody() << std::endl;
+    }
+    else {
         std::cout << "Error: " << response.getStatus() << std::endl;
     }
 
