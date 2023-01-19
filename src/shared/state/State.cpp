@@ -205,9 +205,13 @@ void State::distibuteTroops(){
 }
 
 std::shared_ptr<Card> State::drawACard(){
-    std::shared_ptr<Card> card = cardsList.back();
-    cardsList.pop_back();
-    return card;
+    if(cardsList.size()){
+        std::shared_ptr<Card> card = cardsList.back();
+        cardsList.pop_back();
+        return card;
+    }
+    return NULL;
+    
 }
 
 } // namespace state

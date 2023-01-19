@@ -13,7 +13,8 @@ DistributeCard::~DistributeCard(){
 void DistributeCard::execute(){
     std::shared_ptr<state::Card> card;
     card = state->drawACard();
-    player->addCard(card);
+    if(card)
+        player->addCard(card);
 }
 
 }
