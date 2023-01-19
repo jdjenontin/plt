@@ -30,9 +30,11 @@ NormalAi::~NormalAi() {
 
 //La stratégie du bot est de conquérir un maximux de pays sur un même continent puis une fois cela fait il attack un autre continent
 void NormalAi::execute (){
+    
     std::vector<int> allContinents(6, 1);
 
     swapContinentToAttack(allContinents);
+
     place();
     attack();
     reinforce();
@@ -49,8 +51,8 @@ void NormalAi::place (){
     for(int i = 0; i < bonus_troop; i++){
         for (auto country : countriesList){
             vector<shared_ptr<Country>> countriesAdjacent = Computation::adjacentCountries(state, country);
-            if (((country->getContinent() == continentToAttack) | std::find(borderCountriesId.begin(), borderCountriesId.end(), country->getId()) != borderCountriesId.end()) 
-                & (country->getNumberOfTroop()) < minNbTroops[country->getContinent()]){
+            if (((country->getContinent() == continentToAttack) | (std::find(borderCountriesId.begin(), borderCountriesId.end(), country->getId()) != borderCountriesId.end())) 
+                & ((country->getNumberOfTroop()) < minNbTroops[country->getContinent()])){
                 
                 for(auto adjCountry : countriesAdjacent){
                     if(!Calculation::isCountryInList(adjCountry, countriesList)){
@@ -82,6 +84,7 @@ void NormalAi::execute(std::shared_ptr<state::Player> a_player)
 }
 
 void NormalAi::attack (){
+
     bool canAttack = true;
     std::vector<int> count;
     std::vector<std::shared_ptr<Country>> aiAttackCountries;
@@ -92,22 +95,23 @@ void NormalAi::attack (){
 
     while(canAttack){
         
-        for (int i=0; i<countriesList.size();i++) {
+        for (unsigned int i=0; i<countriesList.size();i++) {
             if ((countriesList.at(i)->getNumberOfTroop() > 1) & 
-                ((countriesList.at(i)->getContinent() == continentToAttack) | std::find(borderCountriesId.begin(), borderCountriesId.end(), countriesList.at(i)->getId()) != borderCountriesId.end())) {
+                ((countriesList.at(i)->getContinent() == continentToAttack) | (std::find(borderCountriesId.begin(), borderCountriesId.end(), countriesList.at(i)->getId()) != borderCountriesId.end()))) {
                 aiAttackCountries.push_back(countriesList.at(i));
                 troopsAttackCountries.push_back(countriesList.at(i)->getNumberOfTroop());
             }
 
         }
         
+
+        // TO-DO : Use Computation::adjacentCountries 
         //We make a list of all the countries we can attack
-        for(int j=0; j<aiAttackCountries.size(); j++){
+        for(unsigned int j=0; j<aiAttackCountries.size(); j++){
             for(int i=0; i<42;i++) {
                 
                 if ((aiAttackCountries.at(j)->isAdjacent(i)) & (!Calculation::isCountryInList(v_listcountry.at(i), countriesList))
                      & (v_listcountry.at(i)->getContinent() == continentToAttack)){
-                    cout << "Country: " << v_listcountry.at(i)->getName() << "\t Continent: " << v_listcountry.at(i)->getContinent() << endl;
                     aiAttackableCountries.push_back(v_listcountry.at(i));
                     troopsDefCountries.push_back(v_listcountry.at(i)->getNumberOfTroop());
                     count.push_back(j);
@@ -139,12 +143,12 @@ void NormalAi::reinforce (){
 
     std::vector<std::shared_ptr<state::Country>> countriesAdjacent;
     std::shared_ptr<state::Country> testCountryOne;
-    int i;
+    unsigned int i;
 
     for(i = 0; i<countriesList.size(); i++){
         testCountryOne = countriesList[i];
-        if (((testCountryOne->getContinent() == continentToAttack) | std::find(borderCountriesId.begin(), borderCountriesId.end(), testCountryOne->getId()) != borderCountriesId.end())
-            & testCountryOne->getNumberOfTroop() < 20){
+        if (((testCountryOne->getContinent() == continentToAttack) | (std::find(borderCountriesId.begin(), borderCountriesId.end(), testCountryOne->getId()) != borderCountriesId.end()))
+            & (testCountryOne->getNumberOfTroop() < 20)){
             countriesAdjacent = Computation::adjacentCountries(state, testCountryOne);
             break;
         }
@@ -162,10 +166,8 @@ void NormalAi::reinforce (){
 
 
 void NormalAi::swapContinentToAttack(std::vector<int> continentList){
-    cout << "Swap Continent IA Heu" << endl;
-    int idContinentToAttack;
     int smallest = 100;
-    int i;
+    unsigned int i;
     std::vector<int> totalNbOfCountries = {9,4,6,7,12,4};
     std::vector<int> continentsPresence(player->presenceOnContinents());
     std::vector<int> opponentContinentsPresence;
@@ -173,14 +175,14 @@ void NormalAi::swapContinentToAttack(std::vector<int> continentList){
     std::vector<int> continentsToTest = continentList;
     std::vector<int> listBorderContinents;
     std::vector<int> newContinentsToTest;
-    int counter = 0;
+    unsigned int counter = 0;
 
     for(i = 0; i<continentsPresence.size(); i++){
         opponentContinentsPresence.push_back(totalNbOfCountries.at(i) - continentsPresence.at(i));
     }
 
     if(continentsToTest.size() != 6) {
-        for(int i = 0; i<allContinents.size(); i++) {
+        for(int i = 0; i<(int)allContinents.size(); i++) {
             for (auto testContinent : continentsToTest){
                 
                 if ((testContinent == i) & (opponentContinentsPresence[testContinent] == 0)){

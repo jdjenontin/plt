@@ -204,16 +204,10 @@ void State::distibuteTroops(){
     }
 }
 
-// TO-Do : Use ownerId instead !
-// Player* State::belongsto (Country* country){
-//     for(unsigned i = 0; i < playersList.size(); i++){
-//         sf::Color c1 = playersList[i].getColor();   
-//         sf::Color c2 = country->getColor();
-//         if(c1.toInteger() == c2.toInteger())
-//             return &playersList[i];
-//     }
-
-//     return {};
-// }
+std::shared_ptr<Card> State::drawACard(){
+    std::shared_ptr<Card> card = cardsList.back();
+    cardsList.pop_back();
+    return card;
+}
 
 } // namespace state
