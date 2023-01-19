@@ -12,6 +12,12 @@ Country::Country (std::string a_name , int a_id) {
     id = a_id;
 }
 
+Country::Country (std::string a_name , int a_id, int cont) {
+    name = a_name;
+    id = a_id;
+    continent = (Continent) cont;
+}
+
 Country::Country (std::string a_name , int a_id, int a_posX, int a_posY)
 {
     Country(a_name, a_id);
@@ -117,6 +123,9 @@ Json::Value Country::serialize(){
     country["troop"] = numberOfTroop;
 
     return country;
+
 }
 
+void Country::setContinent(Continent cont){
+    continent = cont;
 }

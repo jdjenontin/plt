@@ -176,7 +176,7 @@
       24,
       25
     ],
-    "Continent": 1
+    "Continent": 2
   },
   "Egypte": {
     "id": 14,
@@ -349,7 +349,7 @@
       27,
       36
     ],
-    "Continent": 3
+    "Continent": 4
   },
   "Afghanistan": {
     "id": 27,
@@ -507,7 +507,7 @@
       39,
       41
     ],
-    "Continent": 4
+    "Continent": 5
   },
   "Nouvelle-Guinee": {
     "id": 39,

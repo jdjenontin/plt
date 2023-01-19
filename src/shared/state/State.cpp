@@ -120,6 +120,7 @@ void State::buildCountries(){
     }
 
     std::sort(countriesList.begin(), countriesList.end(), state::Country::idComparaison);
+
 }
 
 void State::buildCards(){
@@ -203,14 +204,31 @@ void State::distibuteTroops(){
     }
 }
 
+std::shared_ptr<Card> State::drawACard(){
+    if(cardsList.size()){
+        std::shared_ptr<Card> card = cardsList.back();
+        cardsList.pop_back();
+        return card;
+    }
+    return NULL;
+    
+}
 Json::Value State::serialize(){
     Json::Value countries;
-
     for (auto& country : countriesList)
     {
         countries[country->getName()] = country->serialize();
     }
     return countries;
 }
+
+void State::clear(){
+    countriesList.clear();
+    playersList.clear();
+    cardsList.clear();
+    turn = 0, orderPlayer = 0, nbOfPlayer = 2;
+    nbOfBot.assign(3, 0);
+}
+   
 
 } // namespace state

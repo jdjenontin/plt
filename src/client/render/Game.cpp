@@ -1,6 +1,9 @@
 #include "Game.h"
 
 #include <iostream>
+#include <cstdlib>
+#include <chrono>
+#include <thread>
 
 #define LEFT 0
 #define RIGHT 1
@@ -65,6 +68,9 @@ bool attacked = false;
 // Difficultes
 int difficulty = 0;
 
+// Delay
+int delay = 0;
+
 // Des messages pour etre affiche dans le gameMenu
 Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8, *m9;
 
@@ -125,20 +131,22 @@ void Game::change_status(){
  * @brief The event of the country when the client choose the country using the mouse
 */
 void Game::country_event(){
-#ifdef DEBUG
-    cout << "dans la fonction :" << __func__ << "avec status :" << status << endl;
-#endif
+    #ifdef DEBUG
+        cout << "dans la fonction :" << __func__ << "avec status :" << status << endl;
+    #endif
+
     engine.setCountry(country);
+
     switch (status)
     {
     case PLACE:
-    place_event();
+        place_event();
         break;
     case ATTACK:
-    attack_event();
+        attack_event();
         break;
     case REINFORCE:
-    reinforce_event();
+        reinforce_event();
         break;           
     default:
         break;
@@ -201,6 +209,10 @@ void Game::menuScene_event(int button){
             menuScene.init_option();
         else if(menuScene.getNameMenu(pos) == "Quit")
             window->close();
+        else if(menuScene.getNameMenu(pos) == "Rule")
+            menuScene.init_rule();
+        else if(menuScene.getNameMenu(pos) == "About")
+            system("xdg-open https://github.com/jdjenontin/plt/blob/master/README.md");
         else if(menuScene.getNameMenu(pos) == "Back")
             menuScene.init_main();
         else if(menuScene.getNameMenu(pos) == "AddHuman"){
@@ -314,6 +326,18 @@ void Game::key_event(){
     }
     if(Keyboard::isKeyPressed(Keyboard::P))
         engine.execute(DISTRIBUTE);
+    if(Keyboard::isKeyPressed(Keyboard::M))
+        delay += 1000;
+    if(Keyboard::isKeyPressed(Keyboard::N))
+        delay = (delay > 0) ? (delay - 1000) : 0;
+    if(Keyboard::isKeyPressed(Keyboard::Q)){
+        initPlayer = false;
+        status = 0;
+        state->clear();
+        menuScene.clear();
+        gameScene.close();
+        menuScene.open();
+    } 
 }
 
 /**
@@ -349,16 +373,15 @@ void Game::mouse_event(Event* mouse){
         if (mouse->type == Event::Closed)
             window->close();
         if (mouse->type == Event::MouseButtonPressed){
-            if (mouse->key.code == Mouse::Left)
+            if ((int) mouse->key.code == (int) Mouse::Left)
                 leftMouse_event();
-            if (mouse->key.code == Mouse::Right)
+            if ((int) mouse->key.code == (int) Mouse::Right)
                 rightMouse_event();
         }
     }
 }
 
 void Game::updateMessage(){
-    m1->setintMessage(state->getTurn() + 1);
     m2->setstrMessage(player->getName());
     switch (status)
     {
@@ -427,8 +450,10 @@ void Game::aiProcess(){
  * @brief The process for the game scene
 */
 void Game::game_process(){
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     player = pList[state->getOrderPlayer()];
     engine.setPlayer(player);
+    m1->setintMessage(state->getTurn() + 1);
 
     if(player->getCountriesList().size() == 42){
         m9->show(DISPLAY);

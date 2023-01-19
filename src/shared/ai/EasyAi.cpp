@@ -4,6 +4,7 @@
 #include <engine.h>
 #include <vector>
 
+// #define DEBUG 1
 
 using namespace engine;
 using namespace state;
@@ -75,7 +76,7 @@ void EasyAi::attack() {
 
 
     // TO-DO Improve using find_if algo 
-    for (int i=0; i<countriesList.size();i++) {
+    for (unsigned int i=0; i<countriesList.size();i++) {
         if (countriesList.at(i)->getNumberOfTroop() > 1) {
             aiAttackCountries.push_back(countriesList.at(i));
         }
@@ -83,7 +84,7 @@ void EasyAi::attack() {
 
     // TO-DO : Use Computation's functions instead
     //We make a list of all the countries we can attack
-    for(int j=0; j<aiAttackCountries.size(); j++){
+    for(unsigned int j=0; j<aiAttackCountries.size(); j++){
         for(int i=0; i<42;i++) {
             if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries)) {
                 aiAttackableCountries.push_back(v_listcountry.at(i));

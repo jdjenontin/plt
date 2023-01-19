@@ -1,5 +1,4 @@
 #include "DistributeCard.h"
-#include <iostream>
 
 namespace engine {
 
@@ -12,12 +11,10 @@ DistributeCard::~DistributeCard(){
 }
 
 void DistributeCard::execute(){
-    std::vector<std::shared_ptr<state::Card>> cardsList = state->getCardsList();
-    static int i = 0;
-    if(i<cardsList.size()){
-        player->addCard(cardsList[i]);
-        i++;
-    }
+    std::shared_ptr<state::Card> card;
+    card = state->drawACard();
+    if(card)
+        player->addCard(card);
 }
 
 }

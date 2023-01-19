@@ -95,7 +95,7 @@ namespace engine {
             int nDef = troops[1];
             map<string,int> attackSummary = AttackComputer::attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
-            if(attackSummary["win"])
+            if(defCountry->getOwnerId() == player->getId())
                 return 1; 
             else return 0;
         }
