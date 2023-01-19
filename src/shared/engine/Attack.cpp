@@ -64,7 +64,7 @@ namespace engine {
         attackCountry->reduceTroop(attackSummary["attackerLoos"]);
         defCountry->reduceTroop(attackSummary["defenderLoos"]);
 
-        if(attackSummary["win"])
+        if(defCountry->getNumberOfTroop() == 0)
         {
             int defPlayerId = defCountry->getOwnerId();
             shared_ptr<state::Player> defPlayer = state->getPlayersList()[defPlayerId];
@@ -95,7 +95,7 @@ namespace engine {
             int nDef = troops[1];
             map<string,int> attackSummary = AttackComputer::attackNvM(nAtt, nDef);
             this->updateState(attackSummary);
-            if(attackSummary["win"])
+            if(defCountry->getOwnerId() == player->getId())
                 return 1; 
             else return 0;
         }
