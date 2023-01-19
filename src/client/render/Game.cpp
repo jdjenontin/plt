@@ -331,6 +331,7 @@ void Game::key_event(){
     if(Keyboard::isKeyPressed(Keyboard::N))
         delay = (delay > 0) ? (delay - 1000) : 0;
     if(Keyboard::isKeyPressed(Keyboard::Q)){
+        status = 0;
         state->clear();
         menuScene.clear();
         gameScene.close();
