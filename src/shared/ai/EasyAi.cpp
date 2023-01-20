@@ -83,14 +83,12 @@ void EasyAi::attack() {
 
     // TO-DO : Use Computation's functions instead
     //We make a list of all the countries we can attack
-    for(unsigned int j=0; j<aiAttackCountries.size(); j++){
-        for(int i=0; i<42;i++) {
-            if (aiAttackCountries.at(j)->isAdjacent(i) & !Calculation::isCountryInList(v_listcountry.at(i), aiAttackCountries)) {
-                aiAttackableCountries.push_back(v_listcountry.at(i));
-                count.push_back(j);
-            }
-        }
-    }
+    int idCountry;
+    if(aiAttackCountries.empty()) return;
+
+    aiDice.updateDice(0,aiAttackCountries.size()-1);
+    idCountry = aiDice.thrown();
+    aiAttackableCountries = Computation::adjacentCountries(state, aiAttackCountries[idCountry]);
 
     //If the ai can attack a country it will
     if (!aiAttackableCountries.empty()) {
@@ -99,7 +97,7 @@ void EasyAi::attack() {
         //The ai will then choose a random neighbouring country to attack
         int rand = aiDice.thrown();
         if(rand == -1) return;
-        shared_ptr<state::Country> aiAttackCountry = aiAttackCountries.at(count.at(rand));
+        shared_ptr<state::Country> aiAttackCountry = aiAttackCountries.at(idCountry);
         shared_ptr<state::Country> aiDefCountry = aiAttackableCountries.at(rand); 
 
         aiAttack.setAttackCountry(aiAttackCountry);

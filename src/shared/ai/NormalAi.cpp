@@ -86,12 +86,12 @@ void NormalAi::execute(std::shared_ptr<state::Player> a_player)
 void NormalAi::attack (){
 
     bool canAttack = true;
-    std::vector<int> count;
-    std::vector<std::shared_ptr<Country>> aiAttackCountries;
-    std::vector<int> troopsAttackCountries;
-    std::vector<int> troopsDefCountries;
+    vector<int> count;
+    vector<shared_ptr<Country>> aiAttackCountries;
+    vector<int> troopsAttackCountries;
+    vector<int> troopsDefCountries;
 
-    std::vector<std::shared_ptr<Country>> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
+    vector<shared_ptr<Country>> aiAttackableCountries; // We create a list with all the countries the Ai can attack with its attack Country
 
     while(canAttack){
         
@@ -105,25 +105,27 @@ void NormalAi::attack (){
         }
         
 
+        vector<shared_ptr<Country>>::iterator strongestCountry = std::find_if(aiAttackCountries.begin(), aiAttackCountries.end(), isCountryOnContinent);
+        shared_ptr<Country> strongCountry = *strongestCountry;
+        //int idStrongestCountry = distance(troopsAttackCountries.begin(), max_element(troopsAttackCountries.begin(), troopsAttackCountries.end()));
+
+        aiAttackableCountries = Computation::adjacentCountries(state, aiAttackCountries[strongCountry->getId()]);
+
         // TO-DO : Use Computation::adjacentCountries 
         //We make a list of all the countries we can attack
-        for(unsigned int j=0; j<aiAttackCountries.size(); j++){
-            for(int i=0; i<42;i++) {
-                
-                if ((aiAttackCountries.at(j)->isAdjacent(i)) & (!Calculation::isCountryInList(v_listcountry.at(i), countriesList))
-                     & (v_listcountry.at(i)->getContinent() == continentToAttack)){
-                    aiAttackableCountries.push_back(v_listcountry.at(i));
-                    troopsDefCountries.push_back(v_listcountry.at(i)->getNumberOfTroop());
-                    count.push_back(j);
-                }
+
+        int idWeakestCountry;
+        int minTroops = 2000;
+        for (int i = 0; i<aiAttackableCountries.size(); i++){
+            if ((aiAttackableCountries[i]->getNumberOfTroop() < minTroops) & (aiAttackableCountries[i]->getContinent() == continentToAttack)){
+                minTroops = aiAttackableCountries[i]->getNumberOfTroop();
+                idWeakestCountry = i;
             }
         }
 
-        int idWeakestCountry = distance(troopsDefCountries.begin(), min_element(troopsDefCountries.begin(), troopsDefCountries.end()));
-            
         if (!aiAttackableCountries.empty()){
-            std::shared_ptr<state::Country> aiAttackCountry = aiAttackCountries.at(count.at(idWeakestCountry));
-            std::shared_ptr<state::Country> aiDefCountry = aiAttackableCountries.at(idWeakestCountry); 
+            std::shared_ptr<state::Country> aiAttackCountry = aiAttackCountries[strongCountry->getId()];
+            std::shared_ptr<state::Country> aiDefCountry = aiAttackableCountries[idWeakestCountry]; 
 
             aiAttack.setAttackCountry(aiAttackCountry);
             aiAttack.setDefCountry(aiDefCountry);
@@ -227,6 +229,10 @@ void NormalAi::swapContinentToAttack(std::vector<int> continentList){
             }
         }
     }
+}
+
+bool NormalAi::isCountryOnContinent (std::shared_ptr<state::Country> country) {
+    return ((country->getContinent() == continentToAttack) | (find(borderCountriesId.begin(), borderCountriesId.end(), country->getId()) != borderCountriesId.end())); 
 }
 
 };
