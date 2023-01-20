@@ -13,6 +13,9 @@ int main()
     shared_ptr<state::State> gameState(new state::State());
     Server gameServer(gameState);
     gameServer.run();
+    std::cout << "API is running. Press enter to exit." << std::endl;
+    std::cin.get();
+    gameServer.listener.close().wait();
 
     return 0;
 }

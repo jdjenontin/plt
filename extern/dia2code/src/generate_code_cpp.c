@@ -812,7 +812,7 @@ void print_include_stdlib(struct stdlib_includes* si,char* name) {
            si->sstream = 1;
        }
        if (!si->sstream
-       && (strstr(name,"http::experimental::listener") == name)) {
+       && (strstr(name,"web::http::experimental::listener") == name)) {
            print ("#include <cpprest/http_listener.h>\n");
            si->cpprest = 1;
        }
