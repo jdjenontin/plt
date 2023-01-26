@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace state;
 using namespace std;

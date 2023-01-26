@@ -8,7 +8,7 @@
 #include <list>
 #include <iterator>
 
-#define DEBUG 1 
+// #define DEBUG 1 
 
 using namespace std;
 using namespace state;

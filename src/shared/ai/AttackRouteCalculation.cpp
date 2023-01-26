@@ -243,7 +243,6 @@ std::vector<std::vector<int>> AttackRouteCalculation::execute (){
         if(update == -1) break;
     }
     clearRouteList();
-    cout << "routelist size" << totalRouteList.size() << endl;
     if(totalRouteList.empty()) return {};
 
     auto attackRouteCmp = [](std::vector<std::vector<int>>& a, std::vector<std::vector<int>>& b) {

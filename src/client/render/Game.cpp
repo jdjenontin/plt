@@ -68,9 +68,6 @@ bool attacked = false;
 // Difficultes
 int difficulty = 0;
 
-// Delay
-int delay = 0;
-
 // Des messages pour etre affiche dans le gameMenu
 Message *m1, *m2, *m3, *m4, *m5, *m6, *m7, *m8, *m9;
 
@@ -474,7 +471,6 @@ void Game::game_process(){
 */
 void Game::window_begin(){
     Event mouse;
-    engine.init(state);
     createMessage();
 
     while(window->isOpen())
@@ -504,12 +500,53 @@ void Game::setState (std::shared_ptr<state::State>& state){
     this->state = state;
 }
 
+void Game::setPlayer(int humans, std::vector<int> bots){
+    if(humans >= 2){
+        for(int i = 0; i < (humans - 2); i++)
+            state->addPlayer();
+    }
+    else if(humans == 1)
+        state->deletePlayer();
+    else{
+        state->deletePlayer();
+        state->deletePlayer();
+    }
+
+    for(int i = 0; i < bots[0]; i++){
+        state->addBot(Difficulty::EASY);
+    }
+    for(int i = 0; i < bots[1]; i++){
+        state->addBot(Difficulty::NORMAL);
+    }
+    for(int i = 0; i < bots[2]; i++){
+        state->addBot(Difficulty::HARD);
+    }
+}
+
+void Game::setDelay(int m_delay){
+    delay = m_delay;
+}
+
 /**
  * @brief Init the menu and start the game
 */
-void Game::begin(){
-    init_menu();
-    window_begin();
+void Game::begin(TypeScene scene){
+    if(scene == TypeScene::MENU){
+        init_menu();
+        engine.init(state);
+        window_begin();
+    }
+    else if(scene == TypeScene::GAME){
+        init_menu();
+        engine.init(state);
+        init_state();
+        gameScene.setCountriesList(v_listcountry);
+        gameScene.init(pList);
+        menuScene.close();
+        gameScene.open();
+        window_begin();
+    }
+    
 }
 
 }

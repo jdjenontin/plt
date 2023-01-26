@@ -3,7 +3,7 @@
 
 #include "HardAi.h"
 
-#define DEBUG 1;
+// #define DEBUG 1;
 
 using namespace std;
 using namespace state;
