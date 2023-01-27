@@ -61,7 +61,7 @@ Les cartes sont distribué une à une et de façon aléatoire à chaque tour de 
 
 Le diagramme des classes pour les états est présenté à la figure ci dessous.
 
-![State](rapport/state.png)
+![State](rapport/state.svg)
 
 La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
 
