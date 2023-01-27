@@ -165,10 +165,9 @@ Dans le cas ou l'IA possède au moins un continent entier, elle va se concentrer
 
 * **Distribution** Pour la phase de distribution, l'IA place ses troupes dans les pays qui ont un Border Security Ratio (BSR) élevé. Le BSR d'un pays est égale à la somme des troupes énnemies dans les pays limitrophes divisée par le nombre de troupe dans le pays. Cette valeur qui permet de quantifier le risque qu'à un pays d'être perdu suite à une attaque.
 
-* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possible et choisit celle qui rapporte le plus de bonus troupe au tour suivant. Les attaques ne sont effectuées que si la probabilité de victoire est supérieure à 
-60%
+* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possible et choisit celle qui rapporte l'indice plus grand. Par rapport à l'indice, il depende le bonus de troop et le probabilité de chaque attack, et puis l'indice = bonus de troop - nombre de fois de la probabilité entre 60% et 80%. Par exemple, dans une route de l'IA, elle va effectuer trois attack pendant cette route, et la probabilité du premier et le deuxième attack sont supérieur à 80%, et le troisième attack est supérieur à 60% et inférieur à 80&, et aussi après tous les attack, le bonus de troop sera 10, donc l'indice = 10 - 1 = 9, en plus, toutes les route sont terminées quand il n'y a plus de probabilité d'attack est supérieur à 60%. D'ailleurs, l'IA va recalculer et effectuer la route après avoir effectué la route jusqu'à il n'y a pas de route qui peut avoir plus de bonus de troop.
 
-* **Renforcer** La stratégie de renforcement consiste à renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
+* **Renforcer** La stratégie de renforcement consiste à retirer les troops dans le pays qui a le plus de troops entre les pays qui n'ont pas le pays d'ennemi adjacent, et renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
 
 ## 5.2 Conception logiciel
 
