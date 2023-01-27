@@ -134,20 +134,7 @@ Le diagramme UML du package engine se présente comme suit:
 
 # 5 Intelligence Artificielle
 
-## 5.1 Stratégies
-
-
-### 5.1.1 Intelligence aléatoire
-
-Cette stratégie consiste en des choix aléatoires à chaque étape du jeu.
-
-* **Distribution** Pour la phase de ditribution, l'ia choisit au hasard le pays où elle souhaite positionner ses troupes parmi la liste des pays dont elle dispose.
-
-* **Attaque** Pendant la phase d'attaque, l'IA choisit au hasard le pays à partir duquel elle souhaite mener son attaque. Puis choisie le pays qu'elle souhaite attaquer de façon random parmi les pays adjacents au premier pays choisi. Elle décide ensuite, toujours de façon aléatoire, si elle souhaite effectuer d'autres. Ce processus est effectué en boucle jusqu'au moment où elle décide de ne plus attaquer ou n'est plus en mesure d'attaquer.
-
-* **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destination. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
-
-## 5.2 Conception logiciel
+## 5.1 Conception logiciel
 
 Le diagramme des classe pour l'IA se présente comme ci-dessous.
 
@@ -157,13 +144,18 @@ L'énumération **Difficulty** permet de choisir le niveau de l'IA elle sera uti
 
 ![engine](rapport/ai.svg)
 
-## 5.3 Les différentes IA 
+## 5.2 Les différentes Intelligences Artificielles 
 
+### 5.2.1 L'IA Aléatoire/Facile
 
-### 5.3.1 L'IA Aléatoire/Facile
 
 L'IA aléatoire comme son nom l'indique se contente de placer, attacker et renforcer de manière aléatoire les pays.
 
+* **Distribution** Pour la phase de distribution, l'ia choisit au hasard le pays où elle souhaite positionner ses troupes parmi la liste des pays dont elle dispose.
+
+* **Attaque** Pendant la phase d'attaque, l'IA choisit au hasard le pays à partir duquel elle souhaite mener son attaque. Puis choisie le pays qu'elle souhaite attaquer de façon random parmi les pays adjacents au premier pays choisi. Elle décide ensuite, toujours de façon aléatoire, si elle souhaite effectuer d'autres. Ce processus est effectué en boucle jusqu'au moment où elle décide de ne plus attaquer ou n'est plus en mesure d'attaquer.
+
+* **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destination. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
 
 ### 5.3.2 L'IA Heuristique/Normale
 
