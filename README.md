@@ -151,8 +151,24 @@ Cette stratégie consiste en des choix aléatoires à chaque étape du jeu.
 
 Le diagramme des classe pour l'IA se présente comme ci-dessous.
 
-La classe **AI** regroupe toutes les foctions nécessaires à l'IA.
+La classe **AI** regroupe toutes les fonctions nécessaires à l'IA.
 
 L'énumération **Difficulty** permet de choisir le niveau de l'IA elle sera utile pour la conception des IA heuristique et avancée.
 
 ![engine](rapport/ai.svg)
+
+## 5.3 Les différentes IA 
+
+
+### 5.3.1 L'IA Aléatoire/Facile
+
+L'IA aléatoire comme son nom l'indique se contente de placer, attacker et renforcer de manière aléatoire les pays.
+
+
+### 5.3.2 L'IA Heuristique/Normale
+
+Cette IA contrairement à l'IA aléatoire a une stratégie précise. 
+Si l'IA ne possède aucun continent entier, elle va se concentrer sur le continent sur lequel elle possède le plus de pays. Elle va ainsi placer, attaquer et renforcer les pays de ce continent jusqu'à ce qu'elle possède le continent.
+Dans le cas ou l'IA possède au moins un continent entier, elle va se concentrer sur la conquête du continent frontalier ayant le moins de pays. Elle va donc placer des troupes dans le pays frontalier à ce continent et attaquer à partir de ce pays puis si l'attaque réussi, elle va déplacer ses troupes vers le pays qu'elle viens de conquérir. Elle va continuer d'attaquer ainsi jusqu'à ce que le continent lui appartienne.
+
+
