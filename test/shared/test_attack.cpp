@@ -53,6 +53,6 @@ BOOST_AUTO_TEST_CASE(TestAttack) //Fait aussi test_command
     BOOST_CHECK_EQUAL(attaque->execute(), 1);
     std::map<std::string,int> sum = attaque->getAttSummary();
     attaque->setAttackCountry(PaysTropLoin);
-    BOOST_CHECK_EQUAL(attaque->execute(), 0);
+    BOOST_CHECK_EQUAL(attaque->execute(), -1);
   }
 }

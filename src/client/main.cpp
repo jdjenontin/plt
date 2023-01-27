@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstdlib>
+#include <stdio.h>
+#include <unistd.h>
 
 #include <SFML/Graphics.hpp>
 #include "state.h"
@@ -33,8 +35,10 @@ int main(int argc,char* argv[])
     else if(argc == 2){
         if(strcmp(argv[1], "hello") == 0)
             cout << "Bonjour le monde !" << endl;
-        if(strcmp(argv[1], "state") == 0)
-            cout << "Lancer le test" << endl;
+        if(strcmp(argv[1], "state") == 0){
+            cout << "Lancer le test " << get_current_dir_name() << endl;
+            system("./testScript.sh");
+        }
         if(strcmp(argv[1], "engine") == 0){
             game.setDelay(100);
             game.setPlayer(0, {1,1,1});

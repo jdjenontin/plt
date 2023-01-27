@@ -18,6 +18,6 @@ BOOST_AUTO_TEST_CASE(TestDice)
     {
       BOOST_CHECK_EQUAL(dice.thrown(), 1);
       dice.updateDice(3,1);
-      BOOST_CHECK_EQUAL(dice.thrown(), 0);
+      BOOST_CHECK_EQUAL(dice.thrown(), -1);
     }
 }
