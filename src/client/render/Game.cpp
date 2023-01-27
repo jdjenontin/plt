@@ -324,9 +324,9 @@ void Game::key_event(){
     if(Keyboard::isKeyPressed(Keyboard::P))
         engine.execute(DISTRIBUTE);
     if(Keyboard::isKeyPressed(Keyboard::M))
-        delay += 1000;
+        delay += 500;
     if(Keyboard::isKeyPressed(Keyboard::N))
-        delay = (delay > 0) ? (delay - 1000) : 0;
+        delay = (delay > 0) ? (delay - 500) : 0;
     if(Keyboard::isKeyPressed(Keyboard::Q)){
         initPlayer = false;
         status = 0;
