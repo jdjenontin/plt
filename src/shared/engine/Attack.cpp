@@ -49,14 +49,16 @@ namespace engine {
     // TO-DO : Can be improved
     bool Attack::ableToAttack () {
         bool isOwner = attackCountry->getOwnerId() == player->getId();
-        bool isntOwnerOfDef = defCountry->getOwnerId() != player->getId();
+        //bool isntOwnerOfDef = defCountry->getOwnerId() != player->getId();
 
         bool adjacent = attackCountry->isAdjacent(defCountry->getId());
 
         bool haveTroop = attackCountry->getNumberOfTroop() > 1;
-        
+#ifdef DEBUG
+        std::cout << isOwner << adjacent << haveTroop << std::endl;
+#endif
 
-        return adjacent & haveTroop & isOwner & isntOwnerOfDef;
+        return adjacent & haveTroop & isOwner;
     }
 
     void Attack::updateState(map<string,int> attackSummary )

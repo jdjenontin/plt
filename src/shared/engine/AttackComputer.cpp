@@ -131,7 +131,6 @@ namespace engine{
             return probaTable[nAttacker-1][nDefender-1];
         }
         else{
-            cerr << "Nombre d'attaquant ou de défenseur nul" <<endl;
             return -1;
         }
     }

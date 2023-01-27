@@ -23,7 +23,7 @@ Notre projet porte sur la réalisation du jeu Risk. C’est un jeu de stratégie
 
 Le jeu se déroule sur un plateau représentant la carte du monde et divisée en plusieurs territoires, chaque joueur commence la partie avec un certain nombre de troupes placées sur la carte, et la condition de victoire la plus classique est assez simple : il faut conquérir le monde en conquérant les territoires de ses adversaires ! Il existe cependant d’autres conditions de victoire imposées par des cartes additionnelles et faisant appels à des troupes spéciales, conditions que nous n’implémenterons pas dans notre première version du jeu.
 
-Le tour de chaque joueur se déroule en trois parties. Tout d’abord la phase de fortification, durant cette phase, le joueur a un certain nombre de troupes à répartir entre les territoires qu’il possède déjà, ce nombre est déterminé par le nombre de territoire que le joueur possède déjà. Puis il passe à la phase d’attaque, durant cette phase le joueur peut attaquer à partir de n’importe lequel de ses territoires possédant deux troupes ou plus, tout territoire adversaire avec qui il partage une frontière. Le joueur choisi ensuite s’il veut attaquer avec une, deux ou trois troupes en sachant qu’il doit laisser au moins une troupe sur son territoire, le défenseur choisi s’il veut défendre avec une ou deux troupes. Les deux joueurs lancent un nombre de dés correspondant au nombre de troupes qu’ils mettent chacun en jeu (3 max pour l’attaquant et 2 max pour le défenseur donc) et ils comparent leur plus haut lancé et le vaincu perd une troupe, puis leurs deuxième plus haut lancés s’il y a deux défenseurs, noté qu’en cas d’égalité des lancés le défenseur l’emporte. S’il ne reste plus de troupes sur le territoire du défenseur, l’attaquant s’empare de ce territoire et y déplace au moins autant de troupes qu’il a utilisé pour son attaque. Pour limiter la durée des parties, nous implémenterons une seule forme d’attaque qui consiste en des lancés successives de dés impliquant la totalité des troupes moins 1 sur le territoire attaquant et la totalité des troupes sur le territoire attaqué. La dernière phase est la phase de manœuvres. Durant cette phase, le joueur peut faire un déplacement d’autant de troupes qu’il veut d’un de ses territoires vers un autre territoire qui lui appartient et qui est frontalier à ce premier territoire en n’oubliant pas qu’il faut toujours au moins une troupe sur chaque territoire à tout moment de la partie.
+Le tour de chaque joueur se déroule en trois phases. Tout d’abord la phase de fortification, durant cette phase, le joueur a un certain nombre de troupes à répartir entre les territoires qu’il possède déjà, ce nombre est déterminé par le nombre de territoire que le joueur possède déjà. Puis il passe à la phase d’attaque, durant cette phase le joueur peut attaquer à partir de n’importe lequel de ses territoires possédant deux troupes ou plus, tout territoire adversaire avec qui il partage une frontière. Le joueur choisi ensuite s’il veut attaquer avec une, deux ou trois troupes en sachant qu’il doit laisser au moins une troupe sur son territoire, le défenseur choisi s’il veut défendre avec une ou deux troupes. Les deux joueurs lancent un nombre de dés correspondant au nombre de troupes qu’ils mettent chacun en jeu (3 max pour l’attaquant et 2 max pour le défenseur donc) et ils comparent leur plus haut lancé et le vaincu perd une troupe, puis leurs deuxième plus haut lancés s’il y a deux défenseurs, noté qu’en cas d’égalité des lancés le défenseur l’emporte. S’il ne reste plus de troupes sur le territoire du défenseur, l’attaquant s’empare de ce territoire et y déplace au moins autant de troupes qu’il a utilisé pour son attaque. Pour limiter la durée des parties, nous implémenterons une seule forme d’attaque qui consiste en des lancés successives de dés impliquant la totalité des troupes moins 1 sur le territoire attaquant et la totalité des troupes sur le territoire attaqué. La dernière phase est la phase de manœuvres. Durant cette phase, le joueur peut faire un déplacement d’autant de troupes qu’il veut d’un de ses territoires vers un autre territoire qui lui appartient et qui est frontalier à ce premier territoire en n’oubliant pas qu’il faut toujours au moins une troupe sur chaque territoire à tout moment de la partie.
 
 ## 1.3 Environnement de développement
 
@@ -34,7 +34,7 @@ Nous développons notre jeu en C++ dans un environnement Linux Ubuntu avec l'IDE
 
 ## 2.1 Description des états
 
-L'état du jeu est défini par les joueurs et leurs possesions : Pays et Cartes.
+L'état du jeu est défini par les joueurs et leurs possessions : Pays et Cartes.
 
 ### 2.1.1 Les Joueurs
 
@@ -61,7 +61,7 @@ Les cartes sont distribué une à une et de façon aléatoire à chaque tour de 
 
 Le diagramme des classes pour les états est présenté à la figure ci dessous.
 
-![State](rapport/state.png)
+![State](rapport/state.svg)
 
 La classe principale du package **state** est State. Elle décrit l'état du jeu à chaque instant.
 
@@ -82,14 +82,21 @@ A ces classes s'ajoutent :
 
 * La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map de jeu qui sera définie dans la partie graphique.
 
+* La classe **FileOps**, qui est une classe servant à faire des opérations sur les fichiers nécessaires à l'initialisation du jeu 
+
 # 3 Rendu : Stratégie et Conception
 
 ## 3.1 Stratégie de rendu d'un état
 
-Pour le rendu d'un état, nous avons opté pour la réalisation de deux scène : 
+Pour le rendu d'un état, nous avons opté pour la réalisation de deux scènes : 
 
 ### La scène d'accueil 
-Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lancer une partie et "**addplayer**" (Pas encore fonctionnele) pour ajouter des joueurs.
+Cette scène est composé, pour l'instant, de 5 bouttons 
+* **Start** pour lancer une partie
+* **Option** permet d'ajouter des joueurs et des bots.
+* **Rule** Affiche les régles du jeu 
+* **About** Affiche la page github du projet
+* **Quit** Permet de quitter le jeu
 
 ![Menu](rapport/menu.png)
 
@@ -98,7 +105,7 @@ Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lan
 Ici, nous nous servons d'une map du jeu fixe, celle-ci est représentée dans le rendu par une image de même taille que la fenêtre de jeu. 
 Nous supperposons ensuite sur cette image :
 * Le nombre de soldats présents sur chaque territoire dans des "bulles" en nous servant des coordonnées du territoire dans la fenêtre. Chaque bulle a une couleur permettant d'identifier le joueur détenteur du territoire.
-* Les informations de jeu et les instructions à l'aide de texte que nous disposons à divers endroits de la fenêtre
+* Les informations de jeu sont affichées dans la colonne de droite 
 
 ![RIsk](rapport/jeu.png)
 
@@ -108,19 +115,20 @@ Le diagramme des classes pour le rendu est le suivant :
 
 ![Render](rapport/render.svg)
 
-* **Coulors** : La classe coulors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
+* **Colors** : La classe colors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
 * **Message** : La classe Message est l'une des classe de base du rendu, cette classe est utilisée pour afficher des chaines de caractères sur les différentes scènes. Elle dispose de divers constructeurs pour créer des Message à une position donnée de la scène ou encore pour définir la couleur du message à créer.
-* **Boutton** : La classe Boutton est une classe qui permet de définir les éléments cliquable de l'interface.
+* **Button** : La classe Button est une classe qui permet de définir les éléments cliquable de l'interface.
 * **Menu** : La classe Menu est utilisé pour créer des éléments de menu, cliquable et portant un texte.
 * **MenuScene** : MenuScene est la classe qui se charge d'afficher la scène d'acceuil, elle est composée d'éléments de type Menu.
 * **GameScene** : GameScene est la classe qui se charge d'afficher la scène de jeu.
-* **Scene** est la classe principale de ce diagramme. C'est la classe mère de MenuScene et GameScene.
+* **CardScene** : CardScene est la classe qui se charge de l'affichage des cartes
+* **Scene** est la classe mère de MenuScene, GameScene, CardScene.
 
 # 4. Moteur de jeu
 
 ## 4.1 Changement d'états
 
-Chaque tour de jeu se déroule en trois étapes majeures : **Distrubition** (Place), **Attaque** (Attack) et **Renforcement** (Reinforce). Le passage de l'état Distribution à l'état Attaque se fait de manière automatique dès que le joueur n'a plus de troupe à distribuer. Tous les autres changement d'état se font sur l'action des joueurs à travers les commandes.
+Chaque tour de jeu se déroule en trois étapes majeures : **Distrubition** (Place), **Attaque** (Attack) et **Renforcement** (Reinforce). Le passage de l'état Distribution à l'état Attaque se fait de manière automatique dès que le joueur n'a plus de troupe à distribuer. Tous les autres changements d'état se font sur l'action des joueurs à travers les commandes.
 
 ## 4.2 Conception logiciel
 
@@ -134,7 +142,7 @@ Le diagramme UML du package engine se présente comme suit:
 
 # 5 Intelligence Artificielle
 
-## 5.1 Stratégies
+## 5.1 Conception logiciel
 
 
 ### 5.1.1 Intelligence aléatoire
@@ -147,12 +155,54 @@ Cette stratégie consiste en des choix aléatoires à chaque étape du jeu.
 
 * **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destination. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
 
+### 5.1.2 L'IA Heuristique/Normale
+
+Cette IA contrairement à l'IA aléatoire a une stratégie précise. 
+Si l'IA ne possède aucun continent entier, elle va se concentrer sur le continent sur lequel elle possède le plus de pays. Elle va ainsi placer, attaquer et renforcer les pays de ce continent jusqu'à ce qu'elle possède le continent.
+Dans le cas ou l'IA possède au moins un continent entier, elle va se concentrer sur la conquête du continent frontalier ayant le moins de pays. Elle va donc placer des troupes dans le pays frontalier à ce continent et attaquer à partir de ce pays puis si l'attaque réussi, elle va déplacer ses troupes vers le pays qu'elle viens de conquérir. Elle va continuer d'attaquer ainsi jusqu'à ce que le continent lui appartienne.
+
+### 5.1.3 L'IA avancée
+
+* **Distribution** Pour la phase de distribution, l'IA place ses troupes dans les pays qui ont un Border Security Ratio (BSR) élevé. Le BSR d'un pays est égale à la somme des troupes énnemies dans les pays limitrophes divisée par le nombre de troupe dans le pays. Cette valeur qui permet de quantifier le risque qu'à un pays d'être perdu suite à une attaque.
+
+* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possible et choisit celle qui rapporte le plus de bonus troupe au tour suivant. Les attaques ne sont effectuées que si la probabilité de victoire est supérieure à 
+60%
+
+* **Renforcer** La stratégie de renforcement consiste à renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
+
 ## 5.2 Conception logiciel
 
 Le diagramme des classe pour l'IA se présente comme ci-dessous.
 
-La classe **AI** regroupe toutes les foctions nécessaires à l'IA.
-
-L'énumération **Difficulty** permet de choisir le niveau de l'IA elle sera utile pour la conception des IA heuristique et avancée.
+La classe **AI** est la classe principale, d'elle hérite tous les types d'AI.
 
 ![engine](rapport/ai.svg)
+
+
+# 6. Serveur
+
+## 6.1 Description
+
+Notre serveur ne sert pour l'instant qu'à simuler une partie entre plusieurs IA avancées.
+
+Il supporte des requêtes GET sur les routes suivantes:
+
+* **/** : Qui retourne une page html permettant de choisir le nombre de bot. Une fois que le formulaire est soumis, la requête GET sur la route /init est appelée.
+
+![engine](rapport/server_init.png)
+
+* **/init** : Retourne l'état initiale du jeu
+
+* **/state** : Retourne l'état actuel du jeu
+
+* **/botbattle** : Simule une phase du jeu et retourne la présence de chaque bot sur le jeu. Elle retourne le nom du gagnat en cas de victoire.
+
+## 6.2 Conception logiciel
+
+Pour la conception du serveur, nous utilisons la library restcpp développée par Microsoft.
+
+
+Le diagramme UML 
+![engine](rapport/server.svg)
+
+Notre package engine se compose actuellement de 2 classes. La classe Server qui regroupe toutes les fonctions essentielles du Server. La classe DataOps regroupe deux fonctions qui permettent de faire des opérations sur les données reçus et envoyées à travers les requêtes.
