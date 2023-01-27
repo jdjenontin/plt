@@ -23,7 +23,7 @@ Notre projet porte sur la réalisation du jeu Risk. C’est un jeu de stratégie
 
 Le jeu se déroule sur un plateau représentant la carte du monde et divisée en plusieurs territoires, chaque joueur commence la partie avec un certain nombre de troupes placées sur la carte, et la condition de victoire la plus classique est assez simple : il faut conquérir le monde en conquérant les territoires de ses adversaires ! Il existe cependant d’autres conditions de victoire imposées par des cartes additionnelles et faisant appels à des troupes spéciales, conditions que nous n’implémenterons pas dans notre première version du jeu.
 
-Le tour de chaque joueur se déroule en trois parties. Tout d’abord la phase de fortification, durant cette phase, le joueur a un certain nombre de troupes à répartir entre les territoires qu’il possède déjà, ce nombre est déterminé par le nombre de territoire que le joueur possède déjà. Puis il passe à la phase d’attaque, durant cette phase le joueur peut attaquer à partir de n’importe lequel de ses territoires possédant deux troupes ou plus, tout territoire adversaire avec qui il partage une frontière. Le joueur choisi ensuite s’il veut attaquer avec une, deux ou trois troupes en sachant qu’il doit laisser au moins une troupe sur son territoire, le défenseur choisi s’il veut défendre avec une ou deux troupes. Les deux joueurs lancent un nombre de dés correspondant au nombre de troupes qu’ils mettent chacun en jeu (3 max pour l’attaquant et 2 max pour le défenseur donc) et ils comparent leur plus haut lancé et le vaincu perd une troupe, puis leurs deuxième plus haut lancés s’il y a deux défenseurs, noté qu’en cas d’égalité des lancés le défenseur l’emporte. S’il ne reste plus de troupes sur le territoire du défenseur, l’attaquant s’empare de ce territoire et y déplace au moins autant de troupes qu’il a utilisé pour son attaque. Pour limiter la durée des parties, nous implémenterons une seule forme d’attaque qui consiste en des lancés successives de dés impliquant la totalité des troupes moins 1 sur le territoire attaquant et la totalité des troupes sur le territoire attaqué. La dernière phase est la phase de manœuvres. Durant cette phase, le joueur peut faire un déplacement d’autant de troupes qu’il veut d’un de ses territoires vers un autre territoire qui lui appartient et qui est frontalier à ce premier territoire en n’oubliant pas qu’il faut toujours au moins une troupe sur chaque territoire à tout moment de la partie.
+Le tour de chaque joueur se déroule en trois phases. Tout d’abord la phase de fortification, durant cette phase, le joueur a un certain nombre de troupes à répartir entre les territoires qu’il possède déjà, ce nombre est déterminé par le nombre de territoire que le joueur possède déjà. Puis il passe à la phase d’attaque, durant cette phase le joueur peut attaquer à partir de n’importe lequel de ses territoires possédant deux troupes ou plus, tout territoire adversaire avec qui il partage une frontière. Le joueur choisi ensuite s’il veut attaquer avec une, deux ou trois troupes en sachant qu’il doit laisser au moins une troupe sur son territoire, le défenseur choisi s’il veut défendre avec une ou deux troupes. Les deux joueurs lancent un nombre de dés correspondant au nombre de troupes qu’ils mettent chacun en jeu (3 max pour l’attaquant et 2 max pour le défenseur donc) et ils comparent leur plus haut lancé et le vaincu perd une troupe, puis leurs deuxième plus haut lancés s’il y a deux défenseurs, noté qu’en cas d’égalité des lancés le défenseur l’emporte. S’il ne reste plus de troupes sur le territoire du défenseur, l’attaquant s’empare de ce territoire et y déplace au moins autant de troupes qu’il a utilisé pour son attaque. Pour limiter la durée des parties, nous implémenterons une seule forme d’attaque qui consiste en des lancés successives de dés impliquant la totalité des troupes moins 1 sur le territoire attaquant et la totalité des troupes sur le territoire attaqué. La dernière phase est la phase de manœuvres. Durant cette phase, le joueur peut faire un déplacement d’autant de troupes qu’il veut d’un de ses territoires vers un autre territoire qui lui appartient et qui est frontalier à ce premier territoire en n’oubliant pas qu’il faut toujours au moins une troupe sur chaque territoire à tout moment de la partie.
 
 ## 1.3 Environnement de développement
 
@@ -34,7 +34,7 @@ Nous développons notre jeu en C++ dans un environnement Linux Ubuntu avec l'IDE
 
 ## 2.1 Description des états
 
-L'état du jeu est défini par les joueurs et leurs possesions : Pays et Cartes.
+L'état du jeu est défini par les joueurs et leurs possessions : Pays et Cartes.
 
 ### 2.1.1 Les Joueurs
 
@@ -88,7 +88,7 @@ A ces classes s'ajoutent :
 
 ## 3.1 Stratégie de rendu d'un état
 
-Pour le rendu d'un état, nous avons opté pour la réalisation de deux scène : 
+Pour le rendu d'un état, nous avons opté pour la réalisation de deux scènes : 
 
 ### La scène d'accueil 
 Cette scène est composé, pour l'instant, de 5 bouttons 
@@ -115,9 +115,9 @@ Le diagramme des classes pour le rendu est le suivant :
 
 ![Render](rapport/render.svg)
 
-* **Coulors** : La classe coulors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
+* **Colors** : La classe colors définie une liste des couleurs utilisées dans le jeu à l'aide de leurs compositions RGBa.
 * **Message** : La classe Message est l'une des classe de base du rendu, cette classe est utilisée pour afficher des chaines de caractères sur les différentes scènes. Elle dispose de divers constructeurs pour créer des Message à une position donnée de la scène ou encore pour définir la couleur du message à créer.
-* **Boutton** : La classe Boutton est une classe qui permet de définir les éléments cliquable de l'interface.
+* **Button** : La classe Button est une classe qui permet de définir les éléments cliquable de l'interface.
 * **Menu** : La classe Menu est utilisé pour créer des éléments de menu, cliquable et portant un texte.
 * **MenuScene** : MenuScene est la classe qui se charge d'afficher la scène d'acceuil, elle est composée d'éléments de type Menu.
 * **GameScene** : GameScene est la classe qui se charge d'afficher la scène de jeu.
@@ -128,7 +128,7 @@ Le diagramme des classes pour le rendu est le suivant :
 
 ## 4.1 Changement d'états
 
-Chaque tour de jeu se déroule en trois étapes majeures : **Distrubition** (Place), **Attaque** (Attack) et **Renforcement** (Reinforce). Le passage de l'état Distribution à l'état Attaque se fait de manière automatique dès que le joueur n'a plus de troupe à distribuer. Tous les autres changement d'état se font sur l'action des joueurs à travers les commandes.
+Chaque tour de jeu se déroule en trois étapes majeures : **Distrubition** (Place), **Attaque** (Attack) et **Renforcement** (Reinforce). Le passage de l'état Distribution à l'état Attaque se fait de manière automatique dès que le joueur n'a plus de troupe à distribuer. Tous les autres changements d'état se font sur l'action des joueurs à travers les commandes.
 
 ## 4.2 Conception logiciel
 
@@ -142,7 +142,7 @@ Le diagramme UML du package engine se présente comme suit:
 
 # 5 Intelligence Artificielle
 
-## 5.1 Stratégies
+## 5.1 Conception logiciel
 
 
 ### 5.1.1 Intelligence aléatoire
