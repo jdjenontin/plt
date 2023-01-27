@@ -82,6 +82,8 @@ A ces classes s'ajoutent :
 
 * La classe **Position** composante de Country qui stock la les coordonées de chaque territoire sur la map de jeu qui sera définie dans la partie graphique.
 
+* La classe **FileOps**, qui est une classe servant à faire des opérations sur les fichiers nécessaires à l'initialisation du jeu 
+
 # 3 Rendu : Stratégie et Conception
 
 ## 3.1 Stratégie de rendu d'un état
@@ -89,7 +91,12 @@ A ces classes s'ajoutent :
 Pour le rendu d'un état, nous avons opté pour la réalisation de deux scène : 
 
 ### La scène d'accueil 
-Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lancer une partie et "**addplayer**" (Pas encore fonctionnele) pour ajouter des joueurs.
+Cette scène est composé, pour l'instant, de 5 bouttons 
+* **Start** pour lancer une partie
+* **Option** permet d'ajouter des joueurs et des bots.
+* **Rule** Affiche les régles du jeu 
+* **About** Affiche la page github du projet
+* **Quit** Permet de quitter le jeu
 
 ![Menu](rapport/menu.png)
 
@@ -98,7 +105,7 @@ Cette scène est composé, pour l'instant, de deux bouttons "**Start**" pour lan
 Ici, nous nous servons d'une map du jeu fixe, celle-ci est représentée dans le rendu par une image de même taille que la fenêtre de jeu. 
 Nous supperposons ensuite sur cette image :
 * Le nombre de soldats présents sur chaque territoire dans des "bulles" en nous servant des coordonnées du territoire dans la fenêtre. Chaque bulle a une couleur permettant d'identifier le joueur détenteur du territoire.
-* Les informations de jeu et les instructions à l'aide de texte que nous disposons à divers endroits de la fenêtre
+* Les informations de jeu sont affichées dans la colonne de droite 
 
 ![RIsk](rapport/jeu.png)
 
@@ -114,7 +121,8 @@ Le diagramme des classes pour le rendu est le suivant :
 * **Menu** : La classe Menu est utilisé pour créer des éléments de menu, cliquable et portant un texte.
 * **MenuScene** : MenuScene est la classe qui se charge d'afficher la scène d'acceuil, elle est composée d'éléments de type Menu.
 * **GameScene** : GameScene est la classe qui se charge d'afficher la scène de jeu.
-* **Scene** est la classe principale de ce diagramme. C'est la classe mère de MenuScene et GameScene.
+* **CardScene** : CardScene est la classe qui se charge de l'affichage des cartes
+* **Scene** est la classe mère de MenuScene, GameScene, CardScene.
 
 # 4. Moteur de jeu
 
@@ -147,28 +155,54 @@ Cette stratégie consiste en des choix aléatoires à chaque étape du jeu.
 
 * **Renforcer** Durant cette phase, l'ia choisit de façon aléatoire 2 de ses pays : un pays de départ et un pays de destination. Elle choisie ensuite le nombre de soldat qu'elle souhaite déplacer entre les 2 pays toujours aléatoirement.
 
-## 5.2 Conception logiciel
-
-Le diagramme des classe pour l'IA se présente comme ci-dessous.
-
-La classe **AI** regroupe toutes les fonctions nécessaires à l'IA.
-
-L'énumération **Difficulty** permet de choisir le niveau de l'IA elle sera utile pour la conception des IA heuristique et avancée.
-
-![engine](rapport/ai.svg)
-
-## 5.3 Les différentes IA 
-
-
-### 5.3.1 L'IA Aléatoire/Facile
-
-L'IA aléatoire comme son nom l'indique se contente de placer, attacker et renforcer de manière aléatoire les pays.
-
-
-### 5.3.2 L'IA Heuristique/Normale
+### 5.1.2 L'IA Heuristique/Normale
 
 Cette IA contrairement à l'IA aléatoire a une stratégie précise. 
 Si l'IA ne possède aucun continent entier, elle va se concentrer sur le continent sur lequel elle possède le plus de pays. Elle va ainsi placer, attaquer et renforcer les pays de ce continent jusqu'à ce qu'elle possède le continent.
 Dans le cas ou l'IA possède au moins un continent entier, elle va se concentrer sur la conquête du continent frontalier ayant le moins de pays. Elle va donc placer des troupes dans le pays frontalier à ce continent et attaquer à partir de ce pays puis si l'attaque réussi, elle va déplacer ses troupes vers le pays qu'elle viens de conquérir. Elle va continuer d'attaquer ainsi jusqu'à ce que le continent lui appartienne.
 
+### 5.1.3 L'IA avancée
 
+* **Distribution** Pour la phase de distribution, l'IA place ses troupes dans les pays qui ont un Border Security Ratio (BSR) élevé. Le BSR d'un pays est égale à la somme des troupes énnemies dans les pays limitrophes divisée par le nombre de troupe dans le pays. Cette valeur qui permet de quantifier le risque qu'à un pays d'être perdu suite à une attaque.
+
+* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possible et choisit celle qui rapporte le plus de bonus troupe au tour suivant. Les attaques ne sont effectuées que si la probabilité de victoire est supérieure à 
+60%
+
+* **Renforcer** La stratégie de renforcement consiste à renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
+
+## 5.2 Conception logiciel
+
+Le diagramme des classe pour l'IA se présente comme ci-dessous.
+
+La classe **AI** est la classe principale, d'elle hérite tous les types d'AI.
+
+![engine](rapport/ai.svg)
+
+
+# 6. Serveur
+
+## 6.1 Description
+
+Notre serveur ne sert pour l'instant qu'à simuler une partie entre plusieurs IA avancées.
+
+Il supporte des requêtes GET sur les routes suivantes:
+
+* **/** : Qui retourne une page html permettant de choisir le nombre de bot. Une fois que le formulaire est soumis, la requête GET sur la route /init est appelée.
+
+![engine](rapport/server_init.png)
+
+* **/init** : Retourne l'état initiale du jeu
+
+* **/state** : Retourne l'état actuel du jeu
+
+* **/botbattle** : Simule une phase du jeu et retourne la présence de chaque bot sur le jeu. Elle retourne le nom du gagnat en cas de victoire.
+
+## 6.2 Conception logiciel
+
+Pour la conception du serveur, nous utilisons la library restcpp développée par Microsoft.
+
+
+Le diagramme UML 
+![engine](rapport/server.svg)
+
+Notre package engine se compose actuellement de 2 classes. La classe Server qui regroupe toutes les fonctions essentielles du Server. La classe DataOps regroupe deux fonctions qui permettent de faire des opérations sur les données reçus et envoyées à travers les requêtes.
