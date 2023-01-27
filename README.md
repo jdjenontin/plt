@@ -163,12 +163,11 @@ Dans le cas ou l'IA possède au moins un continent entier, elle va se concentrer
 
 ### 5.1.3 L'IA avancée
 
-* **Distribution** Pour la phase de distribution, l'IA place ses troupes dans les pays qui ont un Border Security Ratio (BSR) élevé. Le BSR d'un pays est égale à la somme des troupes énnemies dans les pays limitrophes divisée par le nombre de troupe dans le pays. Cette valeur qui permet de quantifier le risque qu'à un pays d'être perdu suite à une attaque.
+* **Distribution** Pour la phase de distribution, l'IA place ses troupes dans les pays qui ont un Border Security Ratio (BSR) élevé. Le BSR d'un pays est égale à la somme des troupes énnemies dans les pays limitrophes divisée par le nombre de troupe dans le pays. Cette valeur permet de quantifier le risque qu'à un pays d'être perdu suite à une attaque.
 
-* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possible et choisit celle qui rapporte le plus de bonus troupe au tour suivant. Les attaques ne sont effectuées que si la probabilité de victoire est supérieure à 
-60%
+* **Attaque** Lors de la phase d'attaque, l'IA détermine les routes d'attaques possibles et choisit celle qui rapporte l'indice le plus grand. L'indice dépend du bonus de troop et de la probabilité de victoire de chaque attaque. L'indice = bonus de troop - nombre de fois où la probabilité est entre 60% et 80%. Par exemple, pour une route où l'IA peut effectuer trois attaques avec les probabilités de la première et de la deuxième attaque supérieur à 80%, et celle de la troisième attaque est comprise entre 60 et 80%, avec un bonus de troupe de 10, l'indice = 10 - 1 = 9. L'IA arrête la phase d'attaque lorsqu'il n'y a plus de route permettant un gain de troupe.
 
-* **Renforcer** La stratégie de renforcement consiste à renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
+* **Renforcer** La stratégie de renforcement consiste à retirer les troops dans le pays qui a le plus de troops entre les pays qui n'ont pas le pays d'ennemi adjacent, et renforcer les pays les plus suceptibles d'être attaqués, ceux ayant le BRS le plus élevé.
 
 ## 5.2 Conception logiciel
 
